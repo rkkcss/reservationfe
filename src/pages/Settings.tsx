@@ -3,7 +3,7 @@ import SettingsMenu from '../components/SettingsMenu'
 
 const Settings = () => {
     return (
-        <div className="flex">
+        <div className="flex h-full">
             <SettingsMenu />
             <Outlet />
         </div>

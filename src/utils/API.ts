@@ -1,4 +1,6 @@
 import axios from "axios";
+import store from "../store/store";
+import { logoutUser } from "../redux/userSlice";
 
 const serverMode = import.meta.env.VITE_API_URL;
 
@@ -38,11 +40,14 @@ API.interceptors.response.use(
     (response) => {
         return response;
     },
-    (error) => {
-        console.log("err", error);
-        // if (error.response.status === 401) {
-        //     window.location.href = "/logout";
-        // }
+    async (error) => {
+        console.error("Hiba történt:", error);
+        const status = error.response?.status;
+
+        if (status === 401) {
+            await store.dispatch(logoutUser());
+        }
+
         return Promise.reject(error);
     }
 );

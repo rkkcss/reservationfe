@@ -13,7 +13,8 @@
             "required": "Kötelező mezö!",
             "wrongCredentials": "Helytelen felhasználónév vagy jelszó!",
             "somethingWentWrong": "Valami hiba történt, probáld meg kicsit késöbb!",
-            "loggedInSuccessfully": "Sikeres bejelentkezés"
+            "loggedInSuccessfully": "Sikeres bejelentkezés",
+            "logoutSuccessfully": "Sikeres kijelentkezés"
         }
     }
 }

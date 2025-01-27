@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAccountInfo, loginUser, User } from "../../redux/userSlice";
 import { UserStore } from "../../store/store";
 import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { fetchCsrfToken } from "../../helpers/queries/accountService";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +53,7 @@ const LoginModal = () => {
 
     useEffect(() => {
         if (isOpen) {
-            dispatch(getAccountInfo());
+            fetchCsrfToken();
         }
     }, [isOpen])
 

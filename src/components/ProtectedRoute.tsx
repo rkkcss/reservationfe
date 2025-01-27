@@ -1,11 +1,19 @@
 import { useSelector } from "react-redux"
 import { UserStore } from "../store/store"
 import { Authorities } from "../helpers/types/Authorities";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
-const ProtectedRoute = () => {
+type ProtectedRouteProps = {
+    allowedRoles: Authorities[]
+}
+
+const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     const { user } = useSelector((state: UserStore) => state.userStore);
-    return user?.authorities && user?.authorities?.includes(Authorities.ROLE_USER) ? <Outlet /> : null
+
+    const hasRequiredRole = user?.authorities?.some(role => allowedRoles.includes(role));
+
+    // Redirect to home page if user is not authenticated
+    return hasRequiredRole ? <Outlet /> : <Navigate to="/" />
 }
 
 export default ProtectedRoute

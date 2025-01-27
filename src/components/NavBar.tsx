@@ -11,7 +11,7 @@ import { UserStore } from '../store/store'
 import { Authorities } from '../helpers/types/Authorities'
 import logo from '../assets/logo.png'
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 const NavBar = () => {
     const dispatch = useDispatch();
@@ -22,15 +22,36 @@ const NavBar = () => {
     const menuItems = [
         {
             key: 'home',
-            label: 'Home',
+            label: 'Kezdőoldal',
+            link: 'home'
         },
         {
             key: 'about',
-            label: 'About',
+            label: 'Rólunk',
+            link: 'about'
         },
+        {
+            key: 'calendar',
+            label: 'Naptár',
+            roles: [Authorities.ROLE_OWNER, Authorities.ROLE_EMPLOYEE],
+            link: 'dashboard/calendar'
+        },
+        {
+            key: 'appointments',
+            label: 'Időpontjaim',
+            roles: [Authorities.ROLE_USER],
+            link: 'dashboard/appointments'
+        },
+        {
+            key: 'working-hours',
+            label: 'Munkarend',
+            roles: [Authorities.ROLE_OWNER, Authorities.ROLE_EMPLOYEE],
+            link: 'dashboard/working-hours'
+        },
+
     ];
 
-    const items: MenuProps['items'] = [
+    const languages: MenuProps['items'] = [
         {
             key: "en",
             label: "English",
@@ -65,31 +86,39 @@ const NavBar = () => {
         },
     ];
 
-    const filteredMenuItems = userMenuItems
+    const filteredProfileItems: Required<MenuProps>["items"][number][] = userMenuItems
         .filter(item => item?.roles?.some(role => user?.authorities?.includes(role)))
-        .map(item => ({
+        .map((item) => ({
             key: item.key,
             icon: item.icon,
             label: item.label,
             onClick: item.onClick,
-            type: item.type
+            type: item.type as 'divider'
         }));
+
 
     return (
         <>
-            <Header className="bg-transparent  shadow-lg w-full mb-4 rounded-md">
+            <Header className="bg-white shadow-lg container mb-4 rounded-md sticky top-2  z-20">
                 <ul className="flex gap-4 items-center">
-
-                    <img src={logo} className="h-12 min-h-12" alt="logo" />
-
+                    <img src={logo} className="h-12 min-h-12" alt="logo" onClick={() => navigate("/")} />
                     {
-                        menuItems.map(item => (
-                            <li key={item.key}>
-                                <Button href={`/${item.key}`} type="text">{t(item.label)}</Button>
-                            </li>
-                        ))
+                        menuItems.map(item => {
+                            const userRoles = user?.authorities;
+
+                            const isVisible =
+                                (!userRoles?.length && !item.roles) ||
+                                (userRoles?.length && item.roles?.some(role => userRoles.includes(role)));
+
+                            return (
+                                isVisible && (
+                                    <li key={item.key}>
+                                        <Link to={`/${item.link}`} className="text-sm px-4 py-2 hover:text-primary hover:bg-slate-100 hover:transition rounded-lg duration-300 font-semibold">{t(item.label)}</Link>
+                                    </li>
+                                )
+                            );
+                        })
                     }
-                    <div className='hidden md:flex'>asd</div>
                     {!user ?
                         <li className="mr-0 ml-auto">
                             <Button type="primary" onClick={() => loginModal.open()}>
@@ -98,12 +127,12 @@ const NavBar = () => {
                         </li>
                         :
                         <li className="mr-0 ml-auto">
-                            <Dropdown arrow menu={{ items: filteredMenuItems }} trigger={['click']}>
+                            <Dropdown arrow menu={{ items: filteredProfileItems }} trigger={['click']}>
                                 <FiUser strokeWidth={2} size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
                             </Dropdown>
                         </li>}
                     <li>
-                        <Dropdown arrow menu={{ items, selectable: true, defaultSelectedKeys: [language], onSelect: (e) => changeLanguage(e.key) }} trigger={['click']}>
+                        <Dropdown arrow menu={{ items: languages, selectable: true, defaultSelectedKeys: [language], onSelect: (e) => changeLanguage(e.key) }} trigger={['click']}>
                             <MdLanguage size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
                         </Dropdown>
                     </li>

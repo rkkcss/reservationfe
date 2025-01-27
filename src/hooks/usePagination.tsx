@@ -2,14 +2,14 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { API } from "../utils/API";
 
-export function usePagination<T>(endpoint: string) {
+export function usePagination<T>(endpoint: string, itemsPerPage = 10) {
     const location = useLocation();
     const navigate = useNavigate();
 
     const initialPage = new URLSearchParams(location.search).get("page") || "0";
     const [data, setData] = useState<T[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(parseInt(initialPage, 10) || 0); // Aktuális oldal
-    const [totalItems, setTotalItems] = useState<number | undefined>(undefined); // Összes elem száma
+    const [currentPage, setCurrentPage] = useState<number>(parseInt(initialPage, 10) || 0);
+    const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(`${endpoint}?page=${initialPage}`);
     const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -31,7 +31,6 @@ export function usePagination<T>(endpoint: string) {
     };
 
     const handleResponse = (response: { data: T[]; headers: Record<string, string> }, pageUrl: string | null) => {
-        // Headerből olvassuk ki az összes elem számát
         const totalCount = response.headers["x-total-count"];
         if (totalCount) {
             setTotalItems(parseInt(totalCount, 10));
@@ -40,94 +39,63 @@ export function usePagination<T>(endpoint: string) {
         setCurrentPage(getPageFromUrl(pageUrl || ""));
     };
 
-    const fetchNextPage = useCallback(async () => {
-        if (!nextPageUrl) return;
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await API.get(nextPageUrl);
-
-            const linkHeader = response.headers.link;
-            if (linkHeader) {
-                const links = parseLinkHeader(linkHeader);
-                setPrevPageUrl(links.prev);
-                setNextPageUrl(links.next || null);
-            } else {
-                setNextPageUrl(null);
-            }
-
-            handleResponse(response, nextPageUrl);
-
-            navigate({ search: `?page=${getPageFromUrl(nextPageUrl)}` });
-        } catch (err) {
-            setError(err as Error);
-        } finally {
-            setLoading(false);
-        }
-    }, [nextPageUrl, navigate]);
-
-    const fetchPrevPage = useCallback(async () => {
-        if (!prevPageUrl) return;
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await API.get(prevPageUrl);
-
-            const linkHeader = response.headers.link;
-            if (linkHeader) {
-                const links = parseLinkHeader(linkHeader);
-                setPrevPageUrl(links.prev || null);
-                setNextPageUrl(links.next || nextPageUrl);
-            } else {
-                setPrevPageUrl(null);
-            }
-
-            handleResponse(response, prevPageUrl);
-
-            navigate({ search: `?page=${getPageFromUrl(prevPageUrl)}` });
-        } catch (err) {
-            setError(err as Error);
-        } finally {
-            setLoading(false);
-        }
-    }, [prevPageUrl, navigate, nextPageUrl]);
-
-    useEffect(() => {
-        const fetchInitialPage = async () => {
+    const fetchPage = useCallback(
+        async (page: number) => {
             setLoading(true);
             setError(null);
 
             try {
-                const response = await API.get(`${endpoint}?page=${initialPage}`);
+                const url = `${endpoint}?page=${page}`;
+                const response = await API.get(url);
 
                 const linkHeader = response.headers.link;
                 if (linkHeader) {
                     const links = parseLinkHeader(linkHeader);
                     setPrevPageUrl(links.prev || null);
                     setNextPageUrl(links.next || null);
+                } else {
+                    setPrevPageUrl(null);
+                    setNextPageUrl(null);
                 }
 
-                handleResponse(response, `${endpoint}?page=${initialPage}`);
+                handleResponse(response, url);
+
+                navigate({ search: `?page=${page}` });
             } catch (err) {
                 setError(err as Error);
             } finally {
                 setLoading(false);
             }
-        };
+        },
+        [endpoint, navigate]
+    );
 
-        fetchInitialPage();
+    const fetchNextPage = useCallback(() => {
+        if (nextPageUrl) {
+            fetchPage(currentPage + 1);
+        }
+    }, [nextPageUrl, currentPage, fetchPage]);
+
+    const fetchPrevPage = useCallback(() => {
+        if (prevPageUrl) {
+            fetchPage(currentPage - 1);
+        }
+    }, [prevPageUrl, currentPage, fetchPage]);
+
+    useEffect(() => {
+        fetchPage(parseInt(initialPage, 10) || 0);
     }, []);
+
+    const totalPages = totalItems ? Math.ceil(totalItems / itemsPerPage) : 0;
 
     return {
         data,
-        currentPage, // Aktuális oldal
-        totalItems, // Összes elem száma
+        currentPage,
+        totalItems,
+        totalPages, // Összes oldal száma
         fetchNextPage,
         fetchPrevPage,
+        fetchPage, // Oldalszámra ugrás funkció
         loading,
         error,
         hasNextPage: !!nextPageUrl,
