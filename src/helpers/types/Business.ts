@@ -1,10 +1,12 @@
-import { OpeningHour } from "./OpeningHour"
+import { WorkingHours } from "./WorkingHours"
 
 export type Business = {
-    id?: string,
+    id?: string | number,
     name?: string,
     description?: string,
     services?: string[],
-    location?: string,
-    openingHours?: OpeningHour[],
+    address?: string,
+    phoneNumber?: string,
+    workingHours?: WorkingHours[],
+    breakBetweenAppointmentsMin?: number,
 }

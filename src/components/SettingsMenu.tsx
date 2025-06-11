@@ -1,6 +1,4 @@
 import { Menu, MenuProps } from 'antd'
-import React from 'react'
-import { PiUsersFour } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
 import { Authorities } from '../helpers/types/Authorities'
 import { useSelector } from 'react-redux'
@@ -8,35 +6,35 @@ import { UserStore } from '../store/store'
 import { RiProfileLine } from 'react-icons/ri'
 import { FaRegClock } from 'react-icons/fa'
 import { MdOutlineCleaningServices } from 'react-icons/md'
+import { CiShop } from 'react-icons/ci'
+import { useEffect, useState } from 'react'
+import { PiUsersThree } from "react-icons/pi";
 
-type Props = {}
-
-const SettingsMenu = (props: Props) => {
+const SettingsMenu = () => {
     const navigate = useNavigate();
     const { user } = useSelector((state: UserStore) => state.userStore);
     const location = useLocation();
+    const [isMenuCollapsed, setIsMenuCollapsed] = useState(false)
 
-    console.log(location);
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setIsMenuCollapsed(window.innerWidth <= 640)
+        });
+    }, [])
+
     const settingsMenuItems = [
-        {
-            key: "employees",
-            label: "Kollégák",
-            icon: <PiUsersFour size={20} />,
-            roles: [Authorities.ROLE_OWNER],
-            onClick: () => navigate("/settings/employees")
-        },
         {
             key: "opening-hours",
             label: "Nyitvatartási idők",
             icon: <FaRegClock size={20} />,
-            roles: [Authorities.ROLE_OWNER],
+            roles: [Authorities.ROLE_USER],
             onClick: () => navigate("/settings/opening-hours")
         },
         {
             key: "services",
             label: "Szolgáltatásaim",
             icon: <MdOutlineCleaningServices size={20} />,
-            roles: [Authorities.ROLE_OWNER, Authorities.ROLE_EMPLOYEE],
+            roles: [Authorities.ROLE_USER],
             onClick: () => navigate("/settings/my-services")
         },
         {
@@ -45,6 +43,20 @@ const SettingsMenu = (props: Props) => {
             icon: <RiProfileLine size={20} />,
             roles: [Authorities.ROLE_USER],
             onClick: () => navigate("/settings/profile")
+        },
+        {
+            key: "business",
+            label: "Üzlet",
+            icon: <CiShop size={20} strokeWidth={1} />,
+            roles: [Authorities.ROLE_USER],
+            onClick: () => navigate("/settings/business")
+        },
+        {
+            key: "guests",
+            label: "Vendégek",
+            icon: <PiUsersThree size={20} strokeWidth={1} />,
+            roles: [Authorities.ROLE_USER],
+            onClick: () => navigate("/settings/guests")
         }
     ]
 
@@ -61,8 +73,8 @@ const SettingsMenu = (props: Props) => {
         <div className="min-h-72">
             <Menu
                 items={filteredSettingsMenu}
-
-                className="!border-none h-full outline outline-gray-100 rounded-xl outline-1 w-72"
+                inlineCollapsed={isMenuCollapsed}
+                className="!border-none h-full outline outline-gray-100 rounded-xl outline-1 md:w-72 md:max-w-72"
                 selectedKeys={[settingsMenuItems.find(item => location.pathname.includes(item.key))?.key || ""]}
             />
         </div>

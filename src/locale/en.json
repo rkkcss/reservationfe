@@ -15,7 +15,8 @@
             "wrongCredentials": "Wrong username or password",
             "somethingWentWrong": "Something went wrong, please try again later!",
             "loggedInSuccessfully": "Logged in successfully",
-            "logoutSuccessfully": "Logout successfully"
+            "logoutSuccessfully": "Logout successfully",
+            "dontHaveAccountLink": "Don't have account? Register here!"
         }
     }
 }

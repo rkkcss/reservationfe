@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../utils/API";
 import { APILogin } from "../utils/APILogin";
 import i18next from "i18next";
-import { Alert, message } from "antd";
+import { message } from "antd";
 import { Authorities } from "../helpers/types/Authorities";
 
 
@@ -17,6 +17,12 @@ export type User = {
     langKey?: string;
     createdDate?: Date;
     authorities?: [Authorities];
+};
+
+export type LoginForm = {
+    username: string;
+    password: string;
+    rememberMe: string;
 };
 
 export type State = {
@@ -43,9 +49,10 @@ export const getAccountInfo = createAsyncThunk<User>(
     }
 );
 
-export const loginUser = createAsyncThunk<{ status: number, message: string }, User>(
+export const loginUser = createAsyncThunk<{ status: number, message: string }, LoginForm>(
     'loginUser',
-    async (user: User, { dispatch }) => {
+    async (user: LoginForm, { dispatch }) => {
+        console.log(user);
         try {
             const res = await APILogin.post('/api/authentication', user)
             if (res.status === 200) {
@@ -95,6 +102,9 @@ const loginSlice = createSlice({
         },
         setImageUrl(state, action) {
             state.user = ({ ...state.user, imageUrl: action.payload })
+        },
+        updateName(state, action) {
+            state.user = ({ ...state.user, firstName: action.payload.firstName, lastName: action.payload.lastName });
         }
     },
     extraReducers(builder) {
@@ -141,6 +151,6 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl } = loginSlice.actions;
+export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName } = loginSlice.actions;
 
 export default loginSlice.reducer;

@@ -4,10 +4,11 @@ import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountInfo, loginUser, User } from "../../redux/userSlice";
+import { loginUser, User } from "../../redux/userSlice";
 import { UserStore } from "../../store/store";
 import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { fetchCsrfToken } from "../../helpers/queries/accountService";
+import Checkbox from "antd/es/checkbox/Checkbox";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -83,15 +84,17 @@ const LoginModal = () => {
                 >
                     <Input type="password" placeholder={t("loginModal.password")} />
                 </Form.Item>
+                <Form.Item name="remember-me" valuePropName="checked" label={null}>
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
                 <div className="flex justify-between">
 
                     <Button type="primary" htmlType="submit" loading={loading} className="w-full">
                         {t("loginModal.submit")}
                     </Button>
                 </div>
-
-
             </Form>
+            <Button size="small" type="text" className="w-full mt-4">{t("loginModal.dontHaveAccountLink")}</Button>
         </Modal>
     );
 };

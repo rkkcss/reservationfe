@@ -7,11 +7,17 @@ import './i18n.ts'
 import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
 import store from './store/store.ts'
+import locale from 'antd/locale/hu_HU';
+import dayjs from 'dayjs';
+import 'dayjs/locale/hu';
+
+dayjs.locale('hu');
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <ConfigProvider
+        locale={locale}
         theme={{
           components: {
             // Menu: {

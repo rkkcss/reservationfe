@@ -1,8 +1,9 @@
 export type Offering = {
-    id?: string;
+    id: number;
     name?: string;
+    title: string;
     description?: string;
     price?: number;
-    duration?: number;
+    durationMinutes: number;
     isActive?: boolean;
 }
