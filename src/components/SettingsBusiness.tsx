@@ -1,15 +1,15 @@
-import { Button, Form, Input, InputNumber, message } from 'antd'
+import { Alert, Button, Form, Input, InputNumber, message, Select, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useEffect, useState } from 'react'
 import { getBusinessByLoggedInUser, patchBusiness } from '../helpers/queries/businessService'
 import { Business } from '../helpers/types/Business'
-import { useForm } from 'antd/es/form/Form'
+import { useForm, useWatch } from 'antd/es/form/Form'
+import { MdInfoOutline } from 'react-icons/md'
 
-type Props = {}
-
-const SettingsBusiness = (props: Props) => {
+const SettingsBusiness = () => {
     const [form] = useForm()
-    const [business, setBusiness] = useState<Business>({})
+    const appointmentApprovalRequired = useWatch('appointmentApprovalRequired', form)
+    const [business, setBusiness] = useState<Business>({} as Business)
 
     useEffect(() => {
         getBusinessByLoggedInUser()
@@ -20,6 +20,7 @@ const SettingsBusiness = (props: Props) => {
     }, [form]);
 
     const handleSubmit = (values: Business) => {
+        console.log(values)
         patchBusiness(values)
             .then(() => {
                 message.success("Sikeres frissités")
@@ -30,7 +31,7 @@ const SettingsBusiness = (props: Props) => {
 
     return (
         <div className="w-full pl-5 mt-5">
-            <h1 className="text-2xl font-bold mb-4">Üzlet</h1>
+            <h1 className="text-2xl font-bold mb-4">Üzlet adatai</h1>
             <Form layout="vertical" form={form} onFinish={handleSubmit} onFinishFailed={(v) => console.log(v)}>
                 <Form.Item hidden name="id">
                     <Input hidden />
@@ -39,17 +40,53 @@ const SettingsBusiness = (props: Props) => {
                     <Input placeholder="Név..." />
                 </Form.Item>
                 <Form.Item label="Üzlet címe" name="address">
-                    <Input placeholder="Cím..." />
+                    <Input placeholder="Cím..." count={{
+                        show: true,
+                        max: 255
+                    }} />
                 </Form.Item>
                 <Form.Item label="Leírás" name="description" rules={[{ max: 500 }]}>
-                    <TextArea placeholder="Leírás..." />
+                    <TextArea placeholder="Leírás..." count={{
+                        show: true,
+                        max: 500
+                    }} />
                 </Form.Item>
-                <Form.Item label="Telefonszám" name="phoneNumber" rules={[{ max: 500 }]}>
+                <Form.Item label="Telefonszám" name="phoneNumber" rules={[{ max: 15 }]}>
                     <Input placeholder="Telefonszám..." />
                 </Form.Item>
-                <Form.Item label="Szünet két időpont között" name="breakBetweenAppointmentsMin">
-                    <InputNumber placeholder="Szünet..." className="w-full" />
+                <Form.Item
+                    label={
+                        <div className="flex gap-1 items-center">
+                            <span>Időpontok automatikus elfogadása</span>
+                            <Tooltip title="Be tudod állitani hogy a mindig neked kelljen megerősítened a foglalásokat, vagy a rendszer automatikusan elfogadja el öket!">
+                                <MdInfoOutline size={20} />
+                            </Tooltip>
+                        </div>
+                    }
+                    name="appointmentApprovalRequired"
+                >
+                    <Select
+                        options={[
+                            { label: "Igen", value: true },
+                            { label: "Nem", value: false }
+                        ]}
+                    />
                 </Form.Item>
+                {appointmentApprovalRequired === true &&
+                    <Alert showIcon type="info" message="A rendszer most minden a jövőben lefoglalt időpontot el fog fogadni és nem neked kell." className="mb-4" />}
+                {appointmentApprovalRequired === false &&
+                    <Alert showIcon type="info" message="A bejövő idöpontokat neked kell majd elfogadnod!" className="mb-4" />}
+
+                <Form.Item name="maxWeeksInAdvance" label="Add meg hány hétre előre tudjanak foglalni a vendégek">
+                    <InputNumber
+                        min={0}
+                        max={52}
+                        placeholder="Hány hét..."
+                        className="w-full"
+                        maxLength={2}
+                    />
+                </Form.Item>
+
                 <Button htmlType="submit" type="primary">Mentés</Button>
             </Form>
         </div>

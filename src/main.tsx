@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router'
 import './i18n.ts'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, theme } from 'antd'
 import { Provider } from 'react-redux'
 import store from './store/store.ts'
 import locale from 'antd/locale/hu_HU';

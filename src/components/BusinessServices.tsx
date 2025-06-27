@@ -1,18 +1,17 @@
-import { Button, Collapse, Pagination, Select, Spin, Tooltip } from 'antd'
+import { Button, Collapse, Select, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Offering } from '../helpers/types/Offering'
 import { CiClock2 } from 'react-icons/ci'
 import { usePagination } from '../hooks/usePagination'
-import AddAppointment from './Modals/AddAppointment'
 import AddAppointmentSteps from './MultistepForms/AddAppointment/AddAppointmentSteps'
+import CustomPagination from './CustomPagination'
 
 const BusinessServices = () => {
     const { businessId } = useParams();
-    const { data, loading, error, totalItems } = usePagination<Offering>(`/api/offerings/business/${businessId}`)
+    const { data, totalItems, fetchNextPage, fetchPage, fetchPrevPage, currentPage, itemsPerPage } = usePagination<Offering>(`/api/offerings/business/${businessId}`, 5)
     const [selectedOffer, setSelectedOffer] = useState<Offering>({} as Offering);
     const [addAppointmentModal, setAddAppointmentModal] = useState(false);
-    const [reservingModal, setReservingModal] = useState(false);
 
     useEffect(() => {
     }, []);
@@ -33,19 +32,23 @@ const BusinessServices = () => {
                 key={selectedOffer.id || 'new'}
                 businessId={Number(businessId)}
             />
-            <AddAppointment open={reservingModal} onClose={() => setReservingModal(false)} onOk={() => console.log("asd")} />
             <div className="">
                 {data?.length === 0 ? (
                     <div className="w-full mt-4 text-center text-xl">Nincsenek szolgáltatások!</div>
                 ) : (
                     <>
-                        <div className="flex flex-col mb-5">
-                            <label>Szűrés</label>
-                            <Select
-                                placeholder="Filter..."
-                                className="w-fit"
+                        <div className="flex items-center justify-between mb-5">
+                            <div className="flex-col flex">
+                                <label>Szűrés</label>
+                                <Select
+                                    placeholder="Filter..."
+                                    className="w-64"
 
-                            />
+                                />
+                            </div>
+                            <div className="self-end">
+                                <p className="text-gray-700 font-semibold text-base">{totalItems} szolgáltatás</p>
+                            </div>
                         </div>
                         {data?.map((offer, index) => (
                             <Collapse
@@ -65,7 +68,7 @@ const BusinessServices = () => {
                                                 <CiClock2 strokeWidth={1} size={16} />
                                                 <span>{offer.durationMinutes} perc</span>
                                             </Tooltip>
-                                            <div className="text-slate-600 font-bold">
+                                            <div className="text-slate-600 font-bold flex items-baseline">
                                                 {offer.price?.toFixed(0)} Ft
                                             </div>
                                             <Button
@@ -81,7 +84,14 @@ const BusinessServices = () => {
                                 </Collapse.Panel>
                             </Collapse>
                         ))}
-                        <Pagination total={totalItems} />
+                        <CustomPagination
+                            currentPage={currentPage}
+                            fetchNextPage={fetchNextPage}
+                            fetchPage={fetchPage}
+                            fetchPrevPage={fetchPrevPage}
+                            totalItems={totalItems}
+                            pageSize={itemsPerPage}
+                        />
                     </>
                 )}
 

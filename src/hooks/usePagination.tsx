@@ -10,11 +10,12 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
     const initialSort = new URLSearchParams(location.search).get("sort") || defaultSort;
     const [data, setData] = useState<T[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(parseInt(initialPage, 10) || 0);
-    const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
+    const [totalItems, setTotalItems] = useState<number>(0);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(`${endpoint}?page=${initialPage}`);
     const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const [itemsPerPageCount, setItemsPerPageCount] = useState<number>(itemsPerPage);
 
     const [sort, setSort] = useState<string>(initialSort);
 
@@ -35,8 +36,13 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
 
     const handleResponse = (response: { data: T[]; headers: Record<string, string> }, pageUrl: string | null) => {
         const totalCount = response.headers["x-total-count"];
+        const itemsPerPageCount = response.headers["x-page-size"];
+
         if (totalCount) {
             setTotalItems(parseInt(totalCount, 10));
+        }
+        if (itemsPerPageCount) {
+            setItemsPerPageCount(parseInt(itemsPerPageCount, 10));
         }
         setData(response.data);
         setCurrentPage(getPageFromUrl(pageUrl || ""));
@@ -48,7 +54,8 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
             setError(null);
 
             try {
-                const url = `${endpoint}?page=${page}${sort && `&sort=${encodeURIComponent(sortParam)}`}`;
+                const url = `${endpoint}?page=${page}${sort && `&sort=${encodeURIComponent(sortParam)}`}&size=${itemsPerPage}`;
+                console.log(url)
                 const response = await API.get(url);
 
                 const linkHeader = response.headers.link;
@@ -106,5 +113,6 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
         hasPrevPage: !!prevPageUrl,
         sort,
         setSort, // Sort állapot és setter
+        itemsPerPage
     };
 }

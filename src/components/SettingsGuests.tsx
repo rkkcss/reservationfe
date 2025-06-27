@@ -6,7 +6,6 @@ import { MdEditNote } from "react-icons/md"
 import { IoCheckmarkCircle, IoCloseCircleSharp } from "react-icons/io5"
 import CustomPagination from "./CustomPagination"
 import { FilterValue, SorterResult } from "antd/es/table/interface"
-import CustomBreadcrumb from "./CustomBreadcrumb"
 import { createQuest, patchGuest } from "../helpers/queries/guestService"
 import AddOrEditGuestModal from "./Modals/AddOrEditGuestModal"
 
@@ -126,16 +125,15 @@ const SettingsGuests = () => {
                 onClose={() => setEditGuestModal(false)}
                 open={editGuestModal}
                 guest={editGuest}
-                key={editGuest.id}
+                key={editGuest.id || "new"}
                 onOk={handleGuestsChange}
             />
             <div className="w-full h-full p-5">
-                <CustomBreadcrumb />
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-semibold">
                         Vendégek kezelése
                     </h1>
-                    <Button type="primary" onClick={() => handleOpenGuestEditModal({ id: null, name: '', email: '', phoneNumber: '', canBook: true })}>
+                    <Button type="primary" onClick={() => handleOpenGuestEditModal({ id: undefined, name: '', email: '', phoneNumber: '', canBook: true })}>
                         Vendég hozzáadása
                     </Button>
                 </div>

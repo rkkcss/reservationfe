@@ -18,6 +18,7 @@ type AddAppointmentStepsProps = {
 const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmentStepsProps) => {
     const [current, setCurrent] = useState(0);
     const [form] = Form.useForm();
+    const [offerProp, setOfferProp] = useState<Offering>(offer);
 
     const steps = [
         {
@@ -26,11 +27,11 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
         },
         {
             title: "Szolgáltatás kiválasztása",
-            fields: <StepSelectOffering offer={offer} />,
+            fields: <StepSelectOffering offer={offerProp} setOffer={setOfferProp} />,
         },
         {
             title: "Időpont kiválasztása",
-            fields: <StepSelectAppointment businessId={businessId} durationMinutes={offer.durationMinutes} />,
+            fields: <StepSelectAppointment businessId={businessId} durationMinutes={offerProp.durationMinutes} />,
         },
         {
             title: "Megerősítés",

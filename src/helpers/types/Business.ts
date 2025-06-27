@@ -9,4 +9,5 @@ export type Business = {
     phoneNumber?: string,
     workingHours?: WorkingHours[],
     breakBetweenAppointmentsMin?: number,
+    appointmentApprovalRequired: boolean
 }

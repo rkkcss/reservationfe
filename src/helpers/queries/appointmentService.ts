@@ -51,3 +51,11 @@ type CreateAppointmentByGuestProps = {
 export const createAppointmentByGuestQuery = (formData: CreateAppointmentByGuestProps) => {
     return API.post("/api/appointments", formData);
 }
+
+export const getAppointmentByModifierToken = (modifierToken: string) => {
+    return API.get(`/api/appointments/cancel/${modifierToken}`);
+}
+
+export const cancelAppointmentByGuestWithToken = (modifierToken: string) => {
+    return API.post(`/api/appointments/cancel/${modifierToken}`)
+}

@@ -16,10 +16,12 @@ import AboutPage from './pages/AboutPage'
 import NotFound from './pages/NotFound'
 import SettingsBusiness from './components/SettingsBusiness'
 import SettingsGuests from './components/SettingsGuests'
+import CancelAppointment from './components/CancelAppointment'
 
 function App() {
   return (
     <Routes>
+      <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
       <Route path="/business/:businessId" element={<BusinessPage />} />
       <Route element={<HomeLayout />}>
         <Route index element={<Home />} />

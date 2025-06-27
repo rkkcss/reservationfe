@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import BusinessServices from '../components/BusinessServices'
 import { DAY_OF_WEEK } from '../helpers/types/OpeningHour'
 import { Business } from '../helpers/types/Business'
+import BusinessRatings from '../components/BusinessRatings'
 
 const BusinessPage = () => {
     const { businessId } = useParams();
@@ -22,6 +23,11 @@ const BusinessPage = () => {
             key: "services",
             label: "Szolgáltatások",
             children: <BusinessServices />
+        },
+        {
+            key: "reviews",
+            label: "Vélemények",
+            children: <BusinessRatings />
         }
     ]
     return (

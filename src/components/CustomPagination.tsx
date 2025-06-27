@@ -9,9 +9,10 @@ type CustomPaginationProps = {
     fetchPage: (page: number) => void;
     totalItems: number;
     currentPage: number;
+    pageSize?: number;
 }
 
-const CustomPagination = ({ fetchNextPage, fetchPrevPage, fetchPage, totalItems, currentPage }: CustomPaginationProps) => {
+const CustomPagination = ({ fetchNextPage, fetchPrevPage, fetchPage, totalItems, currentPage, pageSize = DEFAULT_PAGE_SIZE }: CustomPaginationProps) => {
 
     const itemRender: PaginationProps['itemRender'] = (parameter, type, originalElement) => {
 
@@ -33,7 +34,7 @@ const CustomPagination = ({ fetchNextPage, fetchPrevPage, fetchPage, totalItems,
                 itemRender={itemRender}
                 total={totalItems}
                 current={currentPage + 1} // Ant Design uses 1-based index for current page
-                pageSize={DEFAULT_PAGE_SIZE} // Assuming 20 items per page
+                pageSize={pageSize} // Assuming 20 items per page
             />
         </div>
     )

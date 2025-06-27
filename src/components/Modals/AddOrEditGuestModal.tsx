@@ -17,10 +17,12 @@ const AddOrEditGuestModal = ({ open, onClose, guest, onOk }: AddOrEditGuestModal
     };
 
     return (
-        <Modal onCancel={onClose} open={open} title="Vendég szerkesztése" footer={null}>
+        <Modal onCancel={onClose} open={open} title={guest?.id ? "Vendég szerkesztése" : "Új vendég hozzáadása"} footer={null} destroyOnClose>
             <Form layout="vertical" onFinish={onFinish}
                 className="mt-5"
-                initialValues={guest}>
+                initialValues={guest}
+                key={guest?.id || "new"}
+            >
                 <Form.Item name="id" hidden>
                 </Form.Item>
                 <Form.Item label="Név" name="name" rules={[{ required: true, message: 'Kérjük, adja meg a nevet!' }]}>

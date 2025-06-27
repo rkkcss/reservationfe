@@ -1,20 +1,56 @@
 import FullCalendar from '@fullcalendar/react';
-import { Button } from 'antd';
-import React, { useEffect, useState } from 'react'
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import AddAppointment from '../../components/Modals/AddAppointment';
+import { Button, Dropdown } from 'antd';
+import { MenuProps } from 'antd/lib';
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { FaAngleDown, FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa';
 
 type CalendarHeaderProps = {
     calendarRef: React.RefObject<FullCalendar>;
 }
 
+
 const CalendarHeader = ({ calendarRef }: CalendarHeaderProps) => {
     const [dateRange, setDateRange] = useState('');
-    const [addAppointment, setAddAppointment] = useState(false);
+    const [viewType, setViewType] = useState<'timeGridDay' | 'timeGridWeek'>('timeGridDay');
+
+    const handleViewChange = useCallback((view: 'timeGridDay' | 'timeGridWeek') => {
+        setViewType(view);
+    }, []);
+
+    const viewItems = useMemo<MenuProps['items']>(() => [
+        {
+            key: 'week',
+            label: (
+                <span className="flex items-center gap-1">
+                    <FaCheck className={viewType === 'timeGridWeek' ? 'visible' : 'invisible'} />
+                    Heti nézet
+                </span>
+            ),
+            onClick: () => handleViewChange('timeGridWeek'),
+        },
+        {
+            key: 'day',
+            label: (
+                <span className="flex items-center gap-1">
+                    <FaCheck className={viewType === 'timeGridDay' ? 'visible' : 'invisible'} />
+                    Napi nézet
+                </span>
+            ),
+            onClick: () => handleViewChange('timeGridDay'),
+        },
+    ], [viewType, handleViewChange]);
+
 
     useEffect(() => {
         updateDateRange();
     }, [])
+
+    useEffect(() => {
+        if (calendarRef.current) {
+            calendarRef.current.getApi().changeView(viewType);
+            updateDateRange();
+        }
+    }, [calendarRef, viewType]);
 
     const handleNext = () => {
         calendarRef.current?.getApi().next();
@@ -58,14 +94,8 @@ const CalendarHeader = ({ calendarRef }: CalendarHeaderProps) => {
 
     return (
         <>
-            <AddAppointment
-                open={addAppointment}
-                onClose={() => setAddAppointment(false)}
-                onOk={() => console.log("asd")}
-            />
-
-            <div className="flex items-center mt-8 mb-2 justify-center">
-                <Button onClick={handleToday} type="default" className="ml-0 mr-auto">
+            <div className="flex items-center mt-8 mb-2 justify-between">
+                <Button onClick={handleToday} type="default" className="">
                     Ma
                 </Button>
                 <div className="flex items-center gap-2">
@@ -81,9 +111,12 @@ const CalendarHeader = ({ calendarRef }: CalendarHeaderProps) => {
                         type="text"
                     />
                 </div>
-                <Button type="primary" className="ml-auto mr-0" onClick={() => setAddAppointment(true)}>
-                    +
-                </Button>
+                <Dropdown menu={{ items: viewItems }} trigger={['click']}>
+                    <Button type="text" onClick={(e) => e.preventDefault()} className="flex items-center gap-1">
+                        {viewType === "timeGridDay" ? "Napi nézet" : "Heti nézet"}
+                        <FaAngleDown size={20} />
+                    </Button>
+                </Dropdown>
             </div>
         </>
     )

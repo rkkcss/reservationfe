@@ -48,6 +48,6 @@ API.interceptors.response.use(
             await store.dispatch(logoutUser());
         }
 
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     }
 );

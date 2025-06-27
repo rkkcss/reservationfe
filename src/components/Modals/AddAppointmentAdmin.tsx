@@ -20,7 +20,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     const [form] = Form.useForm();
     const [searchedGuests, setSearchedGuests] = useState<Guest[]>([]);
     const [offers, setOffers] = useState<Offering[]>([]);
-
+    console.log(appointment)
     const searchInGuests = (value: string) => {
         getAllGuestsBySearch(value).then((res) => {
             setSearchedGuests(res.data);
@@ -36,6 +36,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     useEffect(() => {
         if (open) {
             getAllOffers();
+            form.setFieldsValue(appointment)
         }
     }, [open, getAllOffers])
 
@@ -47,7 +48,6 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
         ) => {
             if (!entity) return;
 
-            // hozzáadjuk, ha még nincs benne
             setList((prev) => {
                 const exists = prev.some(item => item.id === entity.id);
                 return exists ? prev : [entity, ...prev];
@@ -57,9 +57,9 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                 [formKey]: entity.id,
             });
         };
-
         mergeEntity(appointment?.guest, setSearchedGuests, 'guestId');
         mergeEntity(appointment?.offering, setOffers, 'offeringId');
+
 
     }, [appointment, form, searchedGuests, offers]);
 
@@ -75,12 +75,13 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     }
 
     return (
-        <Modal open={open} onCancel={onClose} title={`${appointment?.id ? "Időpont szerkesztése" : "Időpont hozzáadása"}`} footer={null}>
+        <Modal open={open} onCancel={onClose} title={`${appointment?.id ? "Időpont szerkesztése" : "Időpont hozzáadása"}`} footer={null} destroyOnClose>
             <Form
                 layout="vertical"
                 initialValues={appointment}
                 onFinish={handleOnFinish}
                 form={form}
+                key={appointment?.id || "new"}
             >
                 <Form.Item name="id" hidden />
                 <Form.Item label="Megjegyzés" name="note">

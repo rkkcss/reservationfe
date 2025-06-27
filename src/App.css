@@ -38,3 +38,7 @@
 .ant-steps-icon {
     top: -1.3px !important;
 }
+
+.ant-result .ant-result-extra>* {
+    margin-inline-end: auto;
+}
