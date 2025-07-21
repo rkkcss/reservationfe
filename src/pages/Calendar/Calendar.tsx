@@ -19,9 +19,10 @@ import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from '@ful
 import { Appointment } from '../../helpers/types/Appointment';
 import { appointmentToEvent, eventToAppointment } from '../../utils/calendarEventUtils';
 import { useCustomQuery } from '../../hooks/useAppointments';
+import PendingAppointments from '../../components/PendingAppointments';
 
 const CalendarPage = () => {
-    const { data, setData, fetchData } = useCustomQuery({ url: "/api/appointments" });
+    const { data, fetchData } = useCustomQuery({ url: "/api/appointments" });
     const [formattedEvents, setFormattedEvents] = useState<EventInput[]>([]);
     const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState<Appointment>({} as Appointment);
@@ -86,12 +87,16 @@ const CalendarPage = () => {
                 deleteAppointment={handleDeleteAppointment}
                 key={selectedAppointment?.startDate?.toString() || 'new-appointment'}
             />
+            <div className="mt-4 flex justify-end">
+                <PendingAppointments />
+            </div>
 
             <CalendarHeader calendarRef={calendarRef} />
 
             <FullCalendar
                 ref={calendarRef}
-                viewClassNames="max-h-[50dvh] mt-4"
+                viewClassNames="mt-4"
+                height={'80vh'}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="timeGridWeek"
                 locale={huLocal}

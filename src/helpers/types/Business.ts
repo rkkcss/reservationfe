@@ -9,5 +9,7 @@ export type Business = {
     phoneNumber?: string,
     workingHours?: WorkingHours[],
     breakBetweenAppointmentsMin?: number,
-    appointmentApprovalRequired: boolean
+    appointmentApprovalRequired: boolean,
+    logo: string,
+    theme: string
 }

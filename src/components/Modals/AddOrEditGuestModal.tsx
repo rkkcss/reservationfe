@@ -12,6 +12,7 @@ type AddOrEditGuestModalProps = {
 
 const AddOrEditGuestModal = ({ open, onClose, guest, onOk }: AddOrEditGuestModalProps) => {
     const onFinish = (values: Guest) => {
+        console.log(values)
         onOk(values);
         onClose(); // Close the modal after submission
     };
@@ -23,8 +24,9 @@ const AddOrEditGuestModal = ({ open, onClose, guest, onOk }: AddOrEditGuestModal
                 initialValues={guest}
                 key={guest?.id || "new"}
             >
-                <Form.Item name="id" hidden>
-                </Form.Item>
+                {
+                    guest?.id && <Form.Item name="id" initialValue={guest.id} hidden />
+                }
                 <Form.Item label="Név" name="name" rules={[{ required: true, message: 'Kérjük, adja meg a nevet!' }]}>
                     <Input placeholder="Vendég neve" />
                 </Form.Item>

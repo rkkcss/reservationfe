@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar/NavBar";
 import { Button } from "antd";
 import img1 from "../assets/home1.svg"
 import img2 from "../assets/home2.svg"

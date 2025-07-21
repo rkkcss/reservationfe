@@ -12,10 +12,11 @@ type useCustomQueryParams = {
 export const useCustomQuery = ({ url }: useCustomQueryParams) => {
     const [data, setData] = useState<Appointment[]>([]);
 
-    const fetchData = useCallback(async (params: AxiosRequestConfig) => {
+    const fetchData = useCallback(async (params?: AxiosRequestConfig) => {
         const response = await API.get(url, params);
         setData(response.data);
-    }, []);
+    }, [url]);
+
 
     return { data, setData, fetchData };
 };

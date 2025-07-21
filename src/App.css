@@ -10,7 +10,8 @@
 }
 
 */
-.ant-modal-mask {
+.ant-modal-mask,
+.ant-drawer-mask {
     backdrop-filter: blur(2px);
 }
 

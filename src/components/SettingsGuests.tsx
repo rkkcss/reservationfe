@@ -28,7 +28,7 @@ const SettingsGuests = () => {
     }
 
     const handleGuestsChange = (guest: Guest) => {
-        if (guest.id === null) {
+        if (!guest.id) {
             createQuest(guest).then(res => {
                 if (res.status !== 201) {
                     console.error("Failed to create guest");

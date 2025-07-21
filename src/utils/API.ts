@@ -12,7 +12,12 @@ API.interceptors.request.use(
     async (config) => {
         config.withCredentials = true;
         config.headers["Accept"] = "application/json";
-        config.headers["Content-Type"] = "application/json";
+
+        const isFormData = config.data instanceof FormData;
+        if (!isFormData) {
+            config.headers["Content-Type"] = "application/json";
+        }
+
         const csrfToken = getCookie("XSRF-TOKEN");
         if (csrfToken) {
             config.headers["X-XSRF-TOKEN"] = csrfToken;

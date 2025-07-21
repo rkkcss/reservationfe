@@ -1,4 +1,4 @@
-import { Button, Collapse, Select, Tooltip } from 'antd'
+import { Button, Collapse, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Offering } from '../helpers/types/Offering'
@@ -7,7 +7,12 @@ import { usePagination } from '../hooks/usePagination'
 import AddAppointmentSteps from './MultistepForms/AddAppointment/AddAppointmentSteps'
 import CustomPagination from './CustomPagination'
 
-const BusinessServices = () => {
+type BusinessServicesProps = {
+    //TODO: ADD TYPE
+    selectedTheme: any
+}
+
+const BusinessServices = ({ selectedTheme }: BusinessServicesProps) => {
     const { businessId } = useParams();
     const { data, totalItems, fetchNextPage, fetchPage, fetchPrevPage, currentPage, itemsPerPage } = usePagination<Offering>(`/api/offerings/business/${businessId}`, 5)
     const [selectedOffer, setSelectedOffer] = useState<Offering>({} as Offering);
@@ -37,15 +42,7 @@ const BusinessServices = () => {
                     <div className="w-full mt-4 text-center text-xl">Nincsenek szolgáltatások!</div>
                 ) : (
                     <>
-                        <div className="flex items-center justify-between mb-5">
-                            <div className="flex-col flex">
-                                <label>Szűrés</label>
-                                <Select
-                                    placeholder="Filter..."
-                                    className="w-64"
-
-                                />
-                            </div>
+                        <div className="flex items-center justify-end mb-5">
                             <div className="self-end">
                                 <p className="text-gray-700 font-semibold text-base">{totalItems} szolgáltatás</p>
                             </div>
@@ -53,11 +50,12 @@ const BusinessServices = () => {
                         {data?.map((offer, index) => (
                             <Collapse
                                 key={index}
-                                bordered={false}
-                                className="mb-5 outline outline-1 outline-persian-indigo-200"
+                                bordered={true}
+                                className={`mb-5 ${selectedTheme.borderColor}`}
                             >
                                 <Collapse.Panel
                                     key={index}
+                                    className={`${selectedTheme.borderColor}`}
                                     header={offer.title}
                                     extra={
                                         <div className="flex items-center gap-5">
@@ -84,14 +82,16 @@ const BusinessServices = () => {
                                 </Collapse.Panel>
                             </Collapse>
                         ))}
-                        <CustomPagination
-                            currentPage={currentPage}
-                            fetchNextPage={fetchNextPage}
-                            fetchPage={fetchPage}
-                            fetchPrevPage={fetchPrevPage}
-                            totalItems={totalItems}
-                            pageSize={itemsPerPage}
-                        />
+                        <div className="flex justify-end">
+                            <CustomPagination
+                                currentPage={currentPage}
+                                fetchNextPage={fetchNextPage}
+                                fetchPage={fetchPage}
+                                fetchPrevPage={fetchPrevPage}
+                                totalItems={totalItems}
+                                pageSize={itemsPerPage}
+                            />
+                        </div>
                     </>
                 )}
 

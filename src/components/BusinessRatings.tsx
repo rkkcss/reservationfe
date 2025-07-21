@@ -2,6 +2,7 @@ import { useParams } from 'react-router'
 import { usePagination } from '../hooks/usePagination';
 import { Card, Rate } from 'antd';
 import { BusinessRating } from '../helpers/types/BusinessRating';
+import placeholderImage from '../assets/placeholder.jpg'
 
 const BusinessRatings = () => {
     const { businessId } = useParams<{ businessId: string }>();
@@ -19,7 +20,13 @@ const BusinessRatings = () => {
                                 <Card styles={{ body: { padding: '6px 12px' } }} >
                                     <div className="flex justify-between items-center">
                                         <p>{rating.guest.name}</p>
-                                        <img src={rating.imageUrl} />
+                                        <img src={rating.imageUrl}
+                                            onError={e => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = placeholderImage;
+                                            }}
+                                            className="w-7 h-7 rounded-full"
+                                        />
                                     </div>
                                     <div className="mt-1 mb-3">
                                         <Rate disabled defaultValue={rating.number} />

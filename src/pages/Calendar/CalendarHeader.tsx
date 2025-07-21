@@ -8,7 +8,6 @@ type CalendarHeaderProps = {
     calendarRef: React.RefObject<FullCalendar>;
 }
 
-
 const CalendarHeader = ({ calendarRef }: CalendarHeaderProps) => {
     const [dateRange, setDateRange] = useState('');
     const [viewType, setViewType] = useState<'timeGridDay' | 'timeGridWeek'>('timeGridDay');
@@ -94,29 +93,31 @@ const CalendarHeader = ({ calendarRef }: CalendarHeaderProps) => {
 
     return (
         <>
-            <div className="flex items-center mt-8 mb-2 justify-between">
-                <Button onClick={handleToday} type="default" className="">
-                    Ma
-                </Button>
+            <div className="flex items-center flex-col  gap-3 mt-11 mb-2 justify-between">
+                <div className="flex gap-4 justify-between w-full">
+                    <Dropdown menu={{ items: viewItems }} trigger={['click']}>
+                        <Button type="text" onClick={(e) => e.preventDefault()} className="flex items-center gap-1">
+                            {viewType === "timeGridDay" ? "Napi nézet" : "Heti nézet"}
+                            <FaAngleDown size={20} />
+                        </Button>
+                    </Dropdown>
+                    <Button onClick={handleToday} type="default" className="">
+                        Ma
+                    </Button>
+                </div>
                 <div className="flex items-center gap-2">
                     <Button
                         onClick={handlePrev}
                         icon={<FaAngleLeft size={16} />}
                         type="text"
                     />
-                    <p className="text-xl font-semibold">{dateRange}</p>
+                    <p className="sm:text-xl lg:text-2xl font-semibold">{dateRange}</p>
                     <Button
                         onClick={handleNext}
                         icon={<FaAngleRight size={16} />}
                         type="text"
                     />
                 </div>
-                <Dropdown menu={{ items: viewItems }} trigger={['click']}>
-                    <Button type="text" onClick={(e) => e.preventDefault()} className="flex items-center gap-1">
-                        {viewType === "timeGridDay" ? "Napi nézet" : "Heti nézet"}
-                        <FaAngleDown size={20} />
-                    </Button>
-                </Dropdown>
             </div>
         </>
     )

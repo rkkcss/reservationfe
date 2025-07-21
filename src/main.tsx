@@ -4,12 +4,13 @@ import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router'
 import './i18n.ts'
-import { ConfigProvider, theme } from 'antd'
+import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
 import store from './store/store.ts'
 import locale from 'antd/locale/hu_HU';
 import dayjs from 'dayjs';
 import 'dayjs/locale/hu';
+import { App as AntdApp } from 'antd';
 
 dayjs.locale('hu');
 
@@ -20,10 +21,17 @@ createRoot(document.getElementById('root')!).render(
         locale={locale}
         theme={{
           components: {
-            // Menu: {
-            //   colorBgContainer: '#0056d2',
-            // }
+            Card: {
+
+            },
+            Collapse: {
+              colorBgContainer: 'transparent'
+            },
+            Pagination: {
+              colorBgContainer: 'transparent'
+            },
             Button: {
+              colorBgContainer: 'transparent',
               controlHeight: 32,
               paddingContentHorizontal: 18,
               fontWeight: '600',
@@ -31,18 +39,21 @@ createRoot(document.getElementById('root')!).render(
             }
           },
           token: {
-            colorPrimary: '#7635f2', // Primary szín
-            colorText: '#333', // Szövegszín
+            colorPrimary: '#7635f2',
+            colorText: '#333',
             colorTextBase: '#333',
-            colorBgContainer: '#ffffff', // Menü háttér
-            colorBgTextHover: '#f0f0f0', // Hover állapot
+            colorBgContainer: '#ffffff',
+            colorBgTextHover: '#f0f0f0',
           }
         }}
       >
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AntdApp>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AntdApp>
       </ConfigProvider>
     </Provider>
-  </StrictMode>,
+  </StrictMode>
 )
+
