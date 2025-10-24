@@ -2,26 +2,26 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export type GeneralState = {
     theme: string,
-    isLoginModalOpen: boolean
+    isCalendarAlertOpen: boolean
 };
 
 const initialState: GeneralState = {
     theme: 'light',
-    isLoginModalOpen: false,
+    isCalendarAlertOpen: false,
 };
 
 const generalSlice = createSlice({
     name: 'general',
     initialState,
     reducers: {
-        openLoginModal: (state) => {
-            state.isLoginModalOpen = true;
+        openCalendarAlert: (state) => {
+            state.isCalendarAlertOpen = true;
         },
-        closeLoginModal: (state) => {
-            state.isLoginModalOpen = false;
+        closeCalendarAlert: (state) => {
+            state.isCalendarAlertOpen = false;
         }
     }
 });
 
-export const { openLoginModal, closeLoginModal } = generalSlice.actions;
+export const { openCalendarAlert, closeCalendarAlert } = generalSlice.actions;
 export default generalSlice.reducer;

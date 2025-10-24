@@ -16,6 +16,14 @@
             "loggedInSuccessfully": "Sikeres bejelentkezés",
             "logoutSuccessfully": "Sikeres kijelentkezés",
             "dontHaveAccountLink": "Nincs még fiókod? Regisztrálj itt!"
+        },
+        "error": {
+            "appointment": {
+                "reserved": "Ez az időpont már foglalt"
+            },
+            "guest": {
+                "cantbook": "Foglalásodat elutasítottuk, mert nem tudsz foglalni ehhez a szolgáltatóhoz!"
+            }
         }
     }
 }

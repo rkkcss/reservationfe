@@ -5,6 +5,9 @@ import StepSelectAppointment from "./StepSelectAppointment";
 import StepPersonalData from "./StepAddress";
 import { Offering } from "../../../helpers/types/Offering";
 import { createAppointmentByGuestQuery } from "../../../helpers/queries/appointmentService";
+import dayjs from "dayjs";
+import { LuCalendarDays, LuCircleUserRound, LuClock, LuMail, LuPhone } from "react-icons/lu";
+import { MdOutlineDesignServices } from "react-icons/md";
 
 const { Step } = Steps;
 
@@ -13,6 +16,24 @@ type AddAppointmentStepsProps = {
     open: boolean;
     onClose: () => void;
     businessId: number;
+}
+
+const FORM_ITEMS = {
+    phoneNumber: "Telefonszám",
+    name: "Név",
+    email: "Email",
+    offeringId: "Szolgáltatás",
+    time: "Idő",
+    date: "Dátum",
+}
+
+const ICONS: Record<string, JSX.Element> = {
+    name: <LuCircleUserRound size={30} />,
+    email: <LuMail size={30} />,
+    phoneNumber: <LuPhone size={30} />,
+    date: <LuCalendarDays size={30} />,
+    time: <LuClock size={30} />,
+    offeringId: <MdOutlineDesignServices size={30} />
 }
 
 const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmentStepsProps) => {
@@ -24,32 +45,69 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
         {
             title: "Személyes adatok",
             fields: <StepPersonalData key={offer.id || "new"} />,
+            fieldNames: ["name", "email", "phoneNumber"],
         },
         {
             title: "Szolgáltatás kiválasztása",
             fields: <StepSelectOffering offer={offerProp} setOffer={setOfferProp} />,
+            fieldNames: ["offeringId"],
         },
         {
             title: "Időpont kiválasztása",
             fields: <StepSelectAppointment businessId={businessId} durationMinutes={offerProp.durationMinutes} />,
+            fieldNames: ["date", "time"],
         },
         {
             title: "Megerősítés",
             fields:
-                <p>
-                    Kérjük, ellenőrizze a megadott adatokat, majd kattintson a "Beküldés" gombra az időpont foglalásához.
-                    <br />
-                    A foglalás után e-mailben értesítést küldünk Önnek.
-                    <br />
-                    {
-                        Object.entries(form.getFieldsValue(true)).map(([key, value]) => (
-                            <span key={key}>
-                                {key}: {value?.toString()}
-                                <br />
-                            </span>
-                        ))
-                    }
-                </p>,
+                <>
+                    <div className="flex flex-col gap-2">
+                        {
+                            Object.entries(form.getFieldsValue(true)).map(([key, value]) => {
+                                if (key === "date" || key === "time") return null; // ezek külön kezelve lesznek
+
+                                return (
+                                    <div key={key} className="flex items-center gap-3 py-3 px-2 rounded-lg outline outline-gray-300 outline-1">
+                                        <div className="p-2 bg-gray-200 rounded-full">
+                                            {ICONS[key] ?? <LuCircleUserRound size={30} />}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-base">
+                                                {FORM_ITEMS[key]}:
+                                            </p>
+                                            <p className="text-sm">
+                                                {dayjs.isDayjs(value) ? value.format("YYYY.MM.DD") : value?.toString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+
+                        {/* Dátum + Idő egy sorban */}
+                        <div className="flex gap-4">
+                            <div className="flex items-center gap-2 py-4 px-2 outline outline-gray-300 outline-1 rounded-lg w-full">
+                                <div className="p-2 bg-gray-200 rounded-full">
+                                    <LuCalendarDays size={30} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-base">{FORM_ITEMS["date"]}</p>
+                                    <p className="text-sm">{dayjs(form.getFieldValue("date")).format("YYYY.MM.DD")}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 py-4 px-2 outline outline-gray-300 outline-1 rounded-lg w-full">
+                                <div className="p-2 bg-gray-200 rounded-full">
+                                    <LuClock size={30} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-base">{FORM_ITEMS["time"]}</p>
+                                    <p className="text-sm">{form.getFieldValue("time")}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            ,
         },
     ];
 
@@ -63,15 +121,7 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
 
     const next = async () => {
         try {
-            // Kinyerjük a mezőneveket típusosan
-            const fields = React.Children.toArray(steps[current].fields.props.children)
-                .filter(
-                    (child): child is React.ReactElement<{ name: string }> =>
-                        React.isValidElement(child) && typeof child.props?.name === "string"
-                )
-                .map((child) => child.props.name);
-
-            await form.validateFields(fields);
+            await form.validateFields(steps[current].fieldNames);
             setCurrent(current + 1);
         } catch (err) {
             console.log("Validációs hiba:", err);
@@ -84,23 +134,21 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
     };
 
     const handleFinish = async () => {
-        try {
-            let values = await form.getFieldsValue(true);
-            values = {
-                ...values,
-                date: values.date?.format("YYYY-MM-DD"),
-                businessId: businessId,
-            }
-            console.log("Beküldött adatok:", values);
-            createAppointmentByGuestQuery(values)
-                .then(() => {
-                    message.success("Sikeres beküldés!");
-                });
-
-        } catch (error) {
-            console.log("Beküldés sikertelen:", error);
+        let values = await form.getFieldsValue(true);
+        values = {
+            ...values,
+            date: values.date?.format("YYYY-MM-DD"),
+            businessId: businessId,
         }
+        console.log("Beküldött adatok:", values);
+        createAppointmentByGuestQuery(values)
+            .then(() => {
+                message.success("Sikeres beküldés!");
+                // onClose();
+            });
     };
+
+
 
     return (
         <>

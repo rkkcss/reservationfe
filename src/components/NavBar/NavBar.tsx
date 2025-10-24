@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { logoutUser } from '../../redux/userSlice';
 import { AppDispatch, UserStore } from '../../store/store';
 import logo from '../../assets/logo.png';
 
@@ -26,11 +25,14 @@ const NavBar = () => {
 
     const userRoles: string[] = user?.authorities ?? [];
 
-    const filteredMenuItems = menuItems.filter(item =>
-        !item.roles || item.roles.some(role => userRoles.includes(role))
-    );
+    const filteredMenuItems = menuItems.filter(item => {
+        if (!item.roles) {
+            return userRoles.length === 0;
+        }
+        return item.roles.some(role => userRoles.includes(role));
+    });
 
-    const profileMenuItems: MenuProps['items'] = userMenuItems(t, navigate, () => dispatch(logoutUser()))
+    const profileMenuItems: MenuProps['items'] = userMenuItems(t, navigate, dispatch)
         .filter(item => item?.roles?.some(role => userRoles.includes(role)))
         .map(item => {
             if (item.type === 'divider') {
@@ -48,7 +50,7 @@ const NavBar = () => {
 
     return (
         <>
-            <Header className="bg-white shadow-lg container mb-4 rounded-md sticky top-2 z-20 px-1 sm:px-4 md:px-6">
+            <Header className="bg-[#f1f5ff]/60 outline outline-1 outline-gray-300 backdrop-blur-xl shadow-xl mb-4 sticky top-0 z-20 px-1 sm:px-4 md:px-6">
                 <ul className="flex gap-2 items-center h-full">
                     <img src={logo} className="h-12 min-h-12 cursor-pointer" alt="logo" onClick={() => navigate('/')} />
 
@@ -57,7 +59,7 @@ const NavBar = () => {
                             <NavLink
                                 to={`/${item.link}`}
                                 className={({ isActive }) =>
-                                    `${isActive ? 'text-primary bg-slate-100' : ''} text-sm px-4 py-2 hover:text-primary hover:bg-slate-100 rounded-lg transition duration-300 font-semibold`
+                                    `${isActive ? 'text-primary bg-slate-200/70' : ''} text-sm px-4 py-2 hover:text-primary hover:bg-slate-200 rounded-full transition duration-300 font-semibold`
                                 }
                             >
                                 {t(item.label!)}
@@ -73,10 +75,10 @@ const NavBar = () => {
                         </li>
                     ) : (
                         <>
-                            <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-100 transition rounded-lg cursor-pointer relative">
+                            <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full cursor-pointer relative">
                                 <NotificationDropDown />
                             </li>
-                            <li className="p-[5px] hover:text-primary hover:bg-slate-100 transition rounded-lg">
+                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
                                 <Dropdown arrow menu={{ items: profileMenuItems }} trigger={['click']}>
                                     <FiUser size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
                                 </Dropdown>
@@ -84,7 +86,7 @@ const NavBar = () => {
                         </>
                     )}
 
-                    <li className="p-[5px] hover:text-primary hover:bg-slate-100 transition rounded-lg">
+                    <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
                         <LanguageSelector />
                     </li>
 
@@ -98,7 +100,7 @@ const NavBar = () => {
                 <ul className="flex flex-col gap-4">
                     {filteredMenuItems.map(item => (
                         <li key={item.key}>
-                            <Link to={`/${item.link}`} className="flex items-center gap-2 text-sm px-4 py-2 hover:text-primary hover:bg-slate-100 transition rounded-lg font-semibold w-full">
+                            <Link to={`/${item.link}`} className="flex items-center gap-2 text-sm px-4 py-2 hover:text-primary hover:bg-slate-200 transition rounded-full font-semibold w-full">
                                 {item.icon}
                                 {t(item.label!)}
                             </Link>

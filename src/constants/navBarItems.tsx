@@ -19,6 +19,12 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
     {
+        key: 'dashboard',
+        label: 'Irányítópult',
+        roles: [Authorities.ROLE_USER],
+        link: 'dashboard'
+    },
+    {
         key: 'home',
         label: 'Kezdőoldal',
         link: 'home',
@@ -30,30 +36,23 @@ export const menuItems: MenuItem[] = [
     },
     {
         key: 'calendar',
-        label: 'Naptár',
+        label: "Naptár",
         roles: [Authorities.ROLE_USER],
-        link: 'dashboard/calendar',
+        link: 'calendar',
         icon: <CiCalendar size={20} />
     },
     {
-        key: 'appointments',
-        label: 'Időpontjaim',
-        roles: [Authorities.ROLE_USER],
-        link: 'dashboard/appointments',
+        key: 'pricing',
+        label: 'Árak',
+        link: 'pricing',
         icon: <MdOutlineLibraryBooks size={20} />
-    },
-    {
-        key: 'working-hours',
-        label: 'Munkarend',
-        roles: [Authorities.ROLE_USER],
-        link: 'dashboard/working-hours'
     }
 ];
 
 export const userMenuItems = (
     t: (key: string) => string,
     navigate: (path: string) => void,
-    dispatch: (action: AppDispatch) => void
+    dispatch: AppDispatch
 ): MenuItem[] => [
         {
             key: 'settings',
@@ -71,6 +70,8 @@ export const userMenuItems = (
             icon: <IoLogOutOutline size={18} />,
             label: t('logout'),
             roles: [Authorities.ROLE_USER],
-            onClick: () => dispatch(logoutUser())
+            onClick: () => {
+                dispatch(logoutUser())
+            }
         }
     ];

@@ -1,21 +1,33 @@
-import { useTranslation } from "react-i18next";
-import NavBar from "../components/NavBar/NavBar";
-import { Button } from "antd";
+
+import { Button, Carousel } from "antd";
 import img1 from "../assets/home1.svg"
 import img2 from "../assets/home2.svg"
 import signup from "../assets/singup.svg"
-import completed from "../assets/completed.svg"
 import calendar from "../assets/calendar.svg"
 import share from "../assets/share.svg"
 import datepicker from "../assets/datepicker.svg"
 import { TbCircleNumber1, TbCircleNumber2, TbCircleNumber3 } from "react-icons/tb";
+import banner1 from "../assets/banner1.jpg"
+import banner2 from "../assets/banner2.webp"
 
-type Props = {}
-
-const Home = (props: Props) => {
-    const { t, i18n: { changeLanguage, language } } = useTranslation();
+const Home = () => {
     return (
         <>
+            <Carousel effect="fade" className="h-[50vh] mb-9" >
+                <div>
+                    <img src={banner1} alt="Banner 1" className="h-[50vh] object-cover object-center w-full rounded-lg" />
+                </div>
+                <div className="relative">
+                    <img src={banner2} alt="Banner 2" className="h-[50vh] object-cover object-center w-full rounded-lg" />
+                    <div className="absolute h-full p-6 w-full top-0 flex flex-col justify-center bg-black/30 text-white">
+                        <p className="text-4xl font-bold mb-4">Időpont foglaló rendszer</p>
+                        <p className="mb-3 max-w-md text-base">Kezeld egy helyen az összes időpontodat, fejfájás nélkül. Válassz csomagjaink közül, a számodra legmegfelelőbb opciók közül.</p>
+                        <div className="flex gap-4">
+                            <Button type="primary">Regisztrálok</Button>
+                        </div>
+                    </div>
+                </div>
+            </Carousel>
             <div className="grid grid-cols-1 md:grid-cols-2 items-center px-4">
                 <div>
                     <p className="text-3xl font-semibold mb-4">Book with the best, near you</p>

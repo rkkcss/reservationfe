@@ -1,4 +1,5 @@
 import { Form, Input } from "antd";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 const StepPersonalData: React.FC = () => {
 
@@ -23,7 +24,19 @@ const StepPersonalData: React.FC = () => {
             <Form.Item
                 name="phoneNumber"
                 label="Telefonszám"
-                rules={[{ required: true, message: 'Telefonszám...' }]}
+                rules={[
+                    {
+                        required: true, message: 'Telefonszám...'
+                    },
+                    {
+                        validator(_, value) {
+                            if (!value || isValidPhoneNumber(value)) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject("Érvénytelen telefonszám formátum!");
+                        },
+                    },
+                ]}
             >
                 <Input />
             </Form.Item>

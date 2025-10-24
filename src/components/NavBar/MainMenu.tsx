@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { Authorities } from '../../helpers/types/Authorities';
-import { MdOutlineLibraryBooks } from 'react-icons/md';
 import { CiCalendar } from 'react-icons/ci';
 
 interface Props {
@@ -24,20 +23,7 @@ const menuItems = [
         roles: [Authorities.ROLE_USER],
         link: 'dashboard/calendar',
         icon: <CiCalendar size={20} />
-    },
-    {
-        key: 'appointments',
-        label: 'Időpontjaim',
-        roles: [Authorities.ROLE_USER],
-        link: 'dashboard/appointments',
-        icon: <MdOutlineLibraryBooks size={20} />
-    },
-    {
-        key: 'working-hours',
-        label: 'Munkarend',
-        roles: [Authorities.ROLE_USER],
-        link: 'dashboard/working-hours'
-    },
+    }
 
 ];
 

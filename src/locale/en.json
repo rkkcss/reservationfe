@@ -17,6 +17,14 @@
             "loggedInSuccessfully": "Logged in successfully",
             "logoutSuccessfully": "Logout successfully",
             "dontHaveAccountLink": "Don't have account? Register here!"
+        },
+        "error": {
+            "appointment": {
+                "reserved": "This time is already reserved"
+            },
+            "guest": {
+                "cantbook": "You are not allowed to book with this provider!"
+            }
         }
     }
 }

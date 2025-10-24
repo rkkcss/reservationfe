@@ -7,12 +7,7 @@ import { usePagination } from '../hooks/usePagination'
 import AddAppointmentSteps from './MultistepForms/AddAppointment/AddAppointmentSteps'
 import CustomPagination from './CustomPagination'
 
-type BusinessServicesProps = {
-    //TODO: ADD TYPE
-    selectedTheme: any
-}
-
-const BusinessServices = ({ selectedTheme }: BusinessServicesProps) => {
+const BusinessServices = () => {
     const { businessId } = useParams();
     const { data, totalItems, fetchNextPage, fetchPage, fetchPrevPage, currentPage, itemsPerPage } = usePagination<Offering>(`/api/offerings/business/${businessId}`, 5)
     const [selectedOffer, setSelectedOffer] = useState<Offering>({} as Offering);
@@ -51,11 +46,10 @@ const BusinessServices = ({ selectedTheme }: BusinessServicesProps) => {
                             <Collapse
                                 key={index}
                                 bordered={true}
-                                className={`mb-5 ${selectedTheme.borderColor}`}
+                                className={`mb-5`}
                             >
                                 <Collapse.Panel
                                     key={index}
-                                    className={`${selectedTheme.borderColor}`}
                                     header={offer.title}
                                     extra={
                                         <div className="flex items-center gap-5">

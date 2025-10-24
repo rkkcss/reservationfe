@@ -10,3 +10,5 @@ i18n.use(initReactI18next).init({
     },
     lng: "hu",
 });
+
+export default i18n;

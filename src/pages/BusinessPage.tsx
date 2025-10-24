@@ -12,6 +12,7 @@ import placeholderImage from '../assets/placeholder.jpg'
 type CustomTheme = {
     token: Partial<AliasToken>;
     background: string;
+    backgroundColor: string;
     headerText1Color: string;
     pTextColor: string;
     borderColor: string
@@ -22,7 +23,8 @@ const themes: Record<string, CustomTheme> = {
         token: {
             colorPrimary: '#1e90ff',
         },
-        background: 'bg-[radial-gradient(circle,_rgba(230,247,255,1)_0%,_rgba(0,122,204,1)_100%)]',
+        backgroundColor: '#f0f2f5',
+        background: 'bg-gradient-to-br from-sky-300 via-blue-200 to-cyan-300',
         headerText1Color: "",
         pTextColor: "",
         borderColor: ""
@@ -31,25 +33,28 @@ const themes: Record<string, CustomTheme> = {
         token: {
             colorPrimary: '#d63384',
         },
-        background: 'bg-[radial-gradient(circle,_rgba(252,240,240,1)_0%,_rgba(247,151,206,1)_100%)]',
+        backgroundColor: '#fce4ec',
+        background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
         headerText1Color: "",
         pTextColor: "",
         borderColor: "border-pink-300"
     },
     black: {
         token: {
-            colorPrimary: '#dedede',
+            colorPrimary: '#1f1e1d',
         },
-        background: 'bg-[radial-gradient(circle,_rgba(33,8,8,1)_0%,_rgba(59,53,54,1)_100%)]',
+        backgroundColor: '#121212',
+        background: 'bg-gradient-to-br from-gray-800 via-purple-800 to-black',
         headerText1Color: "",
         pTextColor: "",
-        borderColor: "color-pink-500"
+        borderColor: "transparent"
     },
     orange: {
         token: {
             colorPrimary: '#fa8c16',
         },
-        background: 'bg-gradient-to-r from-orange-100 via-orange-300 to-orange-500',
+        backgroundColor: '#fff7e6',
+        background: 'bg-gradient-to-br from-orange-400 via-yellow-300 to-pink-300',
         headerText1Color: "",
         pTextColor: "",
         borderColor: "border-orange-400"
@@ -80,7 +85,7 @@ const BusinessPage = () => {
         {
             key: "services",
             label: "Szolgáltatások",
-            children: <BusinessServices selectedTheme={selectedTheme} />
+            children: <BusinessServices />
         },
         {
             key: "reviews",
@@ -107,12 +112,34 @@ const BusinessPage = () => {
                     Typography: {
                         colorText: selectedTheme.token.colorText,
                     },
+                    Tabs: {
+                        colorBgContainer: selectedTheme.token.colorBgContainer,
+                        colorText: selectedTheme.token.colorText,
+                        colorPrimary: selectedTheme.token.colorPrimary,
+                        colorBorderSecondary: selectedTheme.token.colorPrimary,
+                        fontWeightStrong: 600,
+                    },
+                    Collapse: {
+                        colorBgContainer: selectedTheme.token.colorBgContainer,
+                        colorText: selectedTheme.token.colorText,
+                        colorBorder: selectedTheme.borderColor,
+                        fontWeightStrong: 600,
+                    },
+                    Card: {
+                        colorBgContainer: "transparent",
+                        colorBorderSecondary: selectedTheme.borderColor,
+
+                    },
+                    Dropdown: {
+                        colorBgTextActive: "yellow"
+                    }
                 }
             }}
         >
-            <div className={`min-h-svh flex items-start ${selectedTheme.background}`}>
-                <div className="text-custom-gray container mx-auto max-w-[1240px] p-5 bg-pink-100/50 backdrop-blur-xl mt-4 rounded-xl">
-                    <h1 className="text-3xl mt-4 mb-2">{business.name}</h1>
+            <div className={`min-h-svh flex items-start bg-[${selectedTheme.backgroundColor}] overflow-hidden`}>
+                <div className={`${selectedTheme.background} absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full  opacity-50 blur-[150px] z-0`} />
+                <div className="text-custom-gray container mx-auto max-w-[1240px] p-5 backdrop-blur-xl bg-white/60 border border-white/30 shadow-lg mt-4 rounded-xl">
+                    <h1 className="text-3xl mt-4 mb-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">{business.name}</h1>
 
                     {
                         business.logo &&
@@ -130,7 +157,7 @@ const BusinessPage = () => {
 
                     <div className="flex flex-col md:flex-row gap-5 w-full">
                         <div>
-                            <div className={`border-2 ${selectedTheme.borderColor} py-1 px-3 max-w-96 rounded-lg min-w-[300px]`}>
+                            <div className={`border ${selectedTheme.borderColor} py-1 px-3 max-w-96 rounded-lg min-w-[300px]`}>
                                 {
                                     business.address &&
                                     <>

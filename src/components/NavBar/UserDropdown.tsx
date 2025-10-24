@@ -1,19 +1,18 @@
 import { Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { userMenuItems } from '../../constants/navBarItems';
+import { MenuItem, userMenuItems } from '../../constants/navBarItems';
 
 interface Props {
     user: { authorities?: string[] };
     onLogout: () => void;
 }
 
-export default function UserDropdown({ user, onLogout }: Props) {
+export default function UserDropdown({ user }: Props) {
     const menu = userMenuItems
-        .filter(item => !item.roles || item.roles.some(r => user.authorities?.includes(r)))
-        .map(item => ({
+        .filter((item: MenuItem) => !item.roles || item.roles.some(r => user.authorities?.includes(r)))
+        .map((item: MenuItem) => ({
             key: item.key,
             label: item.label,
-            onClick: item.onClick === 'logout' ? onLogout : item.onClick,
         }));
 
     return (

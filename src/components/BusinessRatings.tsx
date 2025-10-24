@@ -1,6 +1,6 @@
 import { useParams } from 'react-router'
 import { usePagination } from '../hooks/usePagination';
-import { Card, Rate } from 'antd';
+import { Card, Divider, Rate } from 'antd';
 import { BusinessRating } from '../helpers/types/BusinessRating';
 import placeholderImage from '../assets/placeholder.jpg'
 
@@ -16,7 +16,7 @@ const BusinessRatings = () => {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {
                         data?.map((rating) => (
-                            <li>
+                            <li key={rating.id}>
                                 <Card styles={{ body: { padding: '6px 12px' } }} >
                                     <div className="flex justify-between items-center">
                                         <p>{rating.guest.name}</p>
@@ -35,6 +35,7 @@ const BusinessRatings = () => {
                                         <p className="text-xs text-gray-500">{rating.description}</p>
                                     </div>
                                 </Card>
+                                <Divider />
                             </li>
                         ))
                     }

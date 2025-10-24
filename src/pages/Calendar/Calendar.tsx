@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -18,22 +18,24 @@ import {
 import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from '@fullcalendar/core';
 import { Appointment } from '../../helpers/types/Appointment';
 import { appointmentToEvent, eventToAppointment } from '../../utils/calendarEventUtils';
-import { useCustomQuery } from '../../hooks/useAppointments';
-import PendingAppointments from '../../components/PendingAppointments';
+import { useCustomQuery } from '../../hooks/useCustomQuery';
+import PendingAppointments from '../../components/PendingAppointments/PendingAppointments';
+import { useCalendar } from '../../context/CalendarContext';
 
 const CalendarPage = () => {
     const { data, fetchData } = useCustomQuery({ url: "/api/appointments" });
     const [formattedEvents, setFormattedEvents] = useState<EventInput[]>([]);
     const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState<Appointment>({} as Appointment);
+    const { calendarRef } = useCalendar();
 
-    const calendarRef = useRef<FullCalendar | null>(null);
+    // const calendarRef = useRef<FullCalendar | null>(null);
+    const [dateRange, setDateRange] = useState("");
 
     const handleDatesSet = useCallback((arg: DatesSetArg) => {
-        const start = arg.start;
-        const end = new Date(arg.end.getTime() - 1);
-        fetchData({ params: { startDate: start, endDate: end } });
-    }, []);
+        computeDateRange(arg);
+        fetchData({ params: { startDate: arg.start, endDate: arg.end } });
+    }, [fetchData]);
 
     const handleEventClick = useCallback((clickInfo: EventClickArg) => {
         setSelectedAppointment(eventToAppointment(clickInfo.event));
@@ -77,6 +79,17 @@ const CalendarPage = () => {
     }, [data]);
 
 
+    const computeDateRange = (arg: DatesSetArg) => {
+        const start = arg.start;
+        const end = new Date(arg.end.getTime() - 1);
+
+        const fmt: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+        const startStr = new Intl.DateTimeFormat("hu-HU", fmt).format(start);
+        const endStr = new Intl.DateTimeFormat("hu-HU", fmt).format(end);
+
+        setDateRange(`${startStr} - ${endStr}`);
+    };
+
     return (
         <>
             <AddAppointmentAdmin
@@ -87,16 +100,16 @@ const CalendarPage = () => {
                 deleteAppointment={handleDeleteAppointment}
                 key={selectedAppointment?.startDate?.toString() || 'new-appointment'}
             />
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4">
                 <PendingAppointments />
             </div>
 
-            <CalendarHeader calendarRef={calendarRef} />
+            <CalendarHeader dateRange={dateRange} />
 
             <FullCalendar
                 ref={calendarRef}
                 viewClassNames="mt-4"
-                height={'80vh'}
+                height={'70vh'}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="timeGridWeek"
                 locale={huLocal}

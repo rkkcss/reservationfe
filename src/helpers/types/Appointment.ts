@@ -9,5 +9,5 @@ export type Appointment = {
     status: 'PENDING' | 'CONFIRMED' | 'CANCELLED',
     note?: string,
     offering: Offering,
-    guest: Guest
+    guest?: Guest
 }

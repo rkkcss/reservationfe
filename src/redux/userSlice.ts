@@ -4,6 +4,7 @@ import { APILogin } from "../utils/APILogin";
 import i18next from "i18next";
 import { message } from "antd";
 import { Authorities } from "../helpers/types/Authorities";
+import { AxiosError } from "axios";
 
 
 export type User = {
@@ -49,23 +50,31 @@ export const getAccountInfo = createAsyncThunk<User>(
     }
 );
 
-export const loginUser = createAsyncThunk<{ status: number, message: string }, LoginForm>(
+export const loginUser = createAsyncThunk<
+    { status: number; message: string },
+    LoginForm
+>(
     'loginUser',
-    async (user: LoginForm, { dispatch }) => {
-        console.log(user);
+    async (user, { dispatch, rejectWithValue }) => {
         try {
-            const res = await APILogin.post('/api/authentication', user)
+            const res = await APILogin.post('/api/authentication', user);
+
             if (res.status === 200) {
                 dispatch(getAccountInfo());
-                return { status: res.status, message: i18next.t("loginModal.loggedInSuccessfully") }
+                return { status: res.status, message: i18next.t("loginModal.loggedInSuccessfully") };
             }
 
-            return { status: res.status, message: "Unexpected status code!" }
-        } catch (error: any) {
-            if (error?.status === 401) {
-                return { status: error.status, message: i18next.t("loginModal.wrongCredentials") }
+            return { status: res.status, message: "Unexpected status code!" };
+        } catch (error: unknown) {
+            const err = error as AxiosError;
+            const status = err.response?.status ?? 0; // biztosítsunk számot
+
+            if (status === 401) {
+                // rejectWithValue használata, ha hiba történt
+                return rejectWithValue({ status, message: i18next.t("loginModal.wrongCredentials") });
             }
-            return { status: error.status, message: i18next.t("loginModal.somethingWentWrong") }
+
+            return rejectWithValue({ status, message: i18next.t("loginModal.somethingWentWrong") });
         }
     }
 );

@@ -59,3 +59,11 @@ export const getAppointmentByModifierToken = (modifierToken: string) => {
 export const cancelAppointmentByGuestWithToken = (modifierToken: string) => {
     return API.post(`/api/appointments/cancel/${modifierToken}`)
 }
+
+export const approveAppointmentById = (id: number) => {
+    return API.patch(`/api/appointments/${id}/approve`)
+}
+
+export const cancelAppointmentById = (id: number) => {
+    return API.patch(`/api/appointments/${id}/cancel`)
+}

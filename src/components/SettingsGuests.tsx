@@ -137,6 +137,11 @@ const SettingsGuests = () => {
                         Vendég hozzáadása
                     </Button>
                 </div>
+                <div className="flex justify-end">
+                    <p className="text-base mt-8 mb-2">
+                        <span className="font-semibold">{totalItems || 0}</span> találat összesen
+                    </p>
+                </div>
                 <Table
                     dataSource={guests || []}
                     rowKey="id"

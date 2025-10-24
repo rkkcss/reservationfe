@@ -1,6 +1,8 @@
 import axios from "axios";
 import store from "../store/store";
 import { logoutUser } from "../redux/userSlice";
+import { message } from "antd";
+import i18n from "../i18n";
 
 const serverMode = import.meta.env.VITE_API_URL;
 
@@ -48,6 +50,13 @@ API.interceptors.response.use(
     async (error) => {
         console.error("Hiba történt:", error);
         const status = error.response?.status;
+        const messageKey = error.response?.data?.message;
+
+        if (messageKey) {
+            message.error(i18n.t(messageKey));
+        } else {
+            message.error("Ismeretlen hiba");
+        }
 
         if (status === 401) {
             await store.dispatch(logoutUser());
