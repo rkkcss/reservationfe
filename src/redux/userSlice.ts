@@ -8,16 +8,16 @@ import { AxiosError } from "axios";
 
 
 export type User = {
-    id?: number;
-    login?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
+    id: number;
+    login: string;
+    email: string;
+    firstName: string;
+    lastName: string;
     imageUrl?: string | "";
-    activated?: boolean;
-    langKey?: string;
-    createdDate?: Date;
-    authorities?: [Authorities];
+    activated: boolean;
+    langKey: string;
+    createdDate: Date;
+    authorities: [Authorities];
 };
 
 export type LoginForm = {
@@ -81,6 +81,7 @@ export const loginUser = createAsyncThunk<
 
 export const logoutUser = createAsyncThunk("logoutUser", async () => {
     await API.post("/api/logout");
+    await API.get("/api/csrf-token");
 });
 
 export const updateUserApi = createAsyncThunk<User, User>(
@@ -110,10 +111,15 @@ const loginSlice = createSlice({
             state.theme = action.payload;
         },
         setImageUrl(state, action) {
-            state.user = ({ ...state.user, imageUrl: action.payload })
+            if (state.user) {
+                state.user = ({ ...state.user, imageUrl: action.payload })
+            }
         },
         updateName(state, action) {
-            state.user = ({ ...state.user, firstName: action.payload.firstName, lastName: action.payload.lastName });
+            if (state.user) {
+                state.user = ({ ...state.user, firstName: action.payload.firstName, lastName: action.payload.lastName });
+            }
+
         }
     },
     extraReducers(builder) {

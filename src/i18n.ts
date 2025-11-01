@@ -1,14 +1,21 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import enJSON from './locale/en.json'
-import huJSON from './locale/hu.json'
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import Backend from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-i18n.use(initReactI18next).init({
-    resources: {
-        en: { ...enJSON },
-        hu: { ...huJSON },
-    },
-    lng: "hu",
-});
+i18n
+    .use(Backend)
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        fallbackLng: 'hu',
+        debug: true,
+        interpolation: {
+            escapeValue: false,
+        },
+        backend: {
+            loadPath: '/locales/{{lng}}/{{ns}}.json',
+        },
+    });
 
 export default i18n;

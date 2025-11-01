@@ -4,19 +4,21 @@ import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, User } from "../../redux/userSlice";
+import { LoginForm, loginUser, User } from "../../redux/userSlice";
 import { UserStore } from "../../store/store";
 import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { fetchCsrfToken } from "../../helpers/queries/accountService";
 import Checkbox from "antd/es/checkbox/Checkbox";
+import { useNavigate } from "react-router";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-    const { t } = useTranslation();
+    const { t } = useTranslation("login-modal");
     const [form] = useForm();
     const dispatch: ThunkDispatch<User, User, PayloadAction> = useDispatch();
     const { loading } = useSelector((state: UserStore) => state.userStore);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoginModalController({
@@ -27,28 +29,23 @@ const LoginModal = () => {
                 form.resetFields();
             },
         });
-    }, []);
+    }, [form]);
 
-    const submitLogin = (e) => {
+    const submitLogin = (e: LoginForm) => {
         setErrorMsg("");
 
         dispatch(loginUser(e))
+            .unwrap()
             .then((res) => {
-                if (!res?.payload) return;
-                if (res.payload.status === 200) {
-                    loginModal.close();
-                    message.success(res.payload.message);
-                } else {
-                    if (res.payload.status === 401) {
-                        setErrorMsg(res.payload.message);
-                    } else {
-                        setErrorMsg(t("loginModal.somethingWentWrong"));
-                    }
-                }
-
+                message.success(res.message);
+                loginModal.close();
             })
             .catch((err) => {
-                setErrorMsg("An unexpected error occurred");
+                if (err.status === 401) {
+                    setErrorMsg(err.message);
+                } else {
+                    setErrorMsg(t("somethingWentWrong"));
+                }
             });
     };
 
@@ -58,43 +55,48 @@ const LoginModal = () => {
         }
     }, [isOpen])
 
+    const handleNavigateRegister = () => {
+        loginModal.close();
+        navigate("/register");
+    }
+
     return (
         <Modal
             open={isOpen}
             onCancel={() => loginModal.close()}
             footer={null}
-            title={t("loginModal.loginHeader")}
+            title={t("loginHeader")}
             width={400}
         >
             {errorMsg &&
                 <Alert showIcon className="my-4" type="error" message={errorMsg} />
             }
             <Form form={form} layout="vertical" onFinish={submitLogin}>
-                <Form.Item name="username" label={t("loginModal.username")}
+                <Form.Item name="username" label={t("username")}
                     rules={
-                        [{ required: true, message: t("loginModal.required") }]
+                        [{ required: true, message: t("required") }]
                     }
                 >
                     <Input type="text" placeholder="login" />
                 </Form.Item>
-                <Form.Item name="password" label={t("loginModal.password")}
+                <Form.Item name="password" label={t("password")}
                     rules={
-                        [{ required: true, message: t("loginModal.required") }]
+                        [{ required: true, message: t("required") }]
                     }
                 >
-                    <Input type="password" placeholder={t("loginModal.password")} />
+                    <Input type="password" placeholder={t("password")} />
                 </Form.Item>
                 <Form.Item name="remember-me" valuePropName="checked" label={null}>
-                    <Checkbox>Remember me</Checkbox>
+                    <Checkbox>{t("rememberMe")}</Checkbox>
                 </Form.Item>
                 <div className="flex justify-between">
 
                     <Button type="primary" htmlType="submit" loading={loading} className="w-full">
-                        {t("loginModal.submit")}
+                        {t("submit")}
                     </Button>
                 </div>
             </Form>
-            <Button size="small" type="text" className="w-full mt-4">{t("loginModal.dontHaveAccountLink")}</Button>
+            <Button size="small" type="text" onClick={handleNavigateRegister} className="w-full mt-4">{t("dontHaveAccountLink")}</Button>
         </Modal>
     );
 };

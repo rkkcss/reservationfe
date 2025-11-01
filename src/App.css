@@ -5,11 +5,11 @@
     /* font-weight: 400; */
 }
 
-/* body {
-     background-color: #eff8fe;
+body div#root>div {
+    min-height: 100svh;
 }
 
-*/
+
 .ant-modal-mask,
 .ant-drawer-mask {
     backdrop-filter: blur(2px);

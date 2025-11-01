@@ -6,6 +6,7 @@ import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Authorities } from '../helpers/types/Authorities';
 import { AppDispatch } from '../store/store';
 import { logoutUser } from '../redux/userSlice';
+import { Link } from 'react-router';
 
 export interface MenuItem {
     key?: string;
@@ -17,37 +18,39 @@ export interface MenuItem {
     type?: 'divider';
 }
 
-export const menuItems: MenuItem[] = [
-    {
-        key: 'dashboard',
-        label: 'Irányítópult',
-        roles: [Authorities.ROLE_USER],
-        link: 'dashboard'
-    },
-    {
-        key: 'home',
-        label: 'Kezdőoldal',
-        link: 'home',
-    },
-    {
-        key: 'about',
-        label: 'Rólunk',
-        link: 'about',
-    },
-    {
-        key: 'calendar',
-        label: "Naptár",
-        roles: [Authorities.ROLE_USER],
-        link: 'calendar',
-        icon: <CiCalendar size={20} />
-    },
-    {
-        key: 'pricing',
-        label: 'Árak',
-        link: 'pricing',
-        icon: <MdOutlineLibraryBooks size={20} />
-    }
-];
+export const menuItems = (
+    t: (key: string) => string,
+): MenuItem[] => [
+        {
+            key: 'dashboard',
+            label: t('dashboard'),
+            roles: [Authorities.ROLE_USER],
+            link: 'dashboard'
+        },
+        {
+            key: 'home',
+            label: t('home'),
+            link: 'home',
+        },
+        {
+            key: 'about',
+            label: t('about'),
+            link: 'about',
+        },
+        {
+            key: 'calendar',
+            label: t('calendar'),
+            roles: [Authorities.ROLE_USER],
+            link: 'calendar',
+            icon: <CiCalendar size={20} />
+        },
+        {
+            key: 'pricing',
+            label: t('pricing'),
+            link: 'pricing',
+            icon: <MdOutlineLibraryBooks size={20} />
+        }
+    ];
 
 export const userMenuItems = (
     t: (key: string) => string,
@@ -75,3 +78,15 @@ export const userMenuItems = (
             }
         }
     ];
+
+export const threeDotMenuItems = (t: (key: string) => string) => [
+    {
+        key: 'register',
+        label: (
+            <Link to="/register" >
+                {t('register')}
+            </Link>
+        ),
+        link: '/register',
+    },
+]

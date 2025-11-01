@@ -1,0 +1,13 @@
+{
+    "loginHeader": "Login your account",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Belépés",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "required": "Field is required!",
+    "wrongCredentials": "Wrong username or password",
+    "somethingWentWrong": "Something went wrong, please try again later!",
+    "loggedInSuccessfully": "Logged in successfully",
+    "dontHaveAccountLink": "Don't have an account? Register here!"
+}

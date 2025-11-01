@@ -1,0 +1,13 @@
+{
+    "loginHeader": "Jelentkezz be",
+    "username": "Felhasználónév",
+    "password": "Jelszó",
+    "submit": "Bejelentkezés",
+    "rememberMe": "Emlékezz rám",
+    "forgotPassword": "Elfelejtett jelszó?",
+    "required": "Kötelező mezö!",
+    "wrongCredentials": "Helytelen felhasználónév vagy jelszó!",
+    "somethingWentWrong": "Valami hiba történt, probáld meg kicsit késöbb!",
+    "loggedInSuccessfully": "Sikeres bejelentkezés",
+    "dontHaveAccountLink": "Nincs még fiókod? Regisztrálj itt!"
+}

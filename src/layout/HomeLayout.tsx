@@ -1,18 +1,20 @@
 import { Outlet } from 'react-router'
 import NavBar from '../components/NavBar/NavBar'
 import Footer from '../components/Footer'
+import { useLoginModalRouteListener } from '../hooks/useLoginModalRouteListener';
 
 const HomeLayout = () => {
+    useLoginModalRouteListener();
+
     return (
         <>
             <NavBar />
-            <div className="text-custom-gray container mx-auto min-h-svh">
-
-                <div className="min-h-[70vh] px-2 md:px-0 flex flex-col">
+            <div className="text-custom-gray container mx-auto min-h-[calc(100svh-(64px+81px))]">
+                <div className="px-2 md:px-0 flex flex-col">
                     <Outlet />
                 </div>
-                <Footer />
             </div>
+            <Footer />
         </>
     )
 }

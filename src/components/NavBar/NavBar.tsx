@@ -8,29 +8,31 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppDispatch, UserStore } from '../../store/store';
 import logo from '../../assets/logo.png';
+import { BsThreeDots } from "react-icons/bs";
 
 import LanguageSelector from './LanguageSelector';
 import LoginModal from '../Login/LoginModal';
 import { loginModal } from '../Login/loginModalController';
-import { menuItems, userMenuItems } from '../../constants/navBarItems';
+import { menuItems, threeDotMenuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
 import NotificationDropDown from './NotificationDropDown';
 
 const NavBar = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t } = useTranslation("nav-bar");
     const { user } = useSelector((state: UserStore) => state.userStore);
     const [menuDrawerOpen, setMenuDrawerOpen] = useState(false);
 
     const userRoles: string[] = user?.authorities ?? [];
 
-    const filteredMenuItems = menuItems.filter(item => {
-        if (!item.roles) {
-            return userRoles.length === 0;
-        }
-        return item.roles.some(role => userRoles.includes(role));
-    });
+    const filteredMenuItems = menuItems(t)
+        .filter(item => {
+            if (!item.roles) {
+                return userRoles.length === 0;
+            }
+            return item.roles.some(role => userRoles.includes(role));
+        });
 
     const profileMenuItems: MenuProps['items'] = userMenuItems(t, navigate, dispatch)
         .filter(item => item?.roles?.some(role => userRoles.includes(role)))
@@ -68,11 +70,18 @@ const NavBar = () => {
                     ))}
 
                     {!user ? (
-                        <li className="ml-auto">
-                            <Button type="primary" onClick={() => loginModal.open()}>
-                                {t('login')}
-                            </Button>
-                        </li>
+                        <>
+                            <li className="ml-auto">
+                                <Button type="primary" onClick={() => loginModal.open()}>
+                                    {t('login')}
+                                </Button>
+                            </li>
+                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
+                                <Dropdown arrow menu={{ items: threeDotMenuItems(t) }} trigger={['click']}>
+                                    <BsThreeDots size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
+                                </Dropdown>
+                            </li>
+                        </>
                     ) : (
                         <>
                             <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full cursor-pointer relative">

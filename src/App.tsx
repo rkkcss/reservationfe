@@ -17,6 +17,8 @@ import CancelAppointment from './components/CancelAppointment'
 import PricePage from './pages/PricePage'
 import Dashboard from './pages/Dashboard'
 import CalendarLayout from './layout/CalendarLayout'
+import Register from './pages/Register'
+import RegisterActivation from './pages/Activations/RegisterActivation'
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
       <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
       <Route path="/business/:businessId" element={<BusinessPage />} />
       <Route element={<HomeLayout />}>
+        <Route path="/register" element={<Register />} />
         <Route path="/pricing" element={<PricePage />} />
         <Route index element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -46,6 +49,7 @@ function App() {
         </Route>
         <Route element={<NotFound />} path="*" />
       </Route>
+      <Route path="/account/activate" element={<RegisterActivation />} />
     </Routes>
   )
 }

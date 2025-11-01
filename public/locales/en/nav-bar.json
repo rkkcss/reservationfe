@@ -1,0 +1,11 @@
+{
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "home": "Home",
+    "about": "About Us",
+    "pricing": "Pricing",
+    "contact": "Contact us",
+    "calendar": "Calendar",
+    "dashboard": "Dashboard"
+}
