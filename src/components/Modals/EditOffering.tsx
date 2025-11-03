@@ -2,6 +2,7 @@ import { Button, Form, Input, InputNumber, Modal } from "antd"
 import { Offering } from "../../helpers/types/Offering"
 import { useEffect } from "react"
 import TextArea from "antd/es/input/TextArea"
+import { useTranslation } from "react-i18next"
 
 type EditOfferingProps = {
     visible: boolean,
@@ -12,6 +13,7 @@ type EditOfferingProps = {
 
 const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
     const [form] = Form.useForm();
+    const { t } = useTranslation('edit-offering');
 
     const handleCloseModal = () => {
         form.resetFields();
@@ -31,8 +33,8 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
             onCancel={handleCloseModal}
             open={visible}
             title={offer?.id
-                ? "Szerkesztés"
-                : "Új szolgáltatás hozzáadása"
+                ? t("edit")
+                : t("newService")
             }
             footer={false}
         >
@@ -43,41 +45,52 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
             >
                 <Form.Item hidden name="id"><Input hidden /></Form.Item>
                 <Form.Item
-                    label="Fejléc"
+                    label={t("serviceName")}
                     name="title"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
+                    rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <Input placeholder="Fejléc..." />
+                    <Input placeholder={t("serviceName") + "..."} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Leírás"
+                    label={t("serviceDescription")}
                     name="description"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
+                    rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <TextArea placeholder="Leírás..." />
+                    <TextArea placeholder={t("serviceDescription") + "..."} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Szolgáltatás ára"
+                    label={t("servicePrice")}
                     name="price"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
+                    rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <InputNumber placeholder="Ár..." min={1} className="w-full" />
+                    <InputNumber placeholder={t("servicePrice") + "..."}
+                        min={1}
+                        className="w-full"
+                        suffix="Ft"
+                    />
                 </Form.Item>
 
                 <Form.Item
-                    label="Idő"
+                    label={t("serviceDuration")}
                     name="durationMinutes"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
+                    rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <InputNumber placeholder="Idő..." min={1} className="w-full" />
+                    <InputNumber placeholder={t("serviceDuration") + "..."}
+                        min={1}
+                        className="w-full"
+                        suffix={t("minutes")}
+                    />
                 </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="w-full mt-3">
-                        Mentés
+                <div className="flex justify-between mb-0">
+                    <Button type="primary" htmlType="submit" className="mt-3">
+                        {t("save")}
                     </Button>
-                </Form.Item>
+                    <Button className="mt-3" onClick={onClose}>
+                        {t("cancel")}
+                    </Button>
+                </div>
             </Form>
         </Modal>
     );

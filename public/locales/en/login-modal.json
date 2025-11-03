@@ -9,5 +9,6 @@
     "wrongCredentials": "Wrong username or password",
     "somethingWentWrong": "Something went wrong, please try again later!",
     "loggedInSuccessfully": "Logged in successfully",
+    "logoutSuccessfully": "Logged out successfully",
     "dontHaveAccountLink": "Don't have an account? Register here!"
 }

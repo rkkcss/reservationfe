@@ -9,5 +9,6 @@
     "wrongCredentials": "Helytelen felhasználónév vagy jelszó!",
     "somethingWentWrong": "Valami hiba történt, probáld meg kicsit késöbb!",
     "loggedInSuccessfully": "Sikeres bejelentkezés",
+    "logoutSuccessfully": "Sikeres kijelentkezés",
     "dontHaveAccountLink": "Nincs még fiókod? Regisztrálj itt!"
 }

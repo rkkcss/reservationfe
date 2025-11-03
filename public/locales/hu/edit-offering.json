@@ -1,0 +1,12 @@
+{
+    "edit": "Szerkesztés",
+    "newService": "Új szolgáltatás",
+    "serviceName": "Szolgáltatás neve",
+    "serviceDescription": "Szolgáltatás leírása",
+    "serviceDuration": "Szolgáltatás időtartama (percben)",
+    "servicePrice": "Szolgáltatás ára",
+    "save": "Mentés",
+    "cancel": "Mégse",
+    "minutes": "perc",
+    "requiredField": "Kötelező mező"
+}

@@ -61,20 +61,20 @@ export const loginUser = createAsyncThunk<
 
             if (res.status === 200) {
                 dispatch(getAccountInfo());
-                return { status: res.status, message: i18next.t("loginModal.loggedInSuccessfully") };
+                return { status: res.status, message: i18next.t("login-modal:loggedInSuccessfully") };
             }
 
             return { status: res.status, message: "Unexpected status code!" };
         } catch (error: unknown) {
             const err = error as AxiosError;
-            const status = err.response?.status ?? 0; // biztosítsunk számot
+            const status = err.response?.status ?? 0;
 
             if (status === 401) {
                 // rejectWithValue használata, ha hiba történt
-                return rejectWithValue({ status, message: i18next.t("loginModal.wrongCredentials") });
+                return rejectWithValue({ status, message: i18next.t("login-modal:wrongCredentials") });
             }
 
-            return rejectWithValue({ status, message: i18next.t("loginModal.somethingWentWrong") });
+            return rejectWithValue({ status, message: i18next.t("login-modal:somethingWentWrong") });
         }
     }
 );
@@ -153,7 +153,7 @@ const loginSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.loading = false;
                 state.user = null;
-                message.success(i18next.t("loginModal.logoutSuccessfully"));
+                message.success(i18next.t("login-modal:logoutSuccessfully"));
             })
             .addCase(logoutUser.rejected, (state: State, action) => {
                 state.loading = false;

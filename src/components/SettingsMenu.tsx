@@ -67,6 +67,7 @@ const SettingsMenu = () => {
             icon: item.icon,
             label: item.label,
             onClick: item.onClick,
+            className: "md:!rounded-full md:!w-fit"
         }));
 
     return (
@@ -74,7 +75,7 @@ const SettingsMenu = () => {
             <Menu
                 items={filteredSettingsMenu}
                 inlineCollapsed={isMenuCollapsed}
-                className="!border-none h-full outline outline-gray-100 rounded-xl outline-1 md:w-72 md:max-w-72"
+                className="!border-none h-full outline outline-gray-100 rounded-xl outline-2 md:w-72 md:max-w-72"
                 selectedKeys={[settingsMenuItems.find(item => location.pathname.includes(item.key))?.key || ""]}
             />
         </div>

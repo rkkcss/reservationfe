@@ -1,0 +1,12 @@
+{
+    "edit": "Edit",
+    "newService": "New Service",
+    "serviceName": "Service Name",
+    "serviceDescription": "Service Description",
+    "serviceDuration": "Service Duration (in minutes)",
+    "servicePrice": "Service Price",
+    "save": "Save",
+    "cancel": "Cancel",
+    "minutes": "minutes",
+    "requiredField": "Required Field"
+}
