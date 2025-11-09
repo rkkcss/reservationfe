@@ -2,6 +2,7 @@ import { Form, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { Offering } from "../../../helpers/types/Offering";
 import { getOffersByBusinessId } from "../../../helpers/queries/offeringService";
+import { useParams } from "react-router";
 
 type StepSelectOfferingProps = {
     offer?: Offering;
@@ -10,9 +11,10 @@ type StepSelectOfferingProps = {
 
 const StepSelectOffering = ({ offer, setOffer }: StepSelectOfferingProps) => {
     const [offers, setOffers] = useState<Offering[]>([]);
+    const { businessId } = useParams();
 
     const getAllOffers = useCallback(() => {
-        getOffersByBusinessId(1).then((res) => {
+        getOffersByBusinessId(Number(businessId)).then((res) => {
             setOffers(res);
         });
     }, []);
@@ -40,7 +42,7 @@ const StepSelectOffering = ({ offer, setOffer }: StepSelectOfferingProps) => {
             >
                 <Select placeholder="Szolgáltatás" allowClear onChange={(v) => handleOnChange(v)}>
                     {offers.map((offer) => (
-                        <Select.Option key={offer.id} value={offer.id} label={offer.name}>
+                        <Select.Option key={offer.id} value={offer.id}>
                             {offer.title}
                         </Select.Option>
                     ))}

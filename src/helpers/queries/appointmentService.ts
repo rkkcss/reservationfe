@@ -21,8 +21,15 @@ export const createAppointmentByOwnerQuery = (appointment: Appointment) => {
 export const patchAppointmentQuery = (appointment: Appointment) => {
     return API.patch(`/api/appointments/${appointment.id}`, appointment);
 }
+//
+type GetBusinessAvailableSlotsProps = {
+    businessId: number;
+    startDate: string;
+    endDate: string;
+    durationMinutes: number;
+}
 
-export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, durationMinutes }) => {
+export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, durationMinutes }: GetBusinessAvailableSlotsProps) => {
     return API.get(`/api/appointments/businesses/${businessId}/available-slots`, {
         params: {
             startDate: startDate,
@@ -31,6 +38,7 @@ export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, dura
         }
     });
 }
+//
 
 export const deleteAppointmentQuery = (appointmentId: number) => {
     return API.delete(`/api/appointments/${appointmentId}`);

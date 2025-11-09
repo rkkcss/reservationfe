@@ -1,0 +1,21 @@
+{
+    "editAppointment": "Edit Appointment",
+    "addAppointment": "Add Appointment",
+    "note": "Note",
+    "guest": "Guest",
+    "guestName": "Guest Name",
+    "service": "Service",
+    "status": "Status",
+    "pendingApproval": "Pending Approval",
+    "confirmed": "Confirmed",
+    "rejected": "Rejected",
+    "appointmentStartAt": "Appointment Start At",
+    "appointmentEndAt": "Appointment End At",
+    "pleaseSelectDate": "Please select date!",
+    "cantBeforeStart": "End date can't be before start date!",
+    "deleteAppointment": "Delete Appointment",
+    "confirmDeleteAppointment": "Are you sure you want to delete this appointment?",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel"
+}

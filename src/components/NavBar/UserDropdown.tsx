@@ -1,6 +1,9 @@
-import { Dropdown } from 'antd';
+import { Dropdown, MenuProps } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { MenuItem, userMenuItems } from '../../constants/navBarItems';
+import { userMenuItems } from '../../constants/navBarItems';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     user: { authorities?: string[] };
@@ -8,11 +11,15 @@ interface Props {
 }
 
 export default function UserDropdown({ user }: Props) {
-    const menu = userMenuItems
-        .filter((item: MenuItem) => !item.roles || item.roles.some(r => user.authorities?.includes(r)))
-        .map((item: MenuItem) => ({
-            key: item.key,
-            label: item.label,
+    const { t } = useTranslation("nav-bar");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const menu: MenuProps["items"] = userMenuItems(t, navigate, dispatch)
+        .filter((item) => !item.roles || item.roles.some(r => user.authorities?.includes(r)))
+        .map((item) => ({
+            key: item.key!,
+            label: item.label!,
         }));
 
     return (

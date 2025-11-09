@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Steps, Button, Form, message } from "antd";
 import StepSelectOffering from "./StepSelectOffering";
 import StepSelectAppointment from "./StepSelectAppointment";
@@ -64,7 +64,7 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
                     <div className="flex flex-col gap-2">
                         {
                             Object.entries(form.getFieldsValue(true)).map(([key, value]) => {
-                                if (key === "date" || key === "time") return null; // ezek külön kezelve lesznek
+                                if (key === "date" || key === "time") return null;
 
                                 return (
                                     <div key={key} className="flex items-center gap-3 py-3 px-2 rounded-lg outline outline-gray-300 outline-1">
@@ -73,7 +73,7 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
                                         </div>
                                         <div>
                                             <p className="font-bold text-base">
-                                                {FORM_ITEMS[key]}:
+                                                {FORM_ITEMS[key as keyof typeof FORM_ITEMS]}:
                                             </p>
                                             <p className="text-sm">
                                                 {dayjs.isDayjs(value) ? value.format("YYYY.MM.DD") : value?.toString()}

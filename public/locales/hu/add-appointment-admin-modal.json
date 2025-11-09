@@ -1,0 +1,21 @@
+{
+    "editAppointment": "Időpont szerkesztése",
+    "addAppointment": "Új időpont hozzáadása",
+    "note": "Megjegyzés",
+    "guest": "Vendég",
+    "guestName": "Vendég neve",
+    "service": "Szolgáltatás",
+    "status": "Állapot",
+    "pendingApproval": "Elfogadásra vár",
+    "confirmed": "Elfogadva",
+    "rejected": "Elutasítva",
+    "appointmentStartAt": "Időpont kezdete",
+    "appointmentEndAt": "Időpont vége",
+    "pleaseSelectDate": "Kérjük válasszon időpontot!",
+    "cantBeforeStart": "A befejezés nem lehet a kezdés előtt!",
+    "deleteAppointment": "Időpont törlése",
+    "confirmDeleteAppointment": "Biztosan törölni szeretné az időpontot?",
+    "yes": "Igen",
+    "no": "Nem",
+    "cancel": "Mégse"
+}

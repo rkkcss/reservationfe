@@ -133,7 +133,7 @@ const SettingsGuests = () => {
                     <h1 className="text-2xl font-semibold">
                         Vendégek kezelése
                     </h1>
-                    <Button type="primary" onClick={() => handleOpenGuestEditModal({ id: undefined, name: '', email: '', phoneNumber: '', canBook: true })}>
+                    <Button type="primary" onClick={() => handleOpenGuestEditModal({ id: null, name: '', email: '', phoneNumber: '', canBook: true })}>
                         Vendég hozzáadása
                     </Button>
                 </div>

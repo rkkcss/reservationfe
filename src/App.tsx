@@ -19,8 +19,15 @@ import Dashboard from './pages/Dashboard'
 import CalendarLayout from './layout/CalendarLayout'
 import Register from './pages/Register'
 import RegisterActivation from './pages/Activations/RegisterActivation'
+import { useEffect } from 'react'
+import { fetchCsrfToken } from './helpers/queries/accountService'
 
 function App() {
+
+  useEffect(() => {
+    fetchCsrfToken();
+  }, []);
+
   return (
     <Routes>
       <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />

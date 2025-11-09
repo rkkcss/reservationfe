@@ -3,6 +3,7 @@ import { patchUserName } from '../helpers/queries/accountService'
 import { ChangeUserName } from '../helpers/types/ChangeUserName'
 import { updateName } from '../redux/userSlice'
 import { useDispatch } from 'react-redux'
+import { AxiosError } from 'axios'
 
 const ChangeName = ({ firstName, lastName }: ChangeUserName) => {
     const dispatch = useDispatch()
@@ -12,8 +13,9 @@ const ChangeName = ({ firstName, lastName }: ChangeUserName) => {
                 dispatch(updateName({ firstName: values.firstName, lastName: values.lastName }));
                 message.success('Sikeres módosítás!')
             }
-        }).catch((err) => {
+        }).catch((err: AxiosError) => {
             message.error('Hiba történt. Próbáld meg késöbb!')
+            console.error(err.message);
         })
     }
     return (

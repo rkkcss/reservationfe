@@ -9,8 +9,60 @@
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div id="preloader">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" stroke="#3498db" stroke-width="8" fill="none" stroke-linecap="round"
+          stroke-dasharray="60" stroke-dashoffset="0" />
+      </svg>
+    </div>
+
+  </div>
   <script type="module" src="/src/main.tsx"></script>
+
+
+  <style>
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* Spinner animáció */
+    #preloader svg {
+      animation: spin 1s linear infinite;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const rootObserver = new MutationObserver(() => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) preloader.remove();
+      });
+      rootObserver.observe(document.getElementById('root'), { childList: true });
+    });
+  </script>
+
 </body>
 
 </html>

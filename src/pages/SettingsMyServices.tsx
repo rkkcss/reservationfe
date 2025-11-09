@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePagination } from '../hooks/usePagination'
-import { Button, message, Pagination, Popconfirm } from 'antd'
+import { Button, message, Pagination, Popconfirm, Spin } from 'antd'
 import EditOffering from '../components/Modals/EditOffering'
 import { FiPlus } from 'react-icons/fi'
 import { Offering } from '../helpers/types/Offering'
@@ -13,7 +13,7 @@ import { PiPlusBold } from 'react-icons/pi'
 
 const SettingsMyServices = () => {
     const [editOfferingModal, setEditOfferingModal] = useState(false);
-    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage } = usePagination<Offering>(`/api/offerings/business-owner`)
+    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business-owner`)
     const [editOffer, setEditOffer] = useState<Offering>({} as Offering);
 
     const handleEditOffer = (offer: Offering) => {
@@ -46,7 +46,6 @@ const SettingsMyServices = () => {
                 }
                 message.success("Successfully created!");
                 setData(prev => [res.data, ...prev]);
-                handleCloseEditModal();
             });
         }
     }
@@ -91,43 +90,54 @@ const SettingsMyServices = () => {
                     Új szolgáltatás
                 </Button>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <Spin spinning={loading}>
                 {
-                    data && data?.map((offer) => (
-                        <div key={offer.id} className="outline outline-1 outline-gray-300 rounded-lg p-4 group flex flex-col">
-                            <div className="flex mb-3 justify-between">
-                                <p className="font-bold text-base">{offer.title}</p>
-                                <div className="flex gap-2 group-hover:opacity-100 opacity-0">
-                                    <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
-                                    <Popconfirm
-                                        title="Biztosan törölni szeretnéd?"
-                                        onConfirm={() => handleDeleteOffer(offer.id!)}
-                                        okText="Igen"
-                                        cancelText="Nem"
-                                    >
-                                        <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
-                                    </Popconfirm>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-sm">{offer.description}</p>
-                            </div>
-                            <div className="mt-auto">
-                                <p className="text-base font-bold mt-2">{offer.price} Ft</p>
-                            </div>
+                    data.length === 0 ?
+                        <div className="flex flex-col justify-center items-center mt-20">
+                            <p className="text-gray-500 mb-4">Még nincs egy szolgáltatásod sem.</p>
                         </div>
-                    ))
+                        :
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                {
+                                    data && data?.map((offer) => (
+                                        <div key={offer.id} className="outline outline-1 outline-gray-300 rounded-lg p-4 group flex flex-col">
+                                            <div className="flex mb-3 justify-between">
+                                                <p className="font-bold text-base">{offer.title}</p>
+                                                <div className="flex gap-2 group-hover:opacity-100 opacity-0">
+                                                    <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
+                                                    <Popconfirm
+                                                        title="Biztosan törölni szeretnéd?"
+                                                        onConfirm={() => handleDeleteOffer(offer.id!)}
+                                                        okText="Igen"
+                                                        cancelText="Nem"
+                                                    >
+                                                        <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
+                                                    </Popconfirm>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm">{offer.description}</p>
+                                            </div>
+                                            <div className="mt-auto">
+                                                <p className="text-base font-bold mt-2">{offer.price} Ft</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                                {
+                                    data.length < 20 &&
+                                    <div onClick={() => setEditOfferingModal(true)} className="rounded-lg p-4 group flex hover:opacity-100 opacity-0 cursor-pointer bg-slate-50 justify-center items-center">
+                                        <PiPlusBold size={30} />
+                                        <span className="ml-2">Új szolgáltatás hozzáadása</span>
+                                    </div>
+                                }
+                            </div>
+                            <Pagination total={totalItems} className="flex mt-4 justify-end" current={currentPage + 1} itemRender={itemRender} pageSize={20} />
+                        </>
                 }
-                {
-                    data.length < 20 &&
-                    <div onClick={() => setEditOfferingModal(true)} className="rounded-lg p-4 group flex hover:opacity-100 opacity-0 cursor-pointer bg-slate-50 justify-center items-center">
-                        <PiPlusBold size={30} />
-                        <span className="ml-2">Új szolgáltatás hozzáadása</span>
-                    </div>
-                }
-            </div>
-            <Pagination total={totalItems} className="flex mt-4 justify-end" current={currentPage + 1} itemRender={itemRender} pageSize={20} />
+            </Spin>
+
         </div >
     )
 }

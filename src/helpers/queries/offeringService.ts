@@ -1,8 +1,7 @@
 import { API } from "../../utils/API";
 import { Offering } from "../types/Offering";
-import { Pageable } from "../types/Pageable";
 
-export const getOffersByBusinessId = (businessId: number | string): Promise<Pageable<Offering>> => {
+export const getOffersByBusinessId = (businessId: number | string): Promise<Offering[]> => {
     return API.get(`/api/offerings/business/${businessId}`)
         .then(res => {
             return res.data

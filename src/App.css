@@ -9,10 +9,9 @@ body div#root>div {
     min-height: 100svh;
 }
 
-
 .ant-modal-mask,
 .ant-drawer-mask {
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
 }
 
 .ant-radio-button-wrapper:first-child {

@@ -1,6 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { API } from "../utils/API";
+import { AxiosResponse } from "axios";
+
+type AxiosResponseHeaders = {
+    [key: string]: AxiosHeaderValue;
+};
+type AxiosHeaderValue = string | number | boolean | null;
+
 
 export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSort: string = "") {
     const location = useLocation();
@@ -15,6 +22,7 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
     const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+
     const [itemsPerPageCount, setItemsPerPageCount] = useState<number>(itemsPerPage);
 
     const [sort, setSort] = useState<string>(initialSort);
@@ -34,16 +42,39 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
         return parseInt(urlParams.get("page") || "0", 10);
     };
 
-    const handleResponse = (response: { data: T[]; headers: Record<string, string> }, pageUrl: string | null) => {
-        const totalCount = response.headers["x-total-count"];
-        const itemsPerPageCount = response.headers["x-page-size"];
+    const handleResponse = (
+        response: AxiosResponse<T[]>,
+        pageUrl: string | null
+    ) => {
+        // headers típusbiztosan kezelve
+        const headers = response.headers as
+            | AxiosResponseHeaders
+            | Record<string, AxiosHeaderValue | undefined>;
 
-        if (totalCount) {
-            setTotalItems(parseInt(totalCount, 10));
+        const totalCountHeader = headers["x-total-count"];
+        const itemsPerPageHeader = headers["x-page-size"];
+
+        const totalCount =
+            typeof totalCountHeader === "string"
+                ? parseInt(totalCountHeader, 10)
+                : typeof totalCountHeader === "number"
+                    ? totalCountHeader
+                    : null;
+
+        const itemsPerPageCount =
+            typeof itemsPerPageHeader === "string"
+                ? parseInt(itemsPerPageHeader, 10)
+                : typeof itemsPerPageHeader === "number"
+                    ? itemsPerPageHeader
+                    : null;
+
+        if (totalCount !== null) {
+            setTotalItems(totalCount);
         }
-        if (itemsPerPageCount) {
-            setItemsPerPageCount(parseInt(itemsPerPageCount, 10));
+        if (itemsPerPageCount !== null) {
+            setItemsPerPageCount(itemsPerPageCount);
         }
+
         setData(response.data);
         setCurrentPage(getPageFromUrl(pageUrl || ""));
     };
@@ -113,6 +144,7 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
         hasPrevPage: !!prevPageUrl,
         sort,
         setSort, // Sort állapot és setter
-        itemsPerPage
+        itemsPerPage,
+        itemsPerPageCount
     };
 }

@@ -20,11 +20,17 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
         onClose();
     };
 
+    const handleOnOk = () => {
+        if (onOk) {
+            onOk(form.getFieldsValue());
+            form.resetFields();
+            onClose();
+        }
+    }
+
     useEffect(() => {
         if (offer) {
             form.setFieldsValue(offer);
-        } else {
-            form.resetFields();
         }
     }, [offer]);
 
@@ -37,10 +43,11 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                 : t("newService")
             }
             footer={false}
+            destroyOnClose
         >
             <Form
                 layout="vertical"
-                onFinish={onOk}
+                onFinish={handleOnOk}
                 form={form}
             >
                 <Form.Item hidden name="id"><Input hidden /></Form.Item>
@@ -57,7 +64,7 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                     name="description"
                     rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <TextArea placeholder={t("serviceDescription") + "..."} />
+                    <TextArea placeholder={t("serviceDescription") + "..."} maxLength={100} showCount />
                 </Form.Item>
 
                 <Form.Item

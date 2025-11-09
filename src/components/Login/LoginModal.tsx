@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { LoginForm, loginUser, User } from "../../redux/userSlice";
 import { UserStore } from "../../store/store";
 import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { fetchCsrfToken } from "../../helpers/queries/accountService";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +18,7 @@ const LoginModal = () => {
     const dispatch: ThunkDispatch<User, User, PayloadAction> = useDispatch();
     const { loading } = useSelector((state: UserStore) => state.userStore);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     useEffect(() => {
         setLoginModalController({
@@ -39,6 +39,9 @@ const LoginModal = () => {
             .then((res) => {
                 message.success(res.message);
                 loginModal.close();
+                if (pathname === "/") {
+                    navigate("/dashboard");
+                }
             })
             .catch((err) => {
                 if (err.status === 401) {
@@ -48,12 +51,6 @@ const LoginModal = () => {
                 }
             });
     };
-
-    useEffect(() => {
-        if (isOpen) {
-            fetchCsrfToken();
-        }
-    }, [isOpen])
 
     const handleNavigateRegister = () => {
         loginModal.close();

@@ -36,7 +36,7 @@ createRoot(document.getElementById('root')!).render(
               paddingContentHorizontal: 18,
               fontWeight: '600',
               fontSize: 15
-            }
+            },
           },
           token: {
             colorPrimary: '#7635f2',
