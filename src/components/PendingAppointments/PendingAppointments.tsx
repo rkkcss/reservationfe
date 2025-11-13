@@ -1,26 +1,29 @@
 import PendingAppointmentsAlert from "./PendingAppointmentsAlert";
-import usePendingAppointments from "./usePendingAppointments";
 import PendingAppointmentsList from "./PendingAppointmentsList";
-import { useCalendar } from "../../context/CalendarContext";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { AppointmentStore } from "../../store/store";
+import { useAppDispatch } from "../../store/hooks";
+import { fetchPendingAppointments } from "../../redux/appointmentsSlice";
 
 const PendingAppointments = () => {
-    const { data, loading, drawerOpen, setDrawerOpen, approveAppointment, cancelAppointment } = usePendingAppointments();
-    const { calendarRef } = useCalendar();
+    const { pendingAppointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchPendingAppointments());
+    }, [dispatch]);
 
     return (
         <>
             <PendingAppointmentsAlert
-                loading={loading}
-                dataLength={data?.length ?? 0}
+                dataLength={pendingAppointments.length ?? 0}
                 onViewClick={() => setDrawerOpen(true)}
             />
             <PendingAppointmentsList
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
-                data={data}
-                calendarRef={calendarRef}
-                onApprove={approveAppointment}
-                onCancel={cancelAppointment}
             />
         </>
     )

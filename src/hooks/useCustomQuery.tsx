@@ -19,6 +19,5 @@ export const useCustomQuery = ({ url }: useCustomQueryParams) => {
         setLoading(false);
     }, [url]);
 
-
     return { data, setData, fetchData, loading };
 };

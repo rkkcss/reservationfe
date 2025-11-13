@@ -17,7 +17,7 @@ export const appointmentToEvent = (app: Appointment): EventInput => {
         ? Object.values(app.status[0])[0]
         : app.status;
     const colorKey = String(status) as keyof typeof statusColors;
-
+    // console.log("formatting", app)
     return {
         id: app.id?.toString(),
         title: app.guest?.name || 'Nincs megadva',
@@ -35,7 +35,7 @@ export const appointmentToEvent = (app: Appointment): EventInput => {
 };
 
 export const eventToAppointment = (event: EventImpl): Appointment => ({
-    id: event.id ? parseInt(event.id, 10) : undefined,
+    id: event.id ? parseInt(event.id, 10) : null,
     startDate: dayjs(event.start),
     endDate: dayjs(event.end),
     guest: event.extendedProps.guest,

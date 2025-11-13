@@ -41,8 +41,10 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
         if (open) {
             getAllOffers();
             form.setFieldsValue(appointment)
+        } else {
+            form.resetFields();
         }
-    }, [open, getAllOffers])
+    }, [open, getAllOffers, form, appointment]);
 
 
     const mergeEntity = useCallback(<T extends { id: number | null }>(
@@ -68,7 +70,10 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     }, [appointment, form, searchedGuests, offers, mergeEntity]);
 
     const handleOnFinish = (values: Appointment) => {
-        if (onOk) onOk(values);
+        if (onOk) {
+            onOk(values);
+            onClose();
+        };
     }
 
     const handleDeleteAppointment = () => {
@@ -91,12 +96,13 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                 footer={null}
                 destroyOnClose
             >
+                <p>{form.getFieldValue('id')}</p>
                 <Form
                     layout="vertical"
                     initialValues={appointment}
                     onFinish={handleOnFinish}
                     form={form}
-                    key={appointment?.id || "new"}
+                    key={`${appointment?.id ?? 'new'}-${open ? 'open' : 'closed'}`}
                 >
                     <Form.Item name="id" hidden />
                     <Form.Item label={t("note")} name="note">
@@ -158,6 +164,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                     <Form.Item
                         name="status"
                         label={t("status")}
+                        rules={[{ required: true, message: t("required") }]}
                     >
                         <Select placeholder="Időpont státusza">
                             <Select.Option value="PENDING" label="PENDING">
@@ -238,6 +245,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                                     <Button
                                         type="text"
                                         size="large"
+                                        htmlType="reset"
                                         icon={<MdDeleteForever size={24} color="red" />}
                                         shape="circle"
                                     />

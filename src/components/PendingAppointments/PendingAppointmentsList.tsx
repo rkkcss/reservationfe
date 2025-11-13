@@ -1,24 +1,27 @@
-import FullCalendar from '@fullcalendar/react';
-import { Button, Drawer, Tooltip } from 'antd'
-import React from 'react'
+import { Button, Drawer, Popconfirm, Tooltip } from 'antd'
 import { Appointment } from '../../helpers/types/Appointment';
 import dayjs from 'dayjs';
 import { FaCheck } from 'react-icons/fa';
 import { IoCalendarNumberOutline, IoCloseOutline } from 'react-icons/io5';
 import { BiShare } from 'react-icons/bi';
+import { useCalendar } from '../../context/CalendarContext';
+import { AppointmentStore } from '../../store/store';
+import { useSelector } from 'react-redux';
+import { approvePendingAppointmentByIdThunk, cancelPendingAppointmentByIdThunk } from '../../redux/appointmentsSlice';
+import { useAppDispatch } from '../../store/hooks';
 
 type PendingAppointmentsListProps = {
     open: boolean;
     onClose: () => void;
-    data: Appointment[];
-    calendarRef: React.RefObject<FullCalendar>;
-    onApprove: (id?: number) => void;
-    onCancel: (id?: number) => void;
 }
 
-const PendingAppointmentsList = ({ calendarRef, open, onClose, data, onApprove, onCancel }: PendingAppointmentsListProps) => {
+const PendingAppointmentsList = ({ open, onClose }: PendingAppointmentsListProps) => {
+    const { calendarRef } = useCalendar();
+    const { pendingAppointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
+    const dispatch = useAppDispatch();
+
     const handleJumpToAppointment = (appointment: Appointment) => {
-        if (data.length === 0 || !calendarRef?.current) return;
+        if (pendingAppointments.length === 0 || !calendarRef.current) return;
         const calendarApi = calendarRef.current.getApi();
         if (!appointment?.startDate) {
             return;
@@ -39,7 +42,7 @@ const PendingAppointmentsList = ({ calendarRef, open, onClose, data, onApprove, 
                     </span>
                     <span className="text-gray-500 mx-2">|</span>
                     <span className="font-bold text-lg text-blue-600">
-                        {start.format('HH:mm')} – {end.format('HH:mm')}
+                        {start.format('HH:mm')} - {end.format('HH:mm')}
                     </span>
                 </>
             );
@@ -58,34 +61,50 @@ const PendingAppointmentsList = ({ calendarRef, open, onClose, data, onApprove, 
     };
 
     return (
-        <Drawer open={open} title="Függőben lévő időpontok" placement="right" width={600} onClose={onClose} destroyOnClose>
+        <Drawer open={open} title="Függőben lévő időpontok" placement="right" width={800} onClose={onClose} destroyOnClose>
             <ul>
-                {data?.map((appointment) => (
+                {pendingAppointments.map((appointment) => (
                     // Kártya stílus + padding, jobb vizuális elválasztás
-                    <li key={appointment.id} className="flex flex-col justify-between items-start p-4 border-b hover:bg-gray-50 transition duration-150 ease-in-out group">
+                    <li key={appointment.id} className="flex flex-col justify-between items-start p-4 border-b hover:bg-gray-50 transition duration-150 ease-in-out group relative">
                         <div className="w-full">
                             {/* Kiemelt cím vastagon, nagyobb betűmérettel */}
                             <strong className="text-lg text-gray-900">
                                 {appointment?.guest?.name}
                             </strong>
+                            <p className="text-sm text-gray-600">
+                                {appointment?.guest?.email}
+                            </p>
                         </div>
 
                         <div className="flex items-center justify-between w-full mt-1">
-                            {/* Dátum és időpont szekció, ikonokkal és formázva */}
                             <div className="flex items-center text-sm">
                                 <IoCalendarNumberOutline className="mr-1 text-gray-500" size={16} />
                                 {/* Itt használjuk az új formázó segédfüggvényt */}
                                 {formatDateTime(appointment.startDate, appointment.endDate)}
                             </div>
 
-                            <div className="flex gap-2 justify-end group-hover:opacity-100 opacity-0 transition-opacity">
-                                <Button size="small" type="link" icon={<BiShare />} onClick={() => handleJumpToAppointment(appointment)}>Ugrás oda</Button>
-                                <Tooltip title="Jóváhagyás">
-                                    <Button icon={<FaCheck size={10} />} size="small" shape="circle" type="primary" onClick={() => onApprove(appointment.id)} />
-                                </Tooltip>
-                                <Tooltip title="Elutasítás">
-                                    <Button icon={<IoCloseOutline size={16} />} size="small" shape="circle" danger type="primary" onClick={() => onCancel(appointment.id)}></Button>
-                                </Tooltip>
+                            <div className="flex absolute top-5 right-3 gap-2 group-hover:opacity-100 opacity-0 transition-opacity bg-gray-50">
+
+                                <Button size="small" type="text" shape="round" icon={<BiShare />} onClick={() => handleJumpToAppointment(appointment)}>Ugrás oda</Button>
+                                <Popconfirm
+                                    title="Biztosan jóváhagyod az időpontot?"
+                                    onConfirm={() => dispatch(approvePendingAppointmentByIdThunk(appointment.id))}
+                                    okText="Igen"
+                                    cancelText="Nem"
+                                >
+                                    <Tooltip title="Jóváhagyás">
+                                        <Button icon={<FaCheck size={10} />} size="small" shape="circle" type="primary" />
+                                    </Tooltip>
+                                </Popconfirm>
+                                <Popconfirm title="Biztosan elutasítod az időpontot?"
+                                    onConfirm={() => dispatch(cancelPendingAppointmentByIdThunk(appointment.id))}
+                                    okText="Igen"
+                                    cancelText="Nem"
+                                >
+                                    <Tooltip title="Elutasítás">
+                                        <Button icon={<IoCloseOutline size={16} />} size="small" shape="circle" danger type="primary" />
+                                    </Tooltip>
+                                </Popconfirm>
                             </div>
                         </div>
 

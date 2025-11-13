@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios"
 import { API } from "../../utils/API"
 import { Appointment } from "../types/Appointment"
 
@@ -68,10 +69,14 @@ export const cancelAppointmentByGuestWithToken = (modifierToken: string) => {
     return API.post(`/api/appointments/cancel/${modifierToken}`)
 }
 
-export const approveAppointmentById = (id: number) => {
-    return API.patch(`/api/appointments/${id}/approve`)
-}
+export const approveAppointmentById = (id: number): Promise<AxiosResponse<Appointment>> => {
+    return API.patch<Appointment>(`/api/appointments/${id}/approve`);
+};
 
 export const cancelAppointmentById = (id: number) => {
     return API.patch(`/api/appointments/${id}/cancel`)
 }
+
+export const getPendingAppointments = (): Promise<AxiosResponse<Appointment[]>> => {
+    return API.get<Appointment[]>('/api/appointments/pendings');
+};

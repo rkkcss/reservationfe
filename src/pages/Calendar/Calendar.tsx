@@ -1,41 +1,35 @@
-import { useEffect, useState, useCallback } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import huLocal from '@fullcalendar/core/locales/hu';
-import dayjs from 'dayjs';
-import { notification } from 'antd';
-
-import AddAppointmentAdmin from '../../components/Modals/AddAppointmentAdmin';
-import CalendarHeader from './CalendarHeader';
-import {
-    createAppointmentByOwnerQuery,
-    patchAppointmentQuery,
-    deleteAppointmentQuery,
-} from '../../helpers/queries/appointmentService';
-
-import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from '@fullcalendar/core';
-import { Appointment } from '../../helpers/types/Appointment';
-import { appointmentToEvent, eventToAppointment } from '../../utils/calendarEventUtils';
-import { useCustomQuery } from '../../hooks/useCustomQuery';
-import PendingAppointments from '../../components/PendingAppointments/PendingAppointments';
-import { useCalendar } from '../../context/CalendarContext';
+import { useState, useCallback, useMemo } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import huLocal from "@fullcalendar/core/locales/hu";
+import dayjs from "dayjs";
+import { Appointment } from "../../helpers/types/Appointment";
+import { appointmentToEvent, eventToAppointment } from "../../services/calendar-service";
+import { useCalendar } from "../../context/CalendarContext";
+import AddAppointmentAdmin from "../../components/Modals/AddAppointmentAdmin";
+import PendingAppointments from "../../components/PendingAppointments/PendingAppointments";
+import CalendarHeader from "./CalendarHeader";
+import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import { useAppDispatch } from "../../store/hooks";
+import { createAppointmentThunk, deleteAppointmentThunk, fetchAppointmentsBetween, updateAppointmentThunk } from "../../redux/appointmentsSlice";
+import { useSelector } from "react-redux";
+import { AppointmentStore } from "../../store/store";
 
 const CalendarPage = () => {
-    const { data, fetchData } = useCustomQuery({ url: "/api/appointments" });
-    const [formattedEvents, setFormattedEvents] = useState<EventInput[]>([]);
-    const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<Appointment>({} as Appointment);
+    const dispatch = useAppDispatch();
+    const { appointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
+
+    const formattedAppointments = useMemo<EventInput[]>(() => {
+        return appointments.map(appointmentToEvent);
+    }, [appointments]);
+
     const { calendarRef } = useCalendar();
 
-    // const calendarRef = useRef<FullCalendar | null>(null);
+    const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment>({} as Appointment);
     const [dateRange, setDateRange] = useState("");
-
-    const handleDatesSet = useCallback((arg: DatesSetArg) => {
-        computeDateRange(arg);
-        fetchData({ params: { startDate: arg.start, endDate: arg.end } });
-    }, [fetchData]);
 
     const handleEventClick = useCallback((clickInfo: EventClickArg) => {
         setSelectedAppointment(eventToAppointment(clickInfo.event));
@@ -50,56 +44,50 @@ const CalendarPage = () => {
         setAppointmentModalOpen(true);
     }, []);
 
-    const handleAddAppointmentAdmin = useCallback((newAppointment: Appointment) => {
-        const save = newAppointment.id ? patchAppointmentQuery : createAppointmentByOwnerQuery;
-        save(newAppointment).then((res) => {
-            const updatedEvent = appointmentToEvent(res.data);
-            setFormattedEvents((prev) =>
-                newAppointment.id
-                    ? prev.map((e) => (e.id === updatedEvent.id ? updatedEvent : e))
-                    : [...prev, updatedEvent]
-            );
-            notification.success({
-                message: `Időpont ${newAppointment.id ? 'frissítve' : 'hozzáadva'}!`,
-                placement: 'bottom',
-            });
-        });
-        setAppointmentModalOpen(false);
-    }, []);
-
-    const handleDeleteAppointment = useCallback((appointmentId: number) => {
-        setFormattedEvents((prev) => prev.filter((e) => e.id !== appointmentId.toString()));
-        deleteAppointmentQuery(appointmentId).then(() => {
-            notification.success({ message: 'Időpont sikeresen törölve!', placement: 'bottom' });
-        });
-    }, []);
-
-    useEffect(() => {
-        setFormattedEvents(data.map(appointmentToEvent));
-    }, [data]);
-
+    const handleDatesSet = useCallback(
+        (arg: DatesSetArg) => {
+            computeDateRange(arg);
+            dispatch(fetchAppointmentsBetween({ startDate: arg.start, endDate: arg.end }));
+        },
+        [dispatch]
+    );
 
     const computeDateRange = (arg: DatesSetArg) => {
         const start = arg.start;
         const end = new Date(arg.end.getTime() - 1);
-
         const fmt: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
         const startStr = new Intl.DateTimeFormat("hu-HU", fmt).format(start);
         const endStr = new Intl.DateTimeFormat("hu-HU", fmt).format(end);
-
         setDateRange(`${startStr} - ${endStr}`);
     };
+
+    const handleAddAppointment = (appointment: Appointment) => {
+        if (!appointment.id) {
+            dispatch(createAppointmentThunk(appointment));
+        } else {
+            dispatch(updateAppointmentThunk(appointment));
+        }
+    }
+    const handleDeleteAppointment = (appointmentId: number) => {
+        if (appointmentId) {
+            dispatch(deleteAppointmentThunk(appointmentId));
+        }
+    }
 
     return (
         <>
             <AddAppointmentAdmin
                 open={appointmentModalOpen}
-                onClose={() => setAppointmentModalOpen(false)}
+                onClose={() => {
+                    setAppointmentModalOpen(false)
+                    setSelectedAppointment({} as Appointment);
+                }}
                 appointment={selectedAppointment}
-                onOk={handleAddAppointmentAdmin}
+                onOk={handleAddAppointment}
                 deleteAppointment={handleDeleteAppointment}
-                key={selectedAppointment?.startDate?.toString() || 'new-appointment'}
+                key={selectedAppointment?.startDate?.toString() || "new-appointment"}
             />
+
             <div className="mt-4">
                 <PendingAppointments />
             </div>
@@ -109,15 +97,15 @@ const CalendarPage = () => {
             <FullCalendar
                 ref={calendarRef}
                 viewClassNames="mt-4"
-                height={'70vh'}
+                height="70vh"
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="timeGridWeek"
                 locale={huLocal}
                 headerToolbar={false}
-                events={[...formattedEvents]}
+                events={formattedAppointments}
                 datesSet={handleDatesSet}
                 eventClick={handleEventClick}
-                selectable={true}
+                selectable
                 select={handleDateSelect}
                 eventClassNames="cursor-pointer hover:outline hover:opacity-80 hover:outline-2 hover:outline-blue-500 hover:outline-offset-1 duration-50 border-none transition-ease-in-out"
                 slotLabelClassNames="cursor-pointer hover:bg-blue-100 duration-50 transition-ease-in-out"
