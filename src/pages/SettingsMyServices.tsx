@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePagination } from '../hooks/usePagination'
-import { Button, message, Pagination, Popconfirm, Spin } from 'antd'
+import { Button, message, Pagination, Popconfirm, Spin, Tag } from 'antd'
 import EditOffering from '../components/Modals/EditOffering'
 import { FiPlus } from 'react-icons/fi'
 import { Offering } from '../helpers/types/Offering'
@@ -9,6 +9,7 @@ import { PaginationProps } from 'antd/lib'
 import { TbTrash } from 'react-icons/tb'
 import { CiEdit } from 'react-icons/ci'
 import { PiPlusBold } from 'react-icons/pi'
+import { BASIC_ENTITY_STATUSES } from '../helpers/types/BasicEntityStatus'
 
 
 const SettingsMyServices = () => {
@@ -101,28 +102,43 @@ const SettingsMyServices = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                                 {
                                     data && data?.map((offer) => (
-                                        <div key={offer.id} className="outline outline-1 outline-gray-300 rounded-lg p-4 group flex flex-col">
-                                            <div className="flex mb-3 justify-between">
-                                                <p className="font-bold text-base">{offer.title}</p>
-                                                <div className="flex gap-2 group-hover:opacity-100 opacity-0">
-                                                    <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
-                                                    <Popconfirm
-                                                        title="Biztosan törölni szeretnéd?"
-                                                        onConfirm={() => handleDeleteOffer(offer.id!)}
-                                                        okText="Igen"
-                                                        cancelText="Nem"
-                                                    >
-                                                        <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
-                                                    </Popconfirm>
+                                        <>
+                                            <div key={offer.id} className="relative bg-white outline outline-1 outline-indigo-600/10 rounded-lg p-4 group flex flex-col">
+                                                {
+                                                    offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
+                                                    <div className="w-full h-full absolute bg-gray-100/50 rounded-lg top-0 left-0 flex items-center justify-center">
+                                                    </div>
+                                                }
+                                                <div className="flex mb-3 justify-between">
+                                                    <p className="font-bold text-base flex items-center gap-1">
+                                                        {offer.title}
+                                                    </p>
+                                                    <div className="flex gap-2 group-hover:opacity-100 opacity-0">
+                                                        <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
+                                                        <Popconfirm
+                                                            title="Biztosan törölni szeretnéd?"
+                                                            onConfirm={() => handleDeleteOffer(offer.id!)}
+                                                            okText="Igen"
+                                                            cancelText="Nem"
+                                                        >
+                                                            <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
+                                                        </Popconfirm>
+                                                    </div>
+                                                    {
+                                                        offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
+                                                        <div className="block absolute top-2 right-1 gap-2 group-hover:hidden">
+                                                            <Tag color="default">Inaktív</Tag>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm">{offer.description}</p>
+                                                </div>
+                                                <div className="mt-auto">
+                                                    <p className="text-base font-bold mt-2">{offer.price} Ft</p>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <p className="text-sm">{offer.description}</p>
-                                            </div>
-                                            <div className="mt-auto">
-                                                <p className="text-base font-bold mt-2">{offer.price} Ft</p>
-                                            </div>
-                                        </div>
+                                        </>
                                     ))
                                 }
                                 {

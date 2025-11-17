@@ -7,7 +7,6 @@ export type GetAppontmentBetweenProps = {
     endDate?: Date,
 }
 export const getAppointmentsBetween = (params: GetAppontmentBetweenProps) => {
-    console.log(params)
     return API.get("/api/appointments", { params: params })
 }
 
@@ -42,7 +41,7 @@ export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, dura
 //
 
 export const deleteAppointmentQuery = (appointmentId: number) => {
-    return API.delete(`/api/appointments/${appointmentId}`);
+    return API.post(`/api/appointments/${appointmentId}`);
 }
 
 // createAppointmentByGuestQuery create appointment by guest

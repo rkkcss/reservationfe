@@ -7,6 +7,7 @@
 
 body div#root>div {
     min-height: 100svh;
+    background-color: #f6f6f6;
 }
 
 .ant-modal-mask,

@@ -8,5 +8,6 @@
     "save": "Save",
     "cancel": "Cancel",
     "minutes": "minutes",
-    "requiredField": "Required Field"
+    "requiredField": "Required Field",
+    "status": "Status"
 }

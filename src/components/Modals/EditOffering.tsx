@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Modal } from "antd"
+import { Button, Form, Input, InputNumber, Modal, Switch } from "antd"
 import { Offering } from "../../helpers/types/Offering"
 import { useEffect } from "react"
 import TextArea from "antd/es/input/TextArea"
@@ -20,9 +20,14 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
         onClose();
     };
 
-    const handleOnOk = () => {
+    const handleOnOk = (values: Offering) => {
         if (onOk) {
-            onOk(form.getFieldsValue());
+            const payload = {
+                ...values,
+                status: values.status ? "ACTIVE" : "INACTIVE",
+            };
+
+            onOk(payload);
             form.resetFields();
             onClose();
         }
@@ -30,7 +35,7 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
 
     useEffect(() => {
         if (offer) {
-            form.setFieldsValue(offer);
+            form.setFieldsValue({ ...offer, status: offer.status === "ACTIVE" ? true : false });
         }
     }, [offer]);
 
@@ -89,6 +94,13 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                         className="w-full"
                         suffix={t("minutes")}
                     />
+                </Form.Item>
+                <Form.Item
+                    label={t("status")}
+                    name="status"
+                    valuePropName="checked"
+                >
+                    <Switch />
                 </Form.Item>
                 <div className="flex justify-between mb-0">
                     <Button type="primary" htmlType="submit" className="mt-3">

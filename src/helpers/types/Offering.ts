@@ -1,3 +1,4 @@
+import { BasicEntityStatus } from './BasicEntityStatus';
 export type Offering = {
     id: number;
     title: string;
@@ -5,4 +6,5 @@ export type Offering = {
     price?: number;
     durationMinutes: number;
     isActive?: boolean;
+    status: BasicEntityStatus;
 }

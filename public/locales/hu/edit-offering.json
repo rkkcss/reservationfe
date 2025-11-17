@@ -8,5 +8,6 @@
     "save": "Mentés",
     "cancel": "Mégse",
     "minutes": "perc",
-    "requiredField": "Kötelező mező"
+    "requiredField": "Kötelező mező",
+    "status": "Státusz"
 }
