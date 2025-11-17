@@ -9,6 +9,7 @@ import { MdOutlineCleaningServices } from 'react-icons/md'
 import { CiShop } from 'react-icons/ci'
 import { useEffect, useState } from 'react'
 import { PiUsersThree } from "react-icons/pi";
+import { GoShieldLock } from 'react-icons/go'
 
 const SettingsMenu = () => {
     const navigate = useNavigate();
@@ -57,6 +58,13 @@ const SettingsMenu = () => {
             icon: <PiUsersThree size={20} strokeWidth={1} />,
             roles: [Authorities.ROLE_USER],
             onClick: () => navigate("/settings/guests")
+        },
+        {
+            key: "security",
+            label: "Biztonság",
+            icon: <GoShieldLock size={20} />,
+            roles: [Authorities.ROLE_USER],
+            onClick: () => navigate("/settings/security")
         }
     ]
 

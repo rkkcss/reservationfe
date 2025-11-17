@@ -21,6 +21,7 @@ import Register from './pages/Register'
 import RegisterActivation from './pages/Activations/RegisterActivation'
 import { useEffect } from 'react'
 import { fetchCsrfToken } from './helpers/queries/accountService'
+import SettingsSecurity from './components/SettingsSecurity'
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
             <Route path="opening-hours" element={<SettingsOpeningHours />} />
             <Route path="business" element={<SettingsBusiness />} />
             <Route path="guests" element={<SettingsGuests />} />
+            <Route path="security" element={<SettingsSecurity />} />
           </Route>
         </Route>
 
