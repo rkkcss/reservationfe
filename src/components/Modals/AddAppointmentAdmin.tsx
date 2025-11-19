@@ -96,7 +96,6 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                 footer={null}
                 destroyOnClose
             >
-                <p>{form.getFieldValue('id')}</p>
                 <Form
                     layout="vertical"
                     initialValues={appointment}
