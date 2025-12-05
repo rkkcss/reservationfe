@@ -4,7 +4,7 @@ import StepSelectOffering from "./StepSelectOffering";
 import StepSelectAppointment from "./StepSelectAppointment";
 import StepPersonalData from "./StepAddress";
 import { Offering } from "../../../helpers/types/Offering";
-import { createAppointmentByGuestQuery } from "../../../helpers/queries/appointmentService";
+import { createAppointmentByGuestQuery } from "../../../helpers/queries/appointment-queries";
 import dayjs from "dayjs";
 import { LuCalendarDays, LuCircleUserRound, LuClock, LuMail, LuPhone } from "react-icons/lu";
 import { MdOutlineDesignServices } from "react-icons/md";
@@ -143,7 +143,6 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
         console.log("Beküldött adatok:", values);
         createAppointmentByGuestQuery(values)
             .then(() => {
-                message.success("Sikeres beküldés!");
                 // onClose();
             });
     };

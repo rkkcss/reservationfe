@@ -1,5 +1,5 @@
-import { Button, Form, Input, message } from 'antd'
-import { patchUserName } from '../helpers/queries/accountService'
+import { Button, Form, Input } from 'antd'
+import { patchUserName } from '../helpers/queries/account-queries'
 import { ChangeUserName } from '../helpers/types/ChangeUserName'
 import { updateName } from '../redux/userSlice'
 import { useDispatch } from 'react-redux'
@@ -11,10 +11,8 @@ const ChangeName = ({ firstName, lastName }: ChangeUserName) => {
         patchUserName(values).then((res) => {
             if (res.status === 200) {
                 dispatch(updateName({ firstName: values.firstName, lastName: values.lastName }));
-                message.success('Sikeres módosítás!')
             }
         }).catch((err: AxiosError) => {
-            message.error('Hiba történt. Próbáld meg késöbb!')
             console.error(err.message);
         })
     }

@@ -1,7 +1,7 @@
 import { Form, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { Offering } from "../../../helpers/types/Offering";
-import { getOffersByBusinessId } from "../../../helpers/queries/offeringService";
+import { getOffersByBusinessId } from "../../../helpers/queries/offering-queries";
 import { useParams } from "react-router";
 
 type StepSelectOfferingProps = {

@@ -6,7 +6,7 @@ import { MdEditNote } from "react-icons/md"
 import { IoCheckmarkCircle, IoCloseCircleSharp } from "react-icons/io5"
 import CustomPagination from "./CustomPagination"
 import { FilterValue, SorterResult } from "antd/es/table/interface"
-import { createQuest, patchGuest } from "../helpers/queries/guestService"
+import { createQuest, patchGuest } from "../helpers/queries/guest-queries"
 import AddOrEditGuestModal from "./Modals/AddOrEditGuestModal"
 
 
@@ -38,7 +38,6 @@ const SettingsGuests = () => {
                     if (!prev) return [guest];
                     return [...prev, res.data];
                 })
-                message.success("Vendég sikeresen hozzáadva!");
             })
         } else {
             patchGuest(guest).then(res => {
@@ -56,7 +55,6 @@ const SettingsGuests = () => {
                     }
                     return [...prev, guest];
                 })
-                message.success("Vendég sikeresen frissítve!");
             })
         }
 

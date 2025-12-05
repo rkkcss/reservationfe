@@ -1,6 +1,5 @@
 // hooks/useAppointments.ts
 import { useCallback, useState } from 'react';
-import { Appointment } from '../helpers/types/Appointment';
 import { AxiosRequestConfig } from 'axios';
 import { API } from '../utils/API';
 
@@ -9,12 +8,12 @@ type useCustomQueryParams = {
     params?: AxiosRequestConfig,
 }
 
-export const useCustomQuery = ({ url }: useCustomQueryParams) => {
+export const useCustomQuery = <T,>({ url }: useCustomQueryParams) => {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<Appointment[]>([]);
+    const [data, setData] = useState<T | null>(null);
 
     const fetchData = useCallback(async (params?: AxiosRequestConfig) => {
-        const response = await API.get(url, params);
+        const response = await API.get<T>(url, params);
         setData(response.data);
         setLoading(false);
     }, [url]);

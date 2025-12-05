@@ -2,23 +2,11 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { API } from "../utils/API";
 import { APILogin } from "../utils/APILogin";
 import i18next from "i18next";
-import { message } from "antd";
-import { Authorities } from "../helpers/types/Authorities";
 import { AxiosError } from "axios";
+import { BusinessEmployee } from "../helpers/types/BusinessEmployee";
+import { notificationManager } from "../utils/notificationConfig";
+import { User } from "../helpers/types/User";
 
-
-export type User = {
-    id: number;
-    login: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    imageUrl?: string | "";
-    activated: boolean;
-    langKey: string;
-    createdDate: Date;
-    authorities: [Authorities];
-};
 
 export type LoginForm = {
     username: string;
@@ -32,6 +20,7 @@ export type State = {
     error: boolean;
     msg: string | null;
     theme: string;
+    selectedBusinessEmployee: BusinessEmployee | null;
 };
 
 const initialState: State = {
@@ -40,12 +29,21 @@ const initialState: State = {
     error: false,
     msg: "",
     theme: "light",
+    selectedBusinessEmployee: null,
 };
 
 export const getAccountInfo = createAsyncThunk<User>(
     "getAccountInfo",
     async () => {
         const response = await API.get<User>("/api/account");
+        return response.data;
+    }
+);
+
+export const getAccountBusinessOptions = createAsyncThunk(
+    "getAccountBusinessOptions",
+    async () => {
+        const response = await API.get("/api/business-employee/current");
         return response.data;
     }
 );
@@ -80,7 +78,9 @@ export const loginUser = createAsyncThunk<
 );
 
 export const logoutUser = createAsyncThunk("logoutUser", async () => {
-    await API.post("/api/logout");
+    await API.post("/api/logout", {}, {
+        showSuccessNotification: false
+    });
     await API.get("/api/csrf-token");
 });
 
@@ -109,6 +109,12 @@ const loginSlice = createSlice({
         },
         toggleTheme(state, action: PayloadAction<string>) {
             state.theme = action.payload;
+        },
+        setActiveBusinessEmployee(state, action: PayloadAction<BusinessEmployee>) {
+            state.selectedBusinessEmployee = action.payload;
+        },
+        setActiveBusinessEmployeeNull(state) {
+            state.selectedBusinessEmployee = null;
         },
         setImageUrl(state, action) {
             if (state.user) {
@@ -153,7 +159,10 @@ const loginSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.loading = false;
                 state.user = null;
-                message.success(i18next.t("login-modal:logoutSuccessfully"));
+                state.selectedBusinessEmployee = null;
+                notificationManager.success("success-logout", {
+                    message: i18next.t("login-modal:logoutSuccessfully"),
+                });
             })
             .addCase(logoutUser.rejected, (state: State, action) => {
                 state.loading = false;
@@ -166,6 +175,6 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName } = loginSlice.actions;
+export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeNull } = loginSlice.actions;
 
 export default loginSlice.reducer;

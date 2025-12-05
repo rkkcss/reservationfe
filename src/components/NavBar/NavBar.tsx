@@ -11,7 +11,6 @@ import logo from '../../assets/logo.png';
 import { BsThreeDots } from "react-icons/bs";
 
 import LanguageSelector from './LanguageSelector';
-import LoginModal from '../Login/LoginModal';
 import { loginModal } from '../Login/loginModalController';
 import { menuItems, threeDotMenuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
@@ -117,8 +116,6 @@ const NavBar = () => {
                     ))}
                 </ul>
             </Drawer>
-
-            <LoginModal />
         </>
     );
 };

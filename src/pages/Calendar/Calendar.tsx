@@ -15,11 +15,12 @@ import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from "@ful
 import { useAppDispatch } from "../../store/hooks";
 import { createAppointmentThunk, deleteAppointmentThunk, fetchAppointmentsBetween, updateAppointmentThunk } from "../../redux/appointmentsSlice";
 import { useSelector } from "react-redux";
-import { AppointmentStore } from "../../store/store";
+import { AppointmentStore, UserStore } from "../../store/store";
 
 const CalendarPage = () => {
     const dispatch = useAppDispatch();
     const { appointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
+    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
 
     const formattedAppointments = useMemo<EventInput[]>(() => {
         return appointments.map(appointmentToEvent);
@@ -47,9 +48,13 @@ const CalendarPage = () => {
     const handleDatesSet = useCallback(
         (arg: DatesSetArg) => {
             computeDateRange(arg);
-            dispatch(fetchAppointmentsBetween({ startDate: arg.start, endDate: arg.end }));
+            dispatch(fetchAppointmentsBetween({
+                startDate: arg.start,
+                endDate: arg.end,
+                businessId: Number(selectedBusinessEmployee!.business.id)
+            }));
         },
-        [dispatch]
+        [dispatch, selectedBusinessEmployee]
     );
 
     const computeDateRange = (arg: DatesSetArg) => {

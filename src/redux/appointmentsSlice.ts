@@ -1,8 +1,17 @@
-import { getAppointmentsBetween, getPendingAppointments, approveAppointmentById, cancelAppointmentById, patchAppointmentQuery, createAppointmentByOwnerQuery, deleteAppointmentQuery } from './../helpers/queries/appointmentService';
+import {
+    getAppointmentsBetween,
+    getPendingAppointments,
+    approveAppointmentById,
+    cancelAppointmentById,
+    patchAppointmentQuery,
+    createAppointmentByOwnerQuery,
+    deleteAppointmentQuery
+} from '../helpers/queries/appointment-queries';
 import { createAsyncThunk, createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Appointment, APPOINTMENT_STATUSES } from '../helpers/types/Appointment';
 import { notification } from 'antd';
 import dayjs from 'dayjs';
+import { UserStore } from '../store/store';
 
 export type AppointmentsState = {
     pendingAppointments: Appointment[],
@@ -18,7 +27,7 @@ const initialState: AppointmentsState = {
 
 export const fetchAppointmentsBetween = createAsyncThunk<
     Appointment[],
-    { startDate?: Date, endDate?: Date }
+    { startDate?: Date, endDate?: Date, businessId: number }
 >('appointments/fetchAppointmentsBetween', async (params) => {
     const response = await getAppointmentsBetween(params);
     return response.data;
@@ -26,10 +35,21 @@ export const fetchAppointmentsBetween = createAsyncThunk<
 
 
 // Async thunk to fetch pending appointments
-export const fetchPendingAppointments = createAsyncThunk<Appointment[], void>(
+export const fetchPendingAppointments = createAsyncThunk<
+    Appointment[],
+    void,
+    { state: UserStore }
+>(
     'appointments/getPendingAppointments',
-    async () => {
-        const response = await getPendingAppointments();
+    async (_, thunkAPI) => {
+
+        const state = thunkAPI.getState();
+        const businessId = state.userStore.selectedBusinessEmployee?.business.id
+        //need better handling
+        if (!businessId) return [];
+
+        const response = await getPendingAppointments(Number(businessId));
+
         return response.data;
     }
 );

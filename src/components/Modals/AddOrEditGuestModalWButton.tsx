@@ -3,7 +3,7 @@ import { FiUserPlus } from "react-icons/fi"
 import AddOrEditGuestModal from "./AddOrEditGuestModal";
 import { Guest } from "../../helpers/types/Guest";
 import { useState } from "react";
-import { createQuest } from "../../helpers/queries/guestService";
+import { createQuest } from "../../helpers/queries/guest-queries";
 
 type AddOrEditGuestModalWButtonProps = {
     afterSubmit: (guest: Guest) => void;

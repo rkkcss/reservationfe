@@ -1,6 +1,6 @@
-import { Alert, Button, Form, Input, InputNumber, message, Select, Tooltip } from 'antd'
+import { Alert, Button, Form, Input, InputNumber, Select, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { patchBusiness } from '../helpers/queries/businessService'
+import { patchBusiness } from '../helpers/queries/business-queries'
 import { Business } from '../helpers/types/Business'
 import { useForm, useWatch } from 'antd/es/form/Form'
 import { MdInfoOutline } from 'react-icons/md'
@@ -19,12 +19,7 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
     }, [business, form])
 
     const handleSubmit = (values: Business) => {
-        patchBusiness(values)
-            .then(() => {
-                message.success("Sikeres frissités")
-            }).catch(() => {
-                message.error("Hiba történt. Próbáld meg késöbb!")
-            });
+        patchBusiness(values);
     }
 
     return (

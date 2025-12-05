@@ -1,7 +1,7 @@
-import { Button, Result, message } from 'antd';
+import { Button, Result } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { cancelAppointmentByGuestWithToken, getAppointmentByModifierToken } from '../helpers/queries/appointmentService';
+import { cancelAppointmentByGuestWithToken, getAppointmentByModifierToken } from '../helpers/queries/appointment-queries';
 import { Appointment } from '../helpers/types/Appointment';
 import dayjs from 'dayjs';
 import { IoCalendarOutline } from 'react-icons/io5';
@@ -9,6 +9,7 @@ import { LuUserRound } from "react-icons/lu";
 import { Popconfirm, Skeleton, Spin } from 'antd/lib';
 import { MdDeleteForever } from 'react-icons/md';
 import { RiServiceLine } from 'react-icons/ri';
+import { notificationManager } from '../utils/notificationConfig';
 
 const CancelAppointment = () => {
     const { modifierToken } = useParams();
@@ -41,14 +42,14 @@ const CancelAppointment = () => {
         setCancelLoading(true);
         cancelAppointmentByGuestWithToken(modifierToken)
             .then(() => {
-                message.success('Az időpont sikeresen lemondva');
+                notificationManager.success("appointment-cancelled", { message: 'Az időpont sikeresen lemondva' });
                 setCancelSuccess(true);
                 setAppointment(null);
                 // Visszairányítás is lehetne pl:
                 // navigate('/');
             })
             .catch(() => {
-                message.error('Nem sikerült lemondani az időpontot, próbálja újra később');
+                notificationManager.error("appointment-cancel-failed", { message: 'Nem sikerült lemondani az időpontot, próbálja újra később' });
             })
             .finally(() => setCancelLoading(false));
     };

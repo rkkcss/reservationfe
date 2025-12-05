@@ -1,7 +1,7 @@
 import { Button, Calendar, Form, Radio } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { getBusinessAvailableSlots } from "../../../helpers/queries/appointmentService";
+import { getBusinessAvailableSlots } from "../../../helpers/queries/appointment-queries";
 
 type StepSelectAppointmentProps = {
     businessId: number;

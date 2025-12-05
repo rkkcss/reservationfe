@@ -5,6 +5,7 @@ import { Appointment } from "../types/Appointment"
 export type GetAppontmentBetweenProps = {
     startDate?: Date,
     endDate?: Date,
+    businessId: number
 }
 export const getAppointmentsBetween = (params: GetAppontmentBetweenProps) => {
     return API.get("/api/appointments", { params: params })
@@ -76,6 +77,6 @@ export const cancelAppointmentById = (id: number) => {
     return API.patch(`/api/appointments/${id}/cancel`)
 }
 
-export const getPendingAppointments = (): Promise<AxiosResponse<Appointment[]>> => {
-    return API.get<Appointment[]>('/api/appointments/pendings');
+export const getPendingAppointments = (businessId: number): Promise<AxiosResponse<Appointment[]>> => {
+    return API.get<Appointment[]>(`/api/appointments/business/${businessId}/pendings`);
 };

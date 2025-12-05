@@ -4,7 +4,7 @@ import { RiDeleteBin5Line } from 'react-icons/ri'
 import { CiEdit } from 'react-icons/ci'
 import placeholderImage from '../assets/placeholder.jpg'
 import { useForm } from 'antd/es/form/Form'
-import { changeBusinessLogo } from '../helpers/queries/businessService'
+import { changeBusinessLogo } from '../helpers/queries/business-queries'
 import type { UploadRequestOption } from 'rc-upload/lib/interface';
 
 type SettingsCoverImageProps = {

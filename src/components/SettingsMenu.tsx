@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from 'antd'
+import { Menu } from 'antd'
 import { useLocation, useNavigate } from 'react-router'
 import { Authorities } from '../helpers/types/Authorities'
 import { useSelector } from 'react-redux'
@@ -10,12 +10,14 @@ import { CiShop } from 'react-icons/ci'
 import { useEffect, useState } from 'react'
 import { PiUsersThree } from "react-icons/pi";
 import { GoShieldLock } from 'react-icons/go'
+import { BUSINESS_PERMISSIONS } from '../helpers/types/BusinessPermission'
 
 const SettingsMenu = () => {
     const navigate = useNavigate();
-    const { user } = useSelector((state: UserStore) => state.userStore);
+    const { user, selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
     const location = useLocation();
-    const [isMenuCollapsed, setIsMenuCollapsed] = useState(false)
+    const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
+    console.log(selectedBusinessEmployee)
 
     useEffect(() => {
         window.addEventListener('resize', () => {
@@ -36,6 +38,7 @@ const SettingsMenu = () => {
             label: "Szolgáltatásaim",
             icon: <MdOutlineCleaningServices size={20} />,
             roles: [Authorities.ROLE_USER],
+            permissions: [BUSINESS_PERMISSIONS.VIEW_SERVICES],
             onClick: () => navigate("/settings/my-services")
         },
         {
@@ -50,6 +53,7 @@ const SettingsMenu = () => {
             label: "Üzlet",
             icon: <CiShop size={20} strokeWidth={1} />,
             roles: [Authorities.ROLE_USER],
+            permissions: [BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS],
             onClick: () => navigate("/settings/business")
         },
         {
@@ -65,11 +69,30 @@ const SettingsMenu = () => {
             icon: <GoShieldLock size={20} />,
             roles: [Authorities.ROLE_USER],
             onClick: () => navigate("/settings/security")
+        },
+        {
+            key: "employees",
+            label: "Kollégák",
+            icon: <PiUsersThree size={20} strokeWidth={1} />,
+            roles: [Authorities.ROLE_USER],
+            permissions: [BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES],
+            onClick: () => navigate("/settings/employees")
         }
     ]
 
-    const filteredSettingsMenu: Required<MenuProps>["items"][number][] = settingsMenuItems
-        .filter(item => item?.roles?.some(role => user?.authorities?.includes(role)))
+    const filteredSettingsMenu = settingsMenuItems
+        .filter(item => {
+            const hasRole =
+                item.roles?.some(role => user?.authorities?.includes(role));
+
+            const hasPermission =
+                !item.permissions ||
+                item.permissions.some(p =>
+                    selectedBusinessEmployee?.permissions?.includes(p)
+                );
+
+            return hasRole && hasPermission;
+        })
         .map(item => ({
             key: item.key,
             icon: item.icon,
@@ -77,6 +100,9 @@ const SettingsMenu = () => {
             onClick: item.onClick,
             className: "md:!rounded-full md:!w-fit"
         }));
+
+
+
 
     return (
         <div className="min-h-72">

@@ -5,8 +5,9 @@ import { MdOutlineLibraryBooks } from 'react-icons/md';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Authorities } from '../helpers/types/Authorities';
 import { AppDispatch } from '../store/store';
-import { logoutUser } from '../redux/userSlice';
+import { logoutUser, setActiveBusinessEmployeeNull } from '../redux/userSlice';
 import { Link } from 'react-router';
+import { LiaIndustrySolid } from 'react-icons/lia';
 
 export interface MenuItem {
     key?: string;
@@ -52,6 +53,11 @@ export const menuItems = (
         }
     ];
 
+const handleAccountChangeBusiness = (dispatch: AppDispatch, navigate: (path: string, options?: { replace: boolean }) => void) => {
+    dispatch(setActiveBusinessEmployeeNull());
+    navigate('/choose-business', { replace: true });
+}
+
 export const userMenuItems = (
     t: (key: string) => string,
     navigate: (path: string) => void,
@@ -67,6 +73,13 @@ export const userMenuItems = (
         {
             type: 'divider',
             roles: [Authorities.ROLE_USER]
+        },
+        {
+            key: 'change-business',
+            icon: <LiaIndustrySolid size={16} />,
+            label: t('change-business'),
+            roles: [Authorities.ROLE_USER],
+            onClick: () => handleAccountChangeBusiness(dispatch, navigate)
         },
         {
             key: 'logout',

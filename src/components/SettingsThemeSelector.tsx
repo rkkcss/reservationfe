@@ -6,7 +6,7 @@ import blueTheme from '../assets/blue-theme.png'
 import defaultTheme from '../assets/default-theme.png'
 import pinkTheme from '../assets/pink-theme.png'
 import { useForm } from 'antd/es/form/Form'
-import { changeBusinessTheme } from '../helpers/queries/businessService'
+import { changeBusinessTheme } from '../helpers/queries/business-queries'
 
 type SettingsThemeSelectorProps = {
     theme: string,

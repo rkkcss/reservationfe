@@ -2,20 +2,24 @@
 import { Tabs } from 'antd'
 import SettingsBusinessData from './SettingsBusinessData'
 import { useCallback, useEffect, useState } from 'react'
-import { getBusinessByLoggedInUser } from '../helpers/queries/businessService'
+import { getBusinessByLoggedInUser } from '../helpers/queries/business-queries'
 import { Business } from '../helpers/types/Business'
 import SettingsCoverImage from './SettingsCoverImage'
 import SettingsThemeSelector from './SettingsThemeSelector'
+import { useAppSelector } from '../store/hooks'
 
 const SettingsBusiness = () => {
-
+    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
     const [business, setBusiness] = useState<Business>({} as Business);
 
     useEffect(() => {
-        getBusinessByLoggedInUser()
-            .then(res => {
-                setBusiness(res.data);
-            });
+        if (selectedBusinessEmployee) {
+            getBusinessByLoggedInUser(Number(selectedBusinessEmployee?.business.id))
+                .then(res => {
+                    setBusiness(res.data);
+                });
+        }
+
     }, [])
 
     const setBusinessLogo = useCallback((logo: string) => {

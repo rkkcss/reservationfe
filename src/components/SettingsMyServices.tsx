@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { usePagination } from '../hooks/usePagination'
-import { Button, message, Pagination, Popconfirm, Spin, Tag } from 'antd'
+import { Button, Pagination, Popconfirm, Spin, Tag } from 'antd'
 import EditOffering from '../components/Modals/EditOffering'
 import { FiPlus } from 'react-icons/fi'
 import { Offering } from '../helpers/types/Offering'
-import { createOffer, deleteOffer, updateOffer } from '../helpers/queries/offeringService'
+import { createOffer, deleteOffer, updateOffer } from '../helpers/queries/offering-queries'
 import { PaginationProps } from 'antd/lib'
 import { TbTrash } from 'react-icons/tb'
 import { CiEdit } from 'react-icons/ci'
 import { PiPlusBold } from 'react-icons/pi'
 import { BASIC_ENTITY_STATUSES } from '../helpers/types/BasicEntityStatus'
+import { UserStore } from '../store/store'
+import { useSelector } from 'react-redux'
+import { BUSINESS_PERMISSIONS } from '../helpers/types/BusinessPermission'
 
 
 const SettingsMyServices = () => {
     const [editOfferingModal, setEditOfferingModal] = useState(false);
-    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business-owner`)
+    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business-employee/${selectedBusinessEmployee?.business?.id}`)
     const [editOffer, setEditOffer] = useState<Offering>({} as Offering);
 
+    const userHasPermission = useMemo(() => selectedBusinessEmployee?.permissions?.includes(BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES), [selectedBusinessEmployee]);
     const handleEditOffer = (offer: Offering) => {
         setEditOffer(offer);
         setEditOfferingModal(true);
@@ -30,22 +35,15 @@ const SettingsMyServices = () => {
     const handleOnOkOffer = (values: Offering) => {
         if (values?.id) {
             updateOffer(values)?.then(res => {
-                if (res.status !== 200) {
-                    message.error("Something went wrong!")
-                    return
-                }
-                message.success("Successfully updated!");
+                if (res.status !== 200) return;
                 setData(prev => {
                     return prev.map(item => item.id === values.id ? values : item)
                 })
             });
         } else {
             createOffer(values).then(res => {
-                if (res.status !== 201) {
-                    message.error("Something went wrong!")
-                    return
-                }
-                message.success("Successfully created!");
+                if (res.status !== 201) return
+
                 setData(prev => [res.data, ...prev]);
             });
         }
@@ -53,11 +51,8 @@ const SettingsMyServices = () => {
 
     const handleDeleteOffer = (offerId: number) => {
         deleteOffer(offerId)?.then(res => {
-            if (res.status !== 204) {
-                message.error("Something went wrong!")
-                return
-            }
-            message.success("Successfully deleted!");
+            if (res.status !== 204) return;
+
             setData(prev => prev.filter(item => item.id !== offerId))
         });
 
@@ -87,9 +82,12 @@ const SettingsMyServices = () => {
             />
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold mb-4">Szolgáltatásaim</h1>
-                <Button icon={<FiPlus />} onClick={() => setEditOfferingModal(true)}>
-                    Új szolgáltatás
-                </Button>
+                {
+                    userHasPermission &&
+                    <Button icon={<FiPlus />} onClick={() => setEditOfferingModal(true)}>
+                        Új szolgáltatás
+                    </Button>
+                }
             </div>
             <Spin spinning={loading}>
                 {
@@ -113,17 +111,21 @@ const SettingsMyServices = () => {
                                                     <p className="font-bold text-base flex items-center gap-1">
                                                         {offer.title}
                                                     </p>
-                                                    <div className="flex gap-2 group-hover:opacity-100 opacity-0">
-                                                        <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
-                                                        <Popconfirm
-                                                            title="Biztosan törölni szeretnéd?"
-                                                            onConfirm={() => handleDeleteOffer(offer.id!)}
-                                                            okText="Igen"
-                                                            cancelText="Nem"
-                                                        >
-                                                            <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
-                                                        </Popconfirm>
-                                                    </div>
+                                                    {
+                                                        selectedBusinessEmployee?.permissions?.includes(BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES) &&
+
+                                                        <div className="flex gap-2 group-hover:opacity-100 opacity-0">
+                                                            <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
+                                                            <Popconfirm
+                                                                title="Biztosan törölni szeretnéd?"
+                                                                onConfirm={() => handleDeleteOffer(offer.id!)}
+                                                                okText="Igen"
+                                                                cancelText="Nem"
+                                                            >
+                                                                <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
+                                                            </Popconfirm>
+                                                        </div>
+                                                    }
                                                     {
                                                         offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
                                                         <div className="block absolute top-2 right-1 gap-2 group-hover:hidden">
@@ -142,7 +144,7 @@ const SettingsMyServices = () => {
                                     ))
                                 }
                                 {
-                                    data.length < 20 &&
+                                    data.length < 20 && userHasPermission &&
                                     <div onClick={() => setEditOfferingModal(true)} className="rounded-lg p-4 group flex hover:opacity-100 opacity-0 cursor-pointer bg-slate-50 justify-center items-center">
                                         <PiPlusBold size={30} />
                                         <span className="ml-2">Új szolgáltatás hozzáadása</span>

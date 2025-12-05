@@ -7,8 +7,8 @@ export const getBusiness = (id: number | string) => {
     return API.get(`${DEFAULT_PATH}/${id}`);
 }
 
-export const getBusinessByLoggedInUser = () => {
-    return API.get(`${DEFAULT_PATH}/owner`);
+export const getBusinessByLoggedInUser = (businessId: number) => {
+    return API.get(`${DEFAULT_PATH}/${businessId}/private`);
 }
 
 export const patchBusiness = (business: Business) => {

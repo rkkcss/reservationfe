@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCustomQuery } from '../../hooks/useCustomQuery';
 import { Appointment, APPOINTMENT_STATUSES } from '../../helpers/types/Appointment';
-import { approveAppointmentById, cancelAppointmentById } from '../../helpers/queries/appointmentService';
+import { approveAppointmentById, cancelAppointmentById } from '../../helpers/queries/appointment-queries';
 import { message } from 'antd';
 import { useCalendar } from '../../context/CalendarContext';
 import dayjs from 'dayjs';
@@ -36,7 +36,6 @@ const usePendingAppointments = () => {
         const res = await approveAppointmentById(id);
         if (res.status === 200) {
             setData((prev: Appointment[]) => prev.filter((a) => a.id !== id));
-            message.success("Időpont jóváhagyva");
             //set global appointments state
             setAppointments((prev) => {
                 return prev.map((e) => (e.id == res.data.id ? { ...e, status: APPOINTMENT_STATUSES.CONFIRMED } : e));
@@ -49,7 +48,6 @@ const usePendingAppointments = () => {
         const res = await cancelAppointmentById(id);
         if (res.status === 200) {
             setData((prev: Appointment[]) => prev.filter((a) => a.id !== id));
-            message.success("Időpont elutasítva");
             setAppointments((prev) => {
                 return prev.map((e) => (e.id == res.data.id ? { ...e, status: APPOINTMENT_STATUSES.CANCELLED } : e));
             });

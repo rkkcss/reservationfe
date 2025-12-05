@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getSessionQuery } from "../helpers/queries/sessionService"
+import { getSessionQuery } from "../helpers/queries/session-queries"
 import { UAParser } from "ua-parser-js";
 import { Session } from "../helpers/types/Session";
 

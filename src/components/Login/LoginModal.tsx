@@ -1,24 +1,23 @@
 import { useState, useEffect } from "react";
-import { Alert, Button, Form, Input, message, Modal } from "antd";
+import { Alert, Button, Form, Input, Modal } from "antd";
 import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
-import { useDispatch, useSelector } from "react-redux";
-import { LoginForm, loginUser, User } from "../../redux/userSlice";
+import { useSelector } from "react-redux";
+import { LoginForm, loginUser } from "../../redux/userSlice";
 import { UserStore } from "../../store/store";
-import { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../../store/hooks";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const { t } = useTranslation("login-modal");
     const [form] = useForm();
-    const dispatch: ThunkDispatch<User, User, PayloadAction> = useDispatch();
+    const dispatch = useAppDispatch();
     const { loading } = useSelector((state: UserStore) => state.userStore);
     const navigate = useNavigate();
-    const { pathname } = useLocation();
 
     useEffect(() => {
         setLoginModalController({
@@ -36,12 +35,10 @@ const LoginModal = () => {
 
         dispatch(loginUser(e))
             .unwrap()
-            .then((res) => {
-                message.success(res.message);
+            .then(() => {
                 loginModal.close();
-                if (pathname === "/") {
-                    navigate("/dashboard");
-                }
+                navigate("/dashboard");
+
             })
             .catch((err) => {
                 if (err.status === 401) {

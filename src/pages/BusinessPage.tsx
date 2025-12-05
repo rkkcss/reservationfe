@@ -1,6 +1,6 @@
 import { ConfigProvider, Tabs } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
-import { getBusiness } from '../helpers/queries/businessService'
+import { getBusiness } from '../helpers/queries/business-queries'
 import { useParams } from 'react-router'
 import BusinessServices from '../components/BusinessServices'
 import { DAY_OF_WEEK } from '../helpers/types/OpeningHour'

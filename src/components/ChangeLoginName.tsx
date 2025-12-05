@@ -1,5 +1,5 @@
-import { Button, Form, Input, message } from 'antd'
-import { patchUserLogin } from '../helpers/queries/accountService';
+import { Button, Form, Input } from 'antd'
+import { patchUserLogin } from '../helpers/queries/account-queries';
 
 type ChangeLoginNameProps = {
     login: string | undefined,
@@ -7,13 +7,7 @@ type ChangeLoginNameProps = {
 
 const ChangeLoginName = ({ login }: ChangeLoginNameProps) => {
     const handleSubmit = (values: string) => {
-        patchUserLogin(values)
-            .then(() => {
-                message.success("Sikeres módosítás!")
-            })
-            .catch(err => {
-                message.error(err.response.data.detail)
-            })
+        patchUserLogin(values);
     }
     return (
         <>

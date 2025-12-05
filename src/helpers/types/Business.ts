@@ -1,7 +1,7 @@
 import { WorkingHours } from "./WorkingHours"
 
 export type Business = {
-    id?: string | number,
+    id: string | number | null,
     name?: string,
     description?: string,
     services?: string[],
