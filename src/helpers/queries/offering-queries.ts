@@ -24,8 +24,8 @@ export const createOffer = (offer: Offering, businessId: number, employeeId: num
     return API.post(`/api/offerings/business/${businessId}/business-employee/${employeeId}`, offer);
 }
 
-export const deleteOffer = (id: number) => {
-    return API.delete(`/api/offerings/${id}`);
+export const deleteOffer = (offerId: number, businessId: number) => {
+    return API.patch(`/api/offerings/${offerId}/business/${businessId}`);
 }
 
 /**

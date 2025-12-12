@@ -39,7 +39,7 @@ const SettingsMyServices = () => {
                 })
             });
         } else {
-            createOffer(values).then(res => {
+            createOffer(values, Number(selectedBusinessEmployee?.business?.id), Number(selectedBusinessEmployee?.id)).then(res => {
                 if (res.status !== 201) return
 
                 setData(prev => [res.data, ...prev]);
@@ -48,7 +48,7 @@ const SettingsMyServices = () => {
     }
 
     const handleDeleteOffer = (offerId: number) => {
-        deleteOffer(offerId)?.then(res => {
+        deleteOffer(offerId, Number(selectedBusinessEmployee?.business?.id)).then(res => {
             if (res.status !== 204) return;
 
             setData(prev => prev.filter(item => item.id !== offerId))
