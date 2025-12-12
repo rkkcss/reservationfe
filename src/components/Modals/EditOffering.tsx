@@ -3,6 +3,7 @@ import { Offering } from "../../helpers/types/Offering"
 import { useEffect } from "react"
 import TextArea from "antd/es/input/TextArea"
 import { useTranslation } from "react-i18next"
+import { BASIC_ENTITY_STATUSES } from "../../helpers/types/BasicEntityStatus"
 
 type EditOfferingProps = {
     visible: boolean,
@@ -22,10 +23,10 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
 
     const handleOnOk = (values: Offering) => {
         if (onOk) {
-            const payload = {
+            const payload: Offering = {
                 ...values,
-                status: values.status ? "ACTIVE" : "INACTIVE",
-            };
+                status: values.status ? BASIC_ENTITY_STATUSES.ACTIVE : BASIC_ENTITY_STATUSES.INACTIVE,
+            }
 
             onOk(payload);
             form.resetFields();
@@ -35,7 +36,7 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
 
     useEffect(() => {
         if (offer) {
-            form.setFieldsValue({ ...offer, status: offer.status === "ACTIVE" ? true : false });
+            form.setFieldsValue({ ...offer, status: offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? true : false });
         }
     }, [offer]);
 
@@ -48,7 +49,6 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                 : t("newService")
             }
             footer={false}
-            destroyOnClose
         >
             <Form
                 layout="vertical"

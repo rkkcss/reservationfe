@@ -1,8 +1,9 @@
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Select } from 'antd';
 import { MenuProps } from 'antd/lib';
 import { useCallback, useMemo } from 'react'
 import { FaAngleDown, FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa';
 import { useCalendar } from '../../context/CalendarContext';
+import { useAppSelector } from '../../store/hooks';
 
 type CalendarHeaderProps = {
     dateRange?: string;
@@ -10,6 +11,7 @@ type CalendarHeaderProps = {
 
 const CalendarHeader = ({ dateRange }: CalendarHeaderProps) => {
     const { calendarRef } = useCalendar();
+    const { user } = useAppSelector(state => state.userStore);
 
     const getCurrentView = calendarRef.current?.getApi().view.type as 'timeGridDay' | 'timeGridWeek';
 
@@ -43,7 +45,10 @@ const CalendarHeader = ({ dateRange }: CalendarHeaderProps) => {
     return (
         <div className="flex flex-col md:flex-row items-center gap-3 mt-11 mb-2 justify-between">
             <div className="flex items-center">
-                <Button onClick={handleToday}>Ma</Button>
+                <Select defaultValue={"business1"} defaultActiveFirstOption>
+                    <Select.Option value="business1">{user?.firstName} {user?.lastName}</Select.Option>
+                    <Select.Option value="business2">Nagy Antal</Select.Option>
+                </Select>
                 <Dropdown menu={{ items: viewItems }} trigger={['click']}>
                     <Button type="text" className="flex items-center gap-1" onClick={e => e.preventDefault()}>
                         {getCurrentView === 'timeGridDay' ? 'Napi nézet' : 'Heti nézet'}
@@ -52,6 +57,7 @@ const CalendarHeader = ({ dateRange }: CalendarHeaderProps) => {
                 </Dropdown>
             </div>
             <div className="flex items-center gap-2">
+                <Button onClick={handleToday}>Ma</Button>
                 <Button onClick={handlePrev} icon={<FaAngleLeft size={16} />} type="text" />
                 <p className="text-base sm:text-xl lg:text-2xl font-semibold">{dateRange}</p>
                 <Button onClick={handleNext} icon={<FaAngleRight size={16} />} type="text" />

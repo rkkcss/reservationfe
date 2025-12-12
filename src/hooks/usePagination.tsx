@@ -8,8 +8,15 @@ type AxiosResponseHeaders = {
 };
 type AxiosHeaderValue = string | number | boolean | null;
 
+// Optional request paraméterek típusa
+type RequestParams = Record<string, string | number | boolean | null | undefined>;
 
-export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSort: string = "") {
+export function usePagination<T>(
+    endpoint: string,
+    itemsPerPage = 10,
+    defaultSort: string = "",
+    additionalParams: RequestParams = {} // Új paraméter
+) {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -24,8 +31,10 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
     const [error, setError] = useState<Error | null>(null);
 
     const [itemsPerPageCount, setItemsPerPageCount] = useState<number>(itemsPerPage);
-
     const [sort, setSort] = useState<string>(initialSort);
+
+    // Request paraméterek állapota
+    const [requestParams, setRequestParams] = useState<RequestParams>(additionalParams);
 
     const parseLinkHeader = (linkHeader: string) => {
         return linkHeader.split(",").reduce((acc, part) => {
@@ -41,12 +50,29 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
         const urlParams = new URLSearchParams(url.split("?")[1]);
         return parseInt(urlParams.get("page") || "0", 10);
     };
+    const buildQueryString = (page: number, sortParam: string, params: RequestParams) => {
+        const queryParams = new URLSearchParams();
+        queryParams.set("page", page.toString());
+        queryParams.set("size", itemsPerPage.toString());
+
+        if (sortParam) {
+            queryParams.set("sort", sortParam);
+        }
+
+        // Additional params hozzáadása
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && value !== '') {
+                queryParams.set(key, String(value));
+            }
+        });
+
+        return queryParams.toString();
+    };
 
     const handleResponse = (
         response: AxiosResponse<T[]>,
         pageUrl: string | null
     ) => {
-        // headers típusbiztosan kezelve
         const headers = response.headers as
             | AxiosResponseHeaders
             | Record<string, AxiosHeaderValue | undefined>;
@@ -80,13 +106,14 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
     };
 
     const fetchPage = useCallback(
-        async (page: number, sortParam: string = sort) => {
+        async (page: number, sortParam: string = sort, params: RequestParams = requestParams) => {
             setLoading(true);
             setError(null);
 
             try {
-                const url = `${endpoint}?page=${page}${sort && `&sort=${encodeURIComponent(sortParam)}`}&size=${itemsPerPage}`;
-                console.log(url)
+                const queryString = buildQueryString(page, sortParam, params);
+                const url = `${endpoint}?${queryString}`;
+                console.log(url);
                 const response = await API.get(url);
 
                 const linkHeader = response.headers.link;
@@ -101,14 +128,14 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
 
                 handleResponse(response, url);
 
-                navigate({ search: `?page=${page}${sort && `&sort=${sort}`}` }, { replace: true });
+                navigate({ search: `?${queryString}` }, { replace: true });
             } catch (err) {
                 setError(err as Error);
             } finally {
                 setLoading(false);
             }
         },
-        [endpoint, navigate, sort]
+        [endpoint, navigate, sort, requestParams, itemsPerPage]
     );
 
     const fetchNextPage = useCallback(() => {
@@ -124,8 +151,12 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
     }, [prevPageUrl, currentPage, fetchPage]);
 
     useEffect(() => {
-        fetchPage(parseInt(initialPage, 10) || 0, sort);
+        fetchPage(parseInt(initialPage, 10) || 0, sort, requestParams);
     }, [sort]);
+
+    useEffect(() => {
+        fetchPage(0, sort, requestParams);
+    }, [requestParams]);
 
     const totalPages = totalItems ? Math.ceil(totalItems / itemsPerPage) : 0;
 
@@ -134,17 +165,19 @@ export function usePagination<T>(endpoint: string, itemsPerPage = 10, defaultSor
         setData,
         currentPage,
         totalItems,
-        totalPages, // Összes oldal száma
+        totalPages,
         fetchNextPage,
         fetchPrevPage,
-        fetchPage, // Oldalszámra ugrás funkció
+        fetchPage,
         loading,
         error,
         hasNextPage: !!nextPageUrl,
         hasPrevPage: !!prevPageUrl,
         sort,
-        setSort, // Sort állapot és setter
+        setSort,
         itemsPerPage,
-        itemsPerPageCount
+        itemsPerPageCount,
+        requestParams,
+        setRequestParams,
     };
 }

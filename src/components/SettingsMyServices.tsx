@@ -1,24 +1,22 @@
 import { useMemo, useState } from 'react'
 import { usePagination } from '../hooks/usePagination'
-import { Button, Pagination, Popconfirm, Spin, Tag } from 'antd'
+import { Button, Pagination, Spin, } from 'antd'
 import EditOffering from '../components/Modals/EditOffering'
 import { FiPlus } from 'react-icons/fi'
 import { Offering } from '../helpers/types/Offering'
 import { createOffer, deleteOffer, updateOffer } from '../helpers/queries/offering-queries'
 import { PaginationProps } from 'antd/lib'
-import { TbTrash } from 'react-icons/tb'
-import { CiEdit } from 'react-icons/ci'
 import { PiPlusBold } from 'react-icons/pi'
-import { BASIC_ENTITY_STATUSES } from '../helpers/types/BasicEntityStatus'
 import { UserStore } from '../store/store'
 import { useSelector } from 'react-redux'
 import { BUSINESS_PERMISSIONS } from '../helpers/types/BusinessPermission'
+import SettingsServicesCard from '../components/SettingsServicesCard'
 
 
 const SettingsMyServices = () => {
     const [editOfferingModal, setEditOfferingModal] = useState(false);
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business-employee/${selectedBusinessEmployee?.business?.id}`)
+    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business/${selectedBusinessEmployee?.business?.id}/my`)
     const [editOffer, setEditOffer] = useState<Offering>({} as Offering);
 
     const userHasPermission = useMemo(() => selectedBusinessEmployee?.permissions?.includes(BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES), [selectedBusinessEmployee]);
@@ -34,7 +32,7 @@ const SettingsMyServices = () => {
 
     const handleOnOkOffer = (values: Offering) => {
         if (values?.id) {
-            updateOffer(values)?.then(res => {
+            updateOffer(values, Number(selectedBusinessEmployee?.business?.id))?.then(res => {
                 if (res.status !== 200) return;
                 setData(prev => {
                     return prev.map(item => item.id === values.id ? values : item)
@@ -101,45 +99,13 @@ const SettingsMyServices = () => {
                                 {
                                     data && data?.map((offer) => (
                                         <>
-                                            <div key={offer.id} className="relative bg-white outline outline-1 outline-indigo-600/10 rounded-lg p-4 group flex flex-col">
-                                                {
-                                                    offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
-                                                    <div className="w-full h-full absolute bg-gray-100/50 rounded-lg top-0 left-0 flex items-center justify-center">
-                                                    </div>
-                                                }
-                                                <div className="flex mb-3 justify-between">
-                                                    <p className="font-bold text-base flex items-center gap-1">
-                                                        {offer.title}
-                                                    </p>
-                                                    {
-                                                        selectedBusinessEmployee?.permissions?.includes(BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES) &&
-
-                                                        <div className="flex gap-2 group-hover:opacity-100 opacity-0">
-                                                            <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEditOffer(offer)}></Button>
-                                                            <Popconfirm
-                                                                title="Biztosan törölni szeretnéd?"
-                                                                onConfirm={() => handleDeleteOffer(offer.id!)}
-                                                                okText="Igen"
-                                                                cancelText="Nem"
-                                                            >
-                                                                <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
-                                                            </Popconfirm>
-                                                        </div>
-                                                    }
-                                                    {
-                                                        offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
-                                                        <div className="block absolute top-2 right-1 gap-2 group-hover:hidden">
-                                                            <Tag color="default">Inaktív</Tag>
-                                                        </div>
-                                                    }
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm">{offer.description}</p>
-                                                </div>
-                                                <div className="mt-auto">
-                                                    <p className="text-base font-bold mt-2">{offer.price} Ft</p>
-                                                </div>
-                                            </div>
+                                            <SettingsServicesCard
+                                                key={offer.id}
+                                                offer={offer}
+                                                handleDeleteOffer={handleDeleteOffer}
+                                                handleEditOffer={handleEditOffer}
+                                                editable={userHasPermission}
+                                            />
                                         </>
                                     ))
                                 }

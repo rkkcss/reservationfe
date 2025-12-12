@@ -64,7 +64,9 @@ function App() {
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_SERVICES]} />} >
                   <Route path="my-services" element={<SettingsMyServices />} />
                 </Route>
-                <Route path="opening-hours" element={<SettingsOpeningHours />} />
+                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE]} />}>
+                  <Route path="opening-hours" element={<SettingsOpeningHours />} />
+                </Route>
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>
                   <Route path="business" element={<SettingsBusiness />} />
                 </Route>
