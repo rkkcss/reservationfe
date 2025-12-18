@@ -1,8 +1,8 @@
 import { BusinessEmployeeRole } from './BusinessEmployeeRole';
-import { User } from "../../redux/userSlice";
 import { BasicEntityStatus } from "./BasicEntityStatus";
 import { Business } from "./Business";
 import { BusinessPermission } from './BusinessPermission';
+import { User } from './User';
 
 export type BusinessEmployee = {
     id: number;

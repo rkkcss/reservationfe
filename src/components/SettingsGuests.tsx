@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Guest } from "../helpers/types/Guest"
 import { usePagination } from "../hooks/usePagination"
-import { Button, message, Table, TablePaginationConfig } from "antd"
+import { Button, Table, TablePaginationConfig } from "antd"
 import { MdEditNote } from "react-icons/md"
 import { IoCheckmarkCircle, IoCloseCircleSharp } from "react-icons/io5"
 import CustomPagination from "./CustomPagination"

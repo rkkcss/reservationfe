@@ -3,15 +3,16 @@ import { MenuProps } from 'antd/lib';
 import { useCallback, useMemo } from 'react'
 import { FaAngleDown, FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa';
 import { useCalendar } from '../../context/CalendarContext';
-import { useAppSelector } from '../../store/hooks';
+import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
 
 type CalendarHeaderProps = {
     dateRange?: string;
+    employees: BusinessEmployee[],
+    handleEmployeeChange: (name: string) => void;
 };
 
-const CalendarHeader = ({ dateRange }: CalendarHeaderProps) => {
+const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: CalendarHeaderProps) => {
     const { calendarRef } = useCalendar();
-    const { user } = useAppSelector(state => state.userStore);
 
     const getCurrentView = calendarRef.current?.getApi().view.type as 'timeGridDay' | 'timeGridWeek';
 
@@ -45,9 +46,13 @@ const CalendarHeader = ({ dateRange }: CalendarHeaderProps) => {
     return (
         <div className="flex flex-col md:flex-row items-center gap-3 mt-11 mb-2 justify-between">
             <div className="flex items-center">
-                <Select defaultValue={"business1"} defaultActiveFirstOption>
-                    <Select.Option value="business1">{user?.firstName} {user?.lastName}</Select.Option>
-                    <Select.Option value="business2">Nagy Antal</Select.Option>
+                <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)}>
+                    <Select.Option value="all" key="all">Összes megtekintése</Select.Option>
+                    {
+                        employees.map(employee => (
+                            <Select.Option value={employee.user.firstName + " " + employee.user.lastName} key={employee.id}>{employee.user.firstName} {employee.user.lastName}</Select.Option>
+                        ))
+                    }
                 </Select>
                 <Dropdown menu={{ items: viewItems }} trigger={['click']}>
                     <Button type="text" className="flex items-center gap-1" onClick={e => e.preventDefault()}>

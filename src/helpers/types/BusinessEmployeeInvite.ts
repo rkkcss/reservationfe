@@ -1,5 +1,6 @@
-import { User } from "../../redux/userSlice";
+
 import { Business } from "./Business";
+import { User } from "./User";
 
 export type BusinessEmployeeInvite = {
     id: number;

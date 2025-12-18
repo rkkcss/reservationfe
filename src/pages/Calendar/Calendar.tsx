@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -12,17 +12,25 @@ import AddAppointmentAdmin from "../../components/Modals/AddAppointmentAdmin";
 import PendingAppointments from "../../components/PendingAppointments/PendingAppointments";
 import CalendarHeader from "./CalendarHeader";
 import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from "@fullcalendar/core";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { createAppointmentThunk, deleteAppointmentThunk, fetchAppointmentsBetween, updateAppointmentThunk } from "../../redux/appointmentsSlice";
 import { useSelector } from "react-redux";
-import { AppointmentStore, UserStore } from "../../store/store";
+import { UserStore } from "../../store/store";
+import { BusinessEmployee } from "../../helpers/types/BusinessEmployee";
+import { getEmployeesByBusinessId } from "../../helpers/queries/business-employee";
 
 const CalendarPage = () => {
     const dispatch = useAppDispatch();
-    const { appointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
+    const { appointments } = useAppSelector((state) => state.appointmentStore);
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const [employees, setEmployees] = useState<BusinessEmployee[]>([]);
 
-    const formattedAppointments = useMemo<EventInput[] | 0>(() => {
+    useEffect(() => {
+        getEmployeesByBusinessId(Number(selectedBusinessEmployee?.business.id))
+            .then((res) => setEmployees(res.data))
+    }, [])
+
+    const formattedAppointments = useMemo<EventInput[]>(() => {
         return appointments.map(appointmentToEvent);
     }, [appointments]);
 
@@ -46,11 +54,12 @@ const CalendarPage = () => {
     }, []);
 
     const handleDatesSet = useCallback(
-        (arg: DatesSetArg) => {
+        (arg: DatesSetArg, name?: string) => {
+            if (!name) return;
             computeDateRange(arg);
             dispatch(fetchAppointmentsBetween({
                 businessId: Number(selectedBusinessEmployee?.business.id),
-                employeeName: selectedBusinessEmployee?.user.firstName + " " + selectedBusinessEmployee?.user.lastName,
+                employeeName: name,
                 startDate: arg.start,
                 endDate: arg.end,
             }));
@@ -80,6 +89,24 @@ const CalendarPage = () => {
         }
     }
 
+    const handleEmployeeChange = (name: string) => {
+        const calendarApi = calendarRef.current?.getApi();
+        if (!calendarApi) return;
+
+        const view = calendarApi.view;
+
+        const arg: DatesSetArg = {
+            start: view.activeStart,
+            end: view.activeEnd,
+            startStr: view.activeStart.toISOString(),
+            endStr: view.activeEnd.toISOString(),
+            view,
+            timeZone: calendarApi.getOption("timeZone") ?? "local",
+        };
+
+        handleDatesSet(arg, name);
+    }
+
     return (
         <>
             <AddAppointmentAdmin
@@ -98,7 +125,7 @@ const CalendarPage = () => {
                 <PendingAppointments />
             </div>
 
-            <CalendarHeader dateRange={dateRange} />
+            <CalendarHeader dateRange={dateRange} employees={employees} handleEmployeeChange={handleEmployeeChange} />
 
             <FullCalendar
                 ref={calendarRef}

@@ -25,7 +25,7 @@ const PendingAppointment = ({ appointment }: PendingAppointmentProps) => {
             return;
         }
         calendarApi.gotoDate(appointment?.startDate.toString());
-        onClose();
+        // onClose();
     }
     const formatDateTime = (startDate: string | Date | dayjs.Dayjs | undefined, endDate: string | Date | dayjs.Dayjs | undefined) => {
         const start = dayjs(startDate);
@@ -81,7 +81,7 @@ const PendingAppointment = ({ appointment }: PendingAppointmentProps) => {
                     <Button size="small" type="text" shape="round" icon={<BiShare />} onClick={() => handleJumpToAppointment(appointment)}>Ugrás oda</Button>
                     <Popconfirm
                         title="Biztosan jóváhagyod az időpontot?"
-                        onConfirm={() => dispatch(approvePendingAppointmentByIdThunk({ appointmentId: appointment.id, employeeId: selectedBusinessEmployee?.user.id }))}
+                        onConfirm={() => dispatch(approvePendingAppointmentByIdThunk({ appointmentId: appointment.id, employeeId: Number(selectedBusinessEmployee?.user.id) }))}
                         okText="Igen"
                         cancelText="Nem"
                     >
@@ -90,7 +90,7 @@ const PendingAppointment = ({ appointment }: PendingAppointmentProps) => {
                         </Tooltip>
                     </Popconfirm>
                     <Popconfirm title="Biztosan elutasítod az időpontot?"
-                        onConfirm={() => dispatch(cancelPendingAppointmentByIdThunk({ appointmentId: appointment.id, employeeId: selectedBusinessEmployee?.user.id }))}
+                        onConfirm={() => dispatch(cancelPendingAppointmentByIdThunk({ appointmentId: appointment.id, employeeId: Number(selectedBusinessEmployee?.user.id) }))}
                         okText="Igen"
                         cancelText="Nem"
                     >

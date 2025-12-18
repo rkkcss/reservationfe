@@ -1,7 +1,7 @@
 import './App.css'
 import { Route, Routes } from 'react-router'
 import Home from './pages/Home'
-import BusinessPage, { BusinessPageWrap } from './pages/PublicBusiness/BusinessPage'
+import { BusinessPageWrap } from './pages/PublicBusiness/BusinessPage'
 import HomeLayout from './layout/HomeLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Settings from './pages/Settings'

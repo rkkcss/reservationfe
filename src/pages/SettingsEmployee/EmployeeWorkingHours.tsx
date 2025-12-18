@@ -1,8 +1,5 @@
-import React from 'react'
 
-type Props = {}
-
-const EmployeeWorkingHours = (props: Props) => {
+const EmployeeWorkingHours = () => {
     return (
         <div>EmployeeWorkingHours</div>
     )

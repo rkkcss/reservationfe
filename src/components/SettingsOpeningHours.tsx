@@ -2,7 +2,7 @@ import { Button, Form, TimePicker } from "antd"
 import { FiPlus } from "react-icons/fi"
 import { DAY_OF_WEEK } from "../helpers/types/OpeningHour"
 import { useEffect, useState } from "react"
-import { getAllByBusinessOwner, updateWorkingHours } from "../helpers/queries/working-hours-queries"
+import { getAllByBusinessOwner } from "../helpers/queries/working-hours-queries"
 import { WorkingHours } from "../helpers/types/WorkingHours"
 import dayjs from "dayjs"
 import { MdDeleteOutline } from "react-icons/md"
@@ -35,17 +35,18 @@ const SettingsOpeningHours = () => {
     }, [workingHours, form]);
 
     const handleSubmit = (values: { openingHours: WorkingHours[] }) => {
-        const formattedOpeningHours = values.openingHours.map((item) => {
-            const formattedStartTime = dayjs(item.startTime).format("HH:mm");
-            const formattedEndTime = dayjs(item.endTime).format("HH:mm");
+        console.log(values)
+        // const formattedOpeningHours = values.openingHours.map((item) => {
+        //     const formattedStartTime = dayjs(item.startTime).format("HH:mm");
+        //     const formattedEndTime = dayjs(item.endTime).format("HH:mm");
 
-            return { ...item, startTime: formattedStartTime, endTime: formattedEndTime };
-        });
+        //     return { ...item, startTime: formattedStartTime, endTime: formattedEndTime };
+        // });
 
-        updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(selectedBusinessEmployee?.user.id), formattedOpeningHours)
-            .then(res => {
-                console.log(res);
-            });
+        // updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(selectedBusinessEmployee?.user.id), formattedOpeningHours)
+        //     .then(res => {
+        //         console.log(res);
+        //     });
     };
 
     return (
