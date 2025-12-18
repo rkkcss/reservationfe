@@ -17,13 +17,13 @@ const CustomPagination = ({ fetchNextPage, fetchPrevPage, fetchPage, totalItems,
     const itemRender: PaginationProps['itemRender'] = (parameter, type, originalElement) => {
 
         if (type === 'prev') {
-            return <a onClick={fetchPrevPage}>{originalElement}</a>;
+            return <div onClick={fetchPrevPage}>{originalElement}</div>;
         }
         if (type === 'next') {
-            return <a onClick={fetchNextPage}>{originalElement}</a>;
+            return <div onClick={fetchNextPage}>{originalElement}</div>;
         }
         if (type === 'page') {
-            return <a onClick={() => fetchPage(parameter - 1)}>{originalElement}</a>;
+            return <div onClick={() => fetchPage(parameter - 1)}>{originalElement}</div>;
         }
         return originalElement;
     };

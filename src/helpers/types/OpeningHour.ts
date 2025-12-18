@@ -6,7 +6,9 @@ export const DAY_OF_WEEK: { [key: number]: string } = {
     5: 'Péntek',
     6: 'Szombat',
     7: 'Vasárnap',
-};
+} as const;
+
+export type DayOfWeek = keyof typeof DAY_OF_WEEK;
 
 export type OpeningHour = {
     dayOfWeek?: number,

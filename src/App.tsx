@@ -1,7 +1,7 @@
 import './App.css'
 import { Route, Routes } from 'react-router'
 import Home from './pages/Home'
-import BusinessPage from './pages/BusinessPage'
+import BusinessPage, { BusinessPageWrap } from './pages/PublicBusiness/BusinessPage'
 import HomeLayout from './layout/HomeLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Settings from './pages/Settings'
@@ -46,7 +46,7 @@ function App() {
       <Routes>
         <Route path="/employee/activate" element={<EmployeeActivation />} />
         <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
-        <Route path="/business/:businessId" element={<BusinessPage />} />
+        <Route path="/business/:businessId" element={<BusinessPageWrap />} />
         <Route element={<HomeLayout />}>
           <Route path="/register" element={<Register />} />
           <Route path="/pricing" element={<PricePage />} />

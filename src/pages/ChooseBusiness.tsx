@@ -9,6 +9,7 @@ import { useAppDispatch } from '../store/hooks';
 import { logoutUser, setActiveBusinessEmployee } from '../redux/userSlice';
 import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from 'react-icons/io5';
+import { businessEmployeeRoleLabels } from '../helpers/types/BusinessEmployeeRole';
 
 const ChooseBusiness = () => {
     const [businessEmployees, setBusinessEmployees] = useState<BusinessEmployee[]>([]);
@@ -70,7 +71,7 @@ const ChooseBusiness = () => {
                                                 {businessEmployee.business.name}
                                             </p>
                                             <div>
-                                                <Badge size="small" count={businessEmployee.role} />
+                                                <Badge size="small" count={businessEmployeeRoleLabels[businessEmployee.role]} />
                                             </div>
                                         </div>
                                     </li>

@@ -1,20 +1,21 @@
-import { Button, Collapse, Select, Spin, Tooltip } from 'antd'
+import { Select, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { Offering } from '../helpers/types/Offering'
-import { CiClock2 } from 'react-icons/ci'
-import { usePagination } from '../hooks/usePagination'
-import AddAppointmentSteps from './MultistepForms/AddAppointment/AddAppointmentSteps'
-import CustomPagination from './CustomPagination'
-import API from '../utils/API'
-import { BusinessEmployee } from '../helpers/types/BusinessEmployee'
+import { Offering } from '../../helpers/types/Offering'
+import { usePagination } from '../../hooks/usePagination'
+import AddAppointmentSteps from '../../components/MultistepForms/AddAppointment/AddAppointmentSteps'
+import CustomPagination from '../../components/CustomPagination'
+import API from '../../utils/API'
+import { BusinessEmployee } from '../../helpers/types/BusinessEmployee'
 import { AxiosResponse } from 'axios'
-import Loading from './Loading'
+import Loading from '../../components/Loading'
+import BusinessService from './BusinessService'
+import { useBusinessConfigProvider } from '../../context/ConfigProviderBusinessContext'
 
 const BusinessServices = () => {
     const { businessId } = useParams();
     const [employees, setEmployees] = useState<BusinessEmployee[]>([]);
-
+    const { selectedTheme } = useBusinessConfigProvider();
     const {
         data,
         totalItems,
@@ -44,6 +45,7 @@ const BusinessServices = () => {
     const handleAppointmentModal = (e: React.MouseEvent, offer: Offering) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log(offer)
         setSelectedOffer(offer);
         setAddAppointmentModal(true);
     }
@@ -71,16 +73,18 @@ const BusinessServices = () => {
                 key={selectedOffer.id || 'new'}
                 businessId={Number(businessId)}
             />
-            <div className="">
+            <div>
                 <div className="flex items-center justify-between mb-5">
                     <div className='flex flex-col'>
-                        <label className="font-semibold text-xs">Szűrés alkalmazottra:</label>
+                        <label className="font-semibold text-xs"
+                            style={{ color: selectedTheme.secondaryTextColor }}
+                        >Szűrés alkalmazottra:</label>
                         <Select
                             value={selectedEmployee}
                             onChange={handleEmployeeFilter}
                             className="w-48"
                         >
-                            <Select.Option value="all">Összes szolgáltatás</Select.Option>
+                            <Select.Option value="all" style={{ color: selectedTheme.primaryTextColor }}>Összes szolgáltatás</Select.Option>
                             {employees.map((employee) => (
                                 <Select.Option key={employee.id} value={employee.id.toString()}>
                                     {employee.user.firstName} {employee.user.lastName}
@@ -88,7 +92,9 @@ const BusinessServices = () => {
                             ))}
                         </Select>
                     </div>
-                    <p className="text-gray-700 font-semibold text-base">
+                    <p className="text-gray-700 font-semibold text-base"
+                        style={{ color: selectedTheme.secondaryTextColor }}
+                    >
                         {totalItems} szolgáltatás
                     </p>
                 </div>
@@ -100,38 +106,11 @@ const BusinessServices = () => {
                         ) : (
                             <>
                                 {data?.map((offer, index) => (
-                                    <Collapse
+                                    <BusinessService
                                         key={offer.id || index}
-                                        bordered={true}
-                                        className={`mb-5`}
-                                    >
-                                        <Collapse.Panel
-                                            key={offer.id || index}
-                                            header={offer.title}
-                                            extra={
-                                                <div className="flex items-center gap-5">
-                                                    <Tooltip
-                                                        title="Szolgáltatás időtartama"
-                                                        className="flex items-center gap-2 h-full"
-                                                    >
-                                                        <CiClock2 strokeWidth={1} size={16} />
-                                                        <span>{offer.durationMinutes} perc</span>
-                                                    </Tooltip>
-                                                    <div className="text-slate-600 font-bold flex items-baseline">
-                                                        {offer.price?.toFixed(0)} Ft
-                                                    </div>
-                                                    <Button
-                                                        type="primary"
-                                                        onClick={(e) => handleAppointmentModal(e, offer)}
-                                                    >
-                                                        Foglalás
-                                                    </Button>
-                                                </div>
-                                            }
-                                        >
-                                            <p className="text-xs">{offer.description}</p>
-                                        </Collapse.Panel>
-                                    </Collapse>
+                                        offer={offer}
+                                        handleReservationButton={handleAppointmentModal}
+                                    />
                                 ))}
                                 <div className="flex justify-end">
                                     <CustomPagination

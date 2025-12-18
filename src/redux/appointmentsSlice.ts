@@ -26,8 +26,7 @@ const initialState: AppointmentsState = {
 };
 
 export const fetchAppointmentsBetween = createAsyncThunk<
-    Appointment[],
-    { startDate?: Date, endDate?: Date, businessId: number }
+    Appointment[], { businessId: number, employeeName: string, startDate?: Date, endDate?: Date }
 >('appointments/fetchAppointmentsBetween', async (params) => {
     const response = await getAppointmentsBetween(params);
     return response.data;
@@ -54,22 +53,22 @@ export const fetchPendingAppointments = createAsyncThunk<
     }
 );
 
-export const approvePendingAppointmentByIdThunk = createAsyncThunk<Appointment, number | null>(
+export const approvePendingAppointmentByIdThunk = createAsyncThunk<Appointment, { appointmentId: number | null, employeeId: number }>(
     'appointments/approvePendingAppointmentById',
-    async (appointmentId, { rejectWithValue }) => {
-        if (!appointmentId) return rejectWithValue("Invalid appointment ID");
+    async ({ appointmentId, employeeId }, { rejectWithValue }) => {
+        if (!appointmentId || !employeeId) return rejectWithValue("Invalid appointment ID");
 
-        const result = await approveAppointmentById(appointmentId);
+        const result = await approveAppointmentById(appointmentId, employeeId);
         return result.data;
     });
 
-export const cancelPendingAppointmentByIdThunk = createAsyncThunk<Appointment, number | null>(
+export const cancelPendingAppointmentByIdThunk = createAsyncThunk<Appointment, { appointmentId: number | null, employeeId: number }>(
     'appointments/cancelPendingAppointmentById',
-    async (appointmentId, { rejectWithValue }) => {
+    async ({ appointmentId, employeeId }, { rejectWithValue }) => {
         // Implementation for canceling a pending appointment
-        if (!appointmentId) return rejectWithValue("Invalid appointment ID");
+        if (!appointmentId || !employeeId) return rejectWithValue("Invalid appointment ID");
 
-        const result = await cancelAppointmentById(appointmentId);
+        const result = await cancelAppointmentById(appointmentId, employeeId);
         return result.data;
     }
 );

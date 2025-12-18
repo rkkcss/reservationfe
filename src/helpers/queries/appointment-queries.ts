@@ -28,10 +28,11 @@ type GetBusinessAvailableSlotsProps = {
     startDate: string;
     endDate: string;
     durationMinutes: number;
+    employeeId: number;
 }
 
-export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, durationMinutes }: GetBusinessAvailableSlotsProps) => {
-    return API.get(`/api/appointments/businesses/${businessId}/available-slots`, {
+export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, durationMinutes, employeeId }: GetBusinessAvailableSlotsProps) => {
+    return API.get(`/api/appointments/businesses/${businessId}/employees/${employeeId}/available-slots`, {
         params: {
             startDate: startDate,
             endDate: endDate,
@@ -57,8 +58,8 @@ type CreateAppointmentByGuestProps = {
     name: string
 }
 
-export const createAppointmentByGuestQuery = (formData: CreateAppointmentByGuestProps) => {
-    return API.post("/api/appointments", formData);
+export const createAppointmentByGuestQuery = (businessId: number, employeeId: number, formData: CreateAppointmentByGuestProps) => {
+    return API.post(`/api/appointments/business/${businessId}/business-employee/${employeeId}`, formData);
 }
 
 export const getAppointmentByModifierToken = (modifierToken: string) => {
@@ -69,12 +70,12 @@ export const cancelAppointmentByGuestWithToken = (modifierToken: string) => {
     return API.post(`/api/appointments/cancel/${modifierToken}`)
 }
 
-export const approveAppointmentById = (id: number): Promise<AxiosResponse<Appointment>> => {
-    return API.patch<Appointment>(`/api/appointments/${id}/approve`);
+export const approveAppointmentById = (id: number, employeeId: number): Promise<AxiosResponse<Appointment>> => {
+    return API.patch<Appointment>(`/api/appointments/${id}/business-employee/${employeeId}/approve`);
 };
 
-export const cancelAppointmentById = (id: number) => {
-    return API.patch(`/api/appointments/${id}/cancel`)
+export const cancelAppointmentById = (id: number, employeeId: number) => {
+    return API.patch(`/api/appointments/${id}/business-employee/${employeeId}/cancel`)
 }
 
 export const getPendingAppointments = (businessId: number): Promise<AxiosResponse<Appointment[]>> => {

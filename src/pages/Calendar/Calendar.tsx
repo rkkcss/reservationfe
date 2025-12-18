@@ -22,7 +22,7 @@ const CalendarPage = () => {
     const { appointments } = useSelector((state: AppointmentStore) => state.appointmentStore);
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
 
-    const formattedAppointments = useMemo<EventInput[]>(() => {
+    const formattedAppointments = useMemo<EventInput[] | 0>(() => {
         return appointments.map(appointmentToEvent);
     }, [appointments]);
 
@@ -49,9 +49,10 @@ const CalendarPage = () => {
         (arg: DatesSetArg) => {
             computeDateRange(arg);
             dispatch(fetchAppointmentsBetween({
+                businessId: Number(selectedBusinessEmployee?.business.id),
+                employeeName: selectedBusinessEmployee?.user.firstName + " " + selectedBusinessEmployee?.user.lastName,
                 startDate: arg.start,
                 endDate: arg.end,
-                businessId: Number(selectedBusinessEmployee!.business.id)
             }));
         },
         [dispatch, selectedBusinessEmployee]

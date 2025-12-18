@@ -1,6 +1,6 @@
 export type WorkingHours = {
     id: number,
     dayOfWeek: number,
-    startTime: string,
-    endTime: string,
+    startTime: Date,
+    endTime: Date,
 }

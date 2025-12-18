@@ -11,7 +11,7 @@ const ChangeLoginName = ({ login }: ChangeLoginNameProps) => {
     }
     return (
         <>
-            <p className="text-xl font-semibold mb-6 mt-4">Felhasználónév változtatás</p>
+            <p className="text-xl font-semibold mb-6">Felhasználónév változtatás</p>
             <Form
                 layout="vertical"
                 onFinish={handleSubmit}

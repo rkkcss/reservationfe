@@ -6,15 +6,17 @@ import { getAllByBusinessOwner, updateWorkingHours } from "../helpers/queries/wo
 import { WorkingHours } from "../helpers/types/WorkingHours"
 import dayjs from "dayjs"
 import { MdDeleteOutline } from "react-icons/md"
+import { useAppSelector } from "../store/hooks"
 
 console.log(dayjs.locale());
 const SettingsOpeningHours = () => {
     const [form] = Form.useForm();
     const [workingHours, setWorkingHours] = useState<WorkingHours[]>([]);
+    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
     // API hívás a workingHours adat betöltésére
     useEffect(() => {
-        getAllByBusinessOwner()
+        getAllByBusinessOwner(Number(selectedBusinessEmployee?.business.id))
             .then(res => {
                 setWorkingHours(res.data);
             });
@@ -40,7 +42,7 @@ const SettingsOpeningHours = () => {
             return { ...item, startTime: formattedStartTime, endTime: formattedEndTime };
         });
 
-        updateWorkingHours(formattedOpeningHours)
+        updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(selectedBusinessEmployee?.user.id), formattedOpeningHours)
             .then(res => {
                 console.log(res);
             });

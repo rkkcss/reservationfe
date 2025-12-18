@@ -109,7 +109,7 @@ const SettingsMenu = () => {
             <Menu
                 items={filteredSettingsMenu}
                 inlineCollapsed={isMenuCollapsed}
-                className="!border-none h-full outline outline-gray-100 rounded-xl outline-2 md:w-72 md:max-w-72"
+                className="!border-none h-full outline outline-gray-100 rounded-xl outline-2 md:w-72 md:max-w-72 !shadow-md"
                 selectedKeys={[settingsMenuItems.find(item => location.pathname.includes(item.key))?.key || ""]}
             />
         </div>

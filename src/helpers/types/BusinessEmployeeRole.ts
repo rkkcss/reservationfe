@@ -9,4 +9,5 @@ export type BusinessEmployeeRole = typeof BUSINESS_EMPLOYEE_ROLE[keyof typeof BU
 export const businessEmployeeRoleLabels: Record<string, string> = {
     MANAGER: 'Menedzser',
     EMPLOYEE: 'Alkalmazott',
+    OWNER: 'Tulajdonos'
 }
