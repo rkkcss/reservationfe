@@ -4,12 +4,13 @@ import { Appointment } from '../../helpers/types/Appointment'
 import { getAllGuestsBySearch } from '../../helpers/queries/guest-queries'
 import { Guest } from '../../helpers/types/Guest'
 import { useCallback, useEffect, useState } from 'react'
-import { getOfferingByLoggedInBusiness } from '../../helpers/queries/offering-queries'
+import { getOfferingByLoggedInEmployee } from '../../helpers/queries/offering-queries'
 import { Offering } from '../../helpers/types/Offering'
 import { MdDeleteForever } from 'react-icons/md'
 import AddOrEditGuestModalWButton from './AddOrEditGuestModalWButton'
 import { useTranslation } from 'react-i18next'
 import { BiUser } from 'react-icons/bi'
+import { useAppSelector } from '../../store/hooks'
 
 type AddAppointmentAdminProps = {
     open: boolean,
@@ -24,6 +25,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     const [searchedGuests, setSearchedGuests] = useState<Guest[]>([]);
     const [offers, setOffers] = useState<Offering[]>([]);
     const { t } = useTranslation('add-appointment-admin-modal');
+    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
     const searchInGuests = (value: string) => {
         getAllGuestsBySearch(value).then((res) => {
@@ -32,7 +34,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
     }
 
     const getAllOffers = useCallback(() => {
-        getOfferingByLoggedInBusiness().then((res) => {
+        getOfferingByLoggedInEmployee(Number(selectedBusinessEmployee?.business.id)).then((res) => {
             setOffers(res);
         });
     }, []);

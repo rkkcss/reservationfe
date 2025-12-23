@@ -10,7 +10,7 @@ APILogin.interceptors.request.use(
         config.withCredentials = true;
         config.headers["Content-Type"] = "application/x-www-form-urlencoded";
         config.headers["Accept"] = "application/json";
-        const csrfToken = getCookie("X-XSRF-TOKEN");
+        const csrfToken = getCookie("XSRF-TOKEN");
 
         if (csrfToken) {
             config.headers["X-XSRF-TOKEN"] = csrfToken;

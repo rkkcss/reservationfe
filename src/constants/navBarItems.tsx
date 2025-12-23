@@ -8,6 +8,8 @@ import { AppDispatch } from '../store/store';
 import { logoutUser, setActiveBusinessEmployeeNull } from '../redux/userSlice';
 import { Link } from 'react-router';
 import { LiaIndustrySolid } from 'react-icons/lia';
+import { PiUsersFourBold } from 'react-icons/pi';
+import { FiHome } from 'react-icons/fi';
 
 export interface MenuItem {
     key?: string;
@@ -32,11 +34,13 @@ export const menuItems = (
             key: 'home',
             label: t('home'),
             link: 'home',
+            icon: <FiHome size={20} strokeWidth={2} />
         },
         {
             key: 'about',
             label: t('about'),
             link: 'about',
+            icon: <PiUsersFourBold size={20} strokeWidth={0} />
         },
         {
             key: 'calendar',
@@ -49,7 +53,7 @@ export const menuItems = (
             key: 'pricing',
             label: t('pricing'),
             link: 'pricing',
-            icon: <MdOutlineLibraryBooks size={20} />
+            icon: <MdOutlineLibraryBooks size={20} strokeWidth={0} />
         }
     ];
 

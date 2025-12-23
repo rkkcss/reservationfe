@@ -44,7 +44,7 @@ function App() {
     <>
       <LoginModal />
       <Routes>
-        <Route path="/employee/activate" element={<EmployeeActivation />} />
+        <Route path="/employee-invite/activate" element={<EmployeeActivation />} />
         <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
         <Route path="/business/:businessId" element={<BusinessPageWrap />} />
         <Route element={<HomeLayout />}>
@@ -64,7 +64,7 @@ function App() {
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_SERVICES]} />} >
                   <Route path="my-services" element={<SettingsMyServices />} />
                 </Route>
-                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE]} />}>
+                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS]} />}>
                   <Route path="opening-hours" element={<SettingsOpeningHours />} />
                 </Route>
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>

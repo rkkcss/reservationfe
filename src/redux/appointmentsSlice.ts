@@ -4,14 +4,15 @@ import {
     approveAppointmentById,
     cancelAppointmentById,
     patchAppointmentQuery,
-    createAppointmentByOwnerQuery,
-    deleteAppointmentQuery
+    deleteAppointmentQuery,
+    createAppointmentByBusinessAndEmployeeId
 } from '../helpers/queries/appointment-queries';
 import { createAsyncThunk, createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Appointment, APPOINTMENT_STATUSES } from '../helpers/types/Appointment';
 import { notification } from 'antd';
 import dayjs from 'dayjs';
 import { UserStore } from '../store/store';
+import { logoutUser, setActiveBusinessEmployeeNull } from './userSlice';
 
 export type AppointmentsState = {
     pendingAppointments: Appointment[],
@@ -83,11 +84,17 @@ export const updateAppointmentThunk = createAsyncThunk<Appointment, Appointment>
     }
 );
 
-export const createAppointmentThunk = createAsyncThunk<Appointment, Appointment>(
+type CreateAppointmentArgs = {
+    businessId: number;
+    employeeId: number;
+    appointment: Appointment;
+}
+
+export const createAppointmentThunk = createAsyncThunk<Appointment, CreateAppointmentArgs>(
     'appointments/createAppointmentThunk',
-    async (appointment, { rejectWithValue }) => {
+    async ({ businessId, employeeId, appointment }, { rejectWithValue }) => {
         if (appointment.id) return rejectWithValue("Can't have ID");
-        const result = await createAppointmentByOwnerQuery(appointment);
+        const result = await createAppointmentByBusinessAndEmployeeId(businessId, employeeId, appointment);
         return result.data;
     }
 );
@@ -159,6 +166,15 @@ const appointmentsSlice = createSlice({
                 console.log(action)
                 state.appointments = state.appointments.filter(appointment => appointment.id !== action.payload);
                 state.pendingAppointments = state.pendingAppointments.filter(appointment => appointment.id !== action.payload);
+            })
+            //after logout
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.appointments = [];
+                state.pendingAppointments = [];
+            })
+            .addCase(setActiveBusinessEmployeeNull, (state) => {
+                state.appointments = [];
+                state.pendingAppointments = [];
             })
             .addMatcher(
                 isAnyOf(

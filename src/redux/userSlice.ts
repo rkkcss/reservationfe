@@ -58,7 +58,7 @@ export const loginUser = createAsyncThunk<
             const res = await APILogin.post('/api/authentication', user);
 
             if (res.status === 200) {
-                dispatch(getAccountInfo());
+                await dispatch(getAccountInfo()).unwrap();
                 return { status: res.status, message: i18next.t("login-modal:loggedInSuccessfully") };
             }
 

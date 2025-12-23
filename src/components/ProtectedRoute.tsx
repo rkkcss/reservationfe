@@ -1,14 +1,13 @@
-import { useSelector } from "react-redux"
-import { UserStore } from "../store/store"
 import { Authorities } from "../helpers/types/Authorities";
 import { Navigate, Outlet } from "react-router";
+import { useAppSelector } from "../store/hooks";
 
 type ProtectedRouteProps = {
     allowedRoles: Authorities[]
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-    const { user } = useSelector((state: UserStore) => state.userStore);
+    const { user } = useAppSelector(state => state.userStore);
 
     const hasRequiredRole = user?.authorities?.some(role => allowedRoles.includes(role));
 

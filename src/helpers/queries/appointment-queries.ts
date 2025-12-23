@@ -15,8 +15,8 @@ export const createAppointmentQuery = (appointment: Appointment) => {
     return API.post("/api/appointments", appointment);
 }
 
-export const createAppointmentByOwnerQuery = (appointment: Appointment) => {
-    return API.post("/api/appointments/create-by-owner", appointment);
+export const createAppointmentByBusinessAndEmployeeId = (businessId: number, employeeId: number, appointment: Appointment) => {
+    return API.post(`/api/appointments/business/${businessId}/business-employee/${employeeId}/own`, appointment);
 }
 
 export const patchAppointmentQuery = (appointment: Appointment) => {

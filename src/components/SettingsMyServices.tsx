@@ -39,7 +39,7 @@ const SettingsMyServices = () => {
                 })
             });
         } else {
-            createOffer(values, Number(selectedBusinessEmployee?.business?.id), Number(selectedBusinessEmployee?.id)).then(res => {
+            createOffer(values, Number(selectedBusinessEmployee?.business?.id), Number(selectedBusinessEmployee?.user.id)).then(res => {
                 if (res.status !== 201) return
 
                 setData(prev => [res.data, ...prev]);

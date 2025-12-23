@@ -9,8 +9,8 @@ export const getOffersByBusinessId = (businessId: number | string): Promise<Offe
         })
 }
 
-export const getOfferingByLoggedInBusiness = (): Promise<Offering[]> => {
-    return API.get(`/api/offerings`)
+export const getOfferingByLoggedInEmployee = (businessId: number): Promise<Offering[]> => {
+    return API.get(`/api/offerings/business/${businessId}/employee`)
         .then(res => {
             return res.data
         })

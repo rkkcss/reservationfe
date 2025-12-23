@@ -37,7 +37,7 @@ const LoginModal = () => {
             .unwrap()
             .then(() => {
                 loginModal.close();
-                navigate("/dashboard");
+                navigate("/choose-business");
 
             })
             .catch((err) => {
@@ -71,20 +71,19 @@ const LoginModal = () => {
                         [{ required: true, message: t("required") }]
                     }
                 >
-                    <Input type="text" placeholder="login" />
+                    <Input type="text" placeholder={t("username") + "..."} />
                 </Form.Item>
                 <Form.Item name="password" label={t("password")}
                     rules={
                         [{ required: true, message: t("required") }]
                     }
                 >
-                    <Input type="password" placeholder={t("password")} />
+                    <Input type="password" placeholder={t("password") + "..."} />
                 </Form.Item>
                 <Form.Item name="remember-me" valuePropName="checked" label={null}>
                     <Checkbox>{t("rememberMe")}</Checkbox>
                 </Form.Item>
                 <div className="flex justify-between">
-
                     <Button type="primary" htmlType="submit" loading={loading} className="w-full">
                         {t("submit")}
                     </Button>

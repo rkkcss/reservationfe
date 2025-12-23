@@ -27,7 +27,7 @@ const CalendarPage = () => {
 
     useEffect(() => {
         getEmployeesByBusinessId(Number(selectedBusinessEmployee?.business.id))
-            .then((res) => setEmployees(res.data))
+            .then((res) => setEmployees(res.data));
     }, [])
 
     const formattedAppointments = useMemo<EventInput[]>(() => {
@@ -55,8 +55,8 @@ const CalendarPage = () => {
 
     const handleDatesSet = useCallback(
         (arg: DatesSetArg, name?: string) => {
-            if (!name) return;
             computeDateRange(arg);
+            if (!name) return;
             dispatch(fetchAppointmentsBetween({
                 businessId: Number(selectedBusinessEmployee?.business.id),
                 employeeName: name,
@@ -66,6 +66,7 @@ const CalendarPage = () => {
         },
         [dispatch, selectedBusinessEmployee]
     );
+
 
     const computeDateRange = (arg: DatesSetArg) => {
         const start = arg.start;
@@ -78,7 +79,11 @@ const CalendarPage = () => {
 
     const handleAddAppointment = (appointment: Appointment) => {
         if (!appointment.id) {
-            dispatch(createAppointmentThunk(appointment));
+            dispatch(createAppointmentThunk({
+                businessId: Number(selectedBusinessEmployee?.business.id),
+                employeeId: Number(selectedBusinessEmployee?.user.id),
+                appointment
+            }));
         } else {
             dispatch(updateAppointmentThunk(appointment));
         }
@@ -136,7 +141,7 @@ const CalendarPage = () => {
                 locale={huLocal}
                 headerToolbar={false}
                 events={formattedAppointments}
-                datesSet={handleDatesSet}
+                datesSet={(arg) => handleDatesSet(arg, "all")}
                 eventClick={handleEventClick}
                 selectable
                 select={handleDateSelect}

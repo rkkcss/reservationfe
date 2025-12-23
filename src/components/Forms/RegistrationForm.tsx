@@ -1,8 +1,4 @@
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { UserStore } from '../../store/store';
 import { UserWithPassword } from '../../helpers/types/User';
 import { Button, Form, Input } from 'antd';
 
@@ -12,8 +8,6 @@ type RegistrationFormProps = {
 }
 
 const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
-  const { user } = useSelector((state: UserStore) => state.userStore);
-  const navigate = useNavigate();
   const { t } = useTranslation("register");
 
   const [form] = Form.useForm();
@@ -25,9 +19,9 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
     }
   }
 
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user) navigate("/");
+  // }, [user, navigate]);
 
   return (
 

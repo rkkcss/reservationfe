@@ -22,10 +22,12 @@ API.interceptors.request.use(
             config.headers["Content-Type"] = "application/json";
         }
 
-        const csrfToken = getCookie("X-XSRF-TOKEN");
+        const csrfToken = getCookie("XSRF-TOKEN");
+
         if (csrfToken) {
             config.headers["X-XSRF-TOKEN"] = csrfToken;
         }
+
         return config;
     },
     (error) => {

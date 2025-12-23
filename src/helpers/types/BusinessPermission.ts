@@ -12,6 +12,8 @@ export const BUSINESS_PERMISSIONS = {
     VIEW_STATISTICS: 'VIEW_STATISTICS',
     MANAGE_EMPLOYEES: 'MANAGE_EMPLOYEES',
     MANAGE_BUSINESS_SETTINGS: 'MANAGE_BUSINESS_SETTINGS',
+    EDIT_OWN_WORKING_HOURS: 'EDIT_OWN_WORKING_HOURS',
+    EDIT_ALL_WORKING_HOURS: 'EDIT_ALL_WORKING_HOURS',
 } as const;
 
 export type BusinessPermission =
@@ -19,8 +21,8 @@ export type BusinessPermission =
 
 export const BusinessEmployeePermissonLabels: Record<string, string> = {
     VIEW_SCHEDULE: 'Naptár megtekintése',
-    EDIT_OWN_SCHEDULE: 'Saját időbeosztás szerkesztése',
-    EDIT_ALL_SCHEDULES: 'Minden időbeosztás szerkesztése',
+    EDIT_OWN_SCHEDULE: 'Saját időpontok szerkesztése',
+    EDIT_ALL_SCHEDULES: 'Minden időpont szerkesztése',
     CREATE_BOOKING: 'Foglalás létrehozása',
     EDIT_OWN_BOOKINGS: 'Saját foglalások szerkesztése',
     EDIT_ALL_BOOKINGS: 'Minden foglalás szerkesztése',
@@ -30,6 +32,8 @@ export const BusinessEmployeePermissonLabels: Record<string, string> = {
     VIEW_STATISTICS: 'Statisztikák megtekintése',
     MANAGE_EMPLOYEES: 'Alkalmazottak kezelése',
     MANAGE_BUSINESS_SETTINGS: 'Üzlet beállításai',
+    EDIT_OWN_WORKING_HOURS: 'Saját munkaidőbeosztás szerkesztése',
+    EDIT_ALL_WORKING_HOURS: 'Minden munkaidőbeosztás szerkesztése',
 }
 
 
@@ -38,8 +42,10 @@ export const permissionGroups = [
         title: 'Naptár és Időbeosztás',
         permissions: [
             { key: BUSINESS_PERMISSIONS.VIEW_SCHEDULE, label: 'Naptár megtekintése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE, label: 'Saját időbeosztás szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_ALL_SCHEDULES, label: 'Minden időbeosztás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_ALL_SCHEDULES, label: 'Mindenki időpontjának szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE, label: 'Saját időpontjaim szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS, label: 'Saját időbeosztás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_ALL_WORKING_HOURS, label: 'Minden időbeosztás szerkesztése' },
         ]
     },
     {

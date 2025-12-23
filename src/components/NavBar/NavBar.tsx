@@ -1,10 +1,10 @@
 // components/NavBar/NavBar.tsx
-import { Button, Drawer, Dropdown, MenuProps } from 'antd';
+import { Button, Dropdown, MenuProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { FiUser } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppDispatch, UserStore } from '../../store/store';
 import logo from '../../assets/logo.png';
@@ -15,6 +15,7 @@ import { loginModal } from '../Login/loginModalController';
 import { menuItems, threeDotMenuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
 import NotificationDropDown from './NotificationDropDown';
+import MobileMainMenu from './MobileMainMenu';
 
 const NavBar = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -75,7 +76,7 @@ const NavBar = () => {
                                     {t('login')}
                                 </Button>
                             </li>
-                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
+                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full md:block hidden">
                                 <Dropdown arrow menu={{ items: threeDotMenuItems(t) }} trigger={['click']}>
                                     <BsThreeDots size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
                                 </Dropdown>
@@ -103,19 +104,11 @@ const NavBar = () => {
                     </div>
                 </ul>
             </Header>
-
-            <Drawer open={menuDrawerOpen} onClose={() => setMenuDrawerOpen(false)} title={t('Menu elements')}>
-                <ul className="flex flex-col gap-4">
-                    {filteredMenuItems.map(item => (
-                        <li key={item.key}>
-                            <Link to={`/${item.link}`} className="flex items-center gap-2 text-sm px-4 py-2 hover:text-primary hover:bg-slate-200 transition rounded-full font-semibold w-full">
-                                {item.icon}
-                                {t(item.label!)}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </Drawer>
+            <MobileMainMenu
+                open={menuDrawerOpen}
+                onClose={() => setMenuDrawerOpen(false)}
+                menuItems={filteredMenuItems}
+            />
         </>
     );
 };
