@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 import { usePagination } from "../../hooks/usePagination";
 import CustomPagination from "../CustomPagination";
 import Loading from "../Loading";
-import { useParams } from "react-router";
 import { getInitials } from "../../helpers/NameShorter";
 
 type AllCommentsModalProps = {
