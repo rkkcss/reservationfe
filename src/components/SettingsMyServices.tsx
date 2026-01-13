@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { usePagination } from '../hooks/usePagination'
 import { Button, Pagination, Spin, } from 'antd'
 import EditOffering from '../components/Modals/EditOffering'
@@ -72,12 +72,16 @@ const SettingsMyServices = () => {
 
     return (
         <div className="w-full pl-5 mt-5">
-            <EditOffering
-                offer={editOffer}
-                visible={editOfferingModal}
-                onClose={handleCloseEditModal}
-                onOk={handleOnOkOffer}
-            />
+            {editOfferingModal &&
+                <Suspense fallback={<Spin />}>
+                    <EditOffering
+                        offer={editOffer}
+                        visible={editOfferingModal}
+                        onClose={handleCloseEditModal}
+                        onOk={handleOnOkOffer}
+                    />
+                </Suspense>
+            }
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold mb-4">Szolgáltatásaim</h1>
                 {

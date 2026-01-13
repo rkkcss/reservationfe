@@ -1,10 +1,24 @@
-let controller: { open: () => void; close: () => void } | null = null;
+// loginModalController.ts
+type LoginSuccessAction = () => void;
 
-export const setLoginModalController = (newController: typeof controller) => {
+interface LoginModalController {
+    open: (onSuccess?: LoginSuccessAction) => void;
+    close: () => void;
+}
+
+interface LoginModal extends LoginModalController {
+    _onSuccessCallback?: LoginSuccessAction;
+}
+
+let controller: LoginModalController | null = null;
+
+export const setLoginModalController = (newController: LoginModalController | null) => {
     controller = newController;
 };
 
-export const loginModal = {
-    open: () => controller?.open(),
+export const loginModal: LoginModal = {
+    _onSuccessCallback: undefined,
+
+    open: (onSuccess?: LoginSuccessAction) => controller?.open(onSuccess),
     close: () => controller?.close(),
 };

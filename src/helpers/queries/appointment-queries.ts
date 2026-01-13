@@ -19,8 +19,8 @@ export const createAppointmentByBusinessAndEmployeeId = (businessId: number, emp
     return API.post(`/api/appointments/business/${businessId}/business-employee/${employeeId}/own`, appointment);
 }
 
-export const patchAppointmentQuery = (appointment: Appointment) => {
-    return API.patch(`/api/appointments/${appointment.id}`, appointment);
+export const patchAppointmentQuery = (businessId: number, appointment: Appointment) => {
+    return API.patch(`/api/appointments/${appointment.id}/business/${businessId}`, appointment);
 }
 //
 type GetBusinessAvailableSlotsProps = {

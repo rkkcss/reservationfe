@@ -3,12 +3,12 @@ export type BusinessRating = {
     title: string;
     description: string;
     number: number;
-    imageUrl?: string; // Optional image URL
+    imageUrl?: string;
     guest: {
         id: number;
-        name: string; // User's name
-        email?: string; // Optional email field
+        name: string;
+        email?: string;
     };
-    createdAt: string; // ISO date string
-    updatedAt: string; // ISO date string
+    createdAt: string;
+    updatedAt: string;
 }

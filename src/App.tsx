@@ -16,7 +16,7 @@ import SettingsBusiness from './components/SettingsBusiness'
 import SettingsGuests from './components/SettingsGuests'
 import CancelAppointment from './components/CancelAppointment'
 import PricePage from './pages/PricePage'
-import Dashboard from './pages/Dashboard'
+import DashboardLayout from './pages/Dashboard'
 import CalendarLayout from './layout/CalendarLayout'
 import Register from './pages/Register'
 import RegisterActivation from './pages/Activations/RegisterActivation'
@@ -77,7 +77,7 @@ function App() {
                   <Route path="employee/:employeeId" element={<EmployeeLayout />} />
                 </Route>
               </Route>
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="dashboard" element={<DashboardLayout />} />
               <Route path="calendar" element={<CalendarLayout />} />
             </Route>
           </Route>

@@ -43,3 +43,17 @@ body div#root>div {
 .ant-result .ant-result-extra>* {
     margin-inline-end: auto;
 }
+
+/* appointments */
+
+.event-confirmed {
+    border-left: 4px solid #28a745;
+}
+
+.event-pending {
+    border-left: 4px solid #ffc107;
+}
+
+.event-cancelled {
+    border-left: 4px solid #dc3545;
+}

@@ -5,7 +5,7 @@ import { Alert, Button, Result } from "antd";
 import { EmployeeInviteActivateType } from "../../helpers/types/BusinessEmployeeInvite";
 import { UserWithPassword } from "../../helpers/types/User";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getAccountInfo } from "../../redux/userSlice";
+import { getAccountInfo, logoutUser } from "../../redux/userSlice";
 import RegistrationForm from "../../components/Forms/RegistrationForm";
 import { AxiosError } from "axios";
 import { loginModal } from "../../components/Login/loginModalController";
@@ -36,11 +36,26 @@ const EmployeeActivation = () => {
     }, []);
 
     const joinToBusiness = async () => {
+        if (!token) return;
+
         if (!user) {
-            loginModal.open()
+            loginModal.open(() => activateBusinessEmployeeInvite(token));
+            return;
         }
 
-    }
+        if (user.email === invite?.businessEmployeeInvite.email) {
+            await activateBusinessEmployeeInvite(token);
+            return;
+        }
+
+        await dispatch(logoutUser());
+        loginModal.open(async () => {
+            const res = await activateBusinessEmployeeInvite(token);
+            if (res.status === 204) {
+                navigate('/choose-business');
+            }
+        });
+    };
 
     const activateAndRegisterUser = async (values: UserWithPassword) => {
         if (!token) return;
@@ -107,7 +122,7 @@ const EmployeeActivation = () => {
                             invite?.userExists ? (
                                 <>
                                     <Alert
-                                        message="Már létezik fiókod a rendszerben. Egyszerű kattintással csatlakozhatsz a csapathoz."
+                                        message={"Már létezik fiókod a rendszerben. Egyszerű kattintással csatlakozhatsz a csapathoz, bejelentkezés után."}
                                         type="info"
                                         showIcon
                                         className="mb-6 border-l-4 border-blue-500 rounded-lg"

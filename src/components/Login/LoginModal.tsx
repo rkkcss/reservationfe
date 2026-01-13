@@ -1,14 +1,13 @@
+// LoginModal.tsx
 import { useState, useEffect } from "react";
 import { Alert, Button, Form, Input, Modal } from "antd";
 import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
-import { useSelector } from "react-redux";
 import { LoginForm, loginUser } from "../../redux/userSlice";
-import { UserStore } from "../../store/store";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { useNavigate } from "react-router";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,16 +15,20 @@ const LoginModal = () => {
     const { t } = useTranslation("login-modal");
     const [form] = useForm();
     const dispatch = useAppDispatch();
-    const { loading } = useSelector((state: UserStore) => state.userStore);
+    const { loading } = useAppSelector((state) => state.userStore);
     const navigate = useNavigate();
 
     useEffect(() => {
         setLoginModalController({
-            open: () => setIsOpen(true),
+            open: (onSuccess) => {
+                setIsOpen(true);
+                loginModal._onSuccessCallback = onSuccess;
+            },
             close: () => {
                 setIsOpen(false);
                 setErrorMsg("");
                 form.resetFields();
+                loginModal._onSuccessCallback = undefined;
             },
         });
     }, [form]);
@@ -36,9 +39,14 @@ const LoginModal = () => {
         dispatch(loginUser(e))
             .unwrap()
             .then(() => {
+                const callback = loginModal._onSuccessCallback;
                 loginModal.close();
-                navigate("/choose-business");
 
+                if (callback) {
+                    callback();
+                } else {
+                    navigate("/choose-business");
+                }
             })
             .catch((err) => {
                 if (err.status === 401) {
@@ -52,7 +60,7 @@ const LoginModal = () => {
     const handleNavigateRegister = () => {
         loginModal.close();
         navigate("/register");
-    }
+    };
 
     return (
         <Modal
@@ -67,16 +75,12 @@ const LoginModal = () => {
             }
             <Form form={form} layout="vertical" onFinish={submitLogin}>
                 <Form.Item name="username" label={t("username")}
-                    rules={
-                        [{ required: true, message: t("required") }]
-                    }
+                    rules={[{ required: true, message: t("required") }]}
                 >
                     <Input type="text" placeholder={t("username") + "..."} />
                 </Form.Item>
                 <Form.Item name="password" label={t("password")}
-                    rules={
-                        [{ required: true, message: t("required") }]
-                    }
+                    rules={[{ required: true, message: t("required") }]}
                 >
                     <Input type="password" placeholder={t("password") + "..."} />
                 </Form.Item>
@@ -89,7 +93,9 @@ const LoginModal = () => {
                     </Button>
                 </div>
             </Form>
-            <Button size="small" type="text" onClick={handleNavigateRegister} className="w-full mt-4">{t("dontHaveAccountLink")}</Button>
+            <Button size="small" type="text" onClick={handleNavigateRegister} className="w-full mt-4">
+                {t("dontHaveAccountLink")}
+            </Button>
         </Modal>
     );
 };

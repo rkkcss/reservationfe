@@ -15,7 +15,7 @@ type NotificationConfig = Omit<ArgsProps, 'key' | 'type'> & { message: React.Rea
 // Notification manager - megakadályozza a duplikációt
 class NotificationManager {
     private currentKey: string | null = null;
-    private timeout: number | null = null; // ✅ number a setTimeout visszatérési értéke
+    private timeout: number | null = null; // number a setTimeout visszatérési értéke
 
     show(type: 'error' | 'warning' | 'success' | 'info', key: string, config: NotificationConfig) {
         // Ha ugyanaz a notification már aktív, ne mutasd újra

@@ -10,6 +10,7 @@ import { logoutUser, setActiveBusinessEmployee } from '../redux/userSlice';
 import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { businessEmployeeRoleLabels } from '../helpers/types/BusinessEmployeeRole';
+import Loading from '../components/Loading';
 
 const ChooseBusiness = () => {
     const [businessEmployees, setBusinessEmployees] = useState<BusinessEmployee[]>([]);
@@ -42,7 +43,7 @@ const ChooseBusiness = () => {
             </h1>
             <div>
                 <Alert className="mb-2" showIcon message={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
-                <Spin spinning={loading}>
+                <Spin spinning={loading} indicator={<Loading size={30} />}>
                     <div>
                         <div className="p-6 shadow-lg rounded-lg bg-white w-[600px]">
                             <ul className="flex flex-col gap-4">

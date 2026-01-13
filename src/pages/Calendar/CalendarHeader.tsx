@@ -46,7 +46,7 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
     return (
         <div className="flex flex-col md:flex-row items-center gap-3 mt-11 mb-2 justify-between">
             <div className="flex items-center">
-                <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)}>
+                <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)} className="w-48">
                     <Select.Option value="all" key="all">Összes megtekintése</Select.Option>
                     {
                         employees.map(employee => (

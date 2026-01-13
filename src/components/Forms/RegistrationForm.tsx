@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { UserWithPassword } from '../../helpers/types/User';
 import { Button, Form, Input } from 'antd';
+import { FaUser } from 'react-icons/fa';
+import { AiFillLock } from "react-icons/ai";
+import { MdLockReset, MdMail } from 'react-icons/md';
 
 type RegistrationFormProps = {
   onSubmit?: (values: UserWithPassword) => void;
@@ -24,19 +27,33 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
   // }, [user, navigate]);
 
   return (
-
-
     <Form layout="vertical"
-      className="mt-6"
       form={form}
       onFinish={onFinish}
     >
+      <div className="flex flex-col md:flex-row md:gap-5">
+        <Form.Item
+          label={t("firstName")}
+          name="firstName"
+          rules={[{ required: true, message: t("firstNameRequired") }]}
+        >
+          <Input name="firstName" placeholder={t("firstName") + "..."} />
+        </Form.Item>
+
+        <Form.Item
+          label={t("lastName")}
+          name="lastName"
+          rules={[{ required: true, message: t("lastNameRequired") }]}
+        >
+          <Input name="lastName" placeholder={t("lastName") + "..."} />
+        </Form.Item>
+      </div>
       <Form.Item
         label={t("username")}
         name="login"
         rules={[{ required: true, message: t("loginRequired") }]}
       >
-        <Input name="login" placeholder={t("login") + "..."} />
+        <Input prefix={<FaUser strokeWidth={1} />} name="login" placeholder={t("login") + "..."} />
       </Form.Item>
 
       <Form.Item
@@ -57,23 +74,7 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
           })
         ]}
       >
-        <Input name="email" placeholder={t("email") + "..."} />
-      </Form.Item>
-
-      <Form.Item
-        label={t("firstName")}
-        name="firstName"
-        rules={[{ required: true, message: t("firstName") }]}
-      >
-        <Input name="firstName" placeholder={t("firstName") + "..."} />
-      </Form.Item>
-
-      <Form.Item
-        label={t("lastName")}
-        name="lastName"
-        rules={[{ required: true, message: t("lastName") }]}
-      >
-        <Input name="lastName" placeholder={t("lastName") + "..."} />
+        <Input prefix={<MdMail />} name="email" placeholder={t("email") + "..."} />
       </Form.Item>
       <Form.Item
         label={t("password")}
@@ -99,7 +100,7 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
           })
         ]}
       >
-        <Input.Password name="password" placeholder={t("password") + "..."} />
+        <Input.Password prefix={<AiFillLock />} name="password" placeholder={t("password") + "..."} />
       </Form.Item>
 
       <Form.Item
@@ -118,7 +119,7 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
           })
         ]}
       >
-        <Input.Password name="passwordAgain" placeholder={t("confirmPassword") + "..."} />
+        <Input.Password prefix={<MdLockReset />} name="passwordAgain" placeholder={t("confirmPassword") + "..."} />
       </Form.Item>
       <Button className="w-full" type="primary" htmlType="submit">{submitText || t("title")}</Button>
     </Form>

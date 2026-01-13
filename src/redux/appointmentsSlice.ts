@@ -74,12 +74,12 @@ export const cancelPendingAppointmentByIdThunk = createAsyncThunk<Appointment, {
     }
 );
 
-export const updateAppointmentThunk = createAsyncThunk<Appointment, Appointment>(
+export const updateAppointmentThunk = createAsyncThunk<Appointment, { appointment: Appointment, businessId: number }>(
     'appointments/updateAppointment',
-    async (appointment, { rejectWithValue }) => {
+    async ({ appointment, businessId }, { rejectWithValue }) => {
         // Implementation for updating an appointment
         if (!appointment.id) return rejectWithValue("Invalid appointment ID");
-        const result = await patchAppointmentQuery(appointment);
+        const result = await patchAppointmentQuery(businessId, appointment);
         return result.data;
     }
 );

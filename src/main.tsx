@@ -11,8 +11,12 @@ import locale from 'antd/locale/hu_HU';
 import dayjs from 'dayjs';
 import 'dayjs/locale/hu';
 import { App as AntdApp } from 'antd';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc'
 
 dayjs.locale('hu');
+dayjs.extend(utc);
+dayjs.extend(relativeTime);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

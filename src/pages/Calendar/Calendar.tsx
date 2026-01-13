@@ -85,7 +85,7 @@ const CalendarPage = () => {
                 appointment
             }));
         } else {
-            dispatch(updateAppointmentThunk(appointment));
+            dispatch(updateAppointmentThunk({ businessId: Number(selectedBusinessEmployee?.business.id), appointment }));
         }
     }
     const handleDeleteAppointment = (appointmentId: number) => {

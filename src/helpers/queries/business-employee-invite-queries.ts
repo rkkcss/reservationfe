@@ -14,7 +14,7 @@ export const getActivateBusinessEmployeeInviteQuery = (inviteToken: string) => {
     });
 };
 
-export const activateBusinessEmployeeInvite = (inviteToken: string, data: UserWithPassword) => {
+export const activateBusinessEmployeeInvite = (inviteToken: string, data?: UserWithPassword) => {
     return API.post(`/api/employee-invite/activate`, data, {
         params: {
             token: inviteToken
