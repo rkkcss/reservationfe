@@ -1,5 +1,5 @@
 
-import { Tabs } from 'antd'
+import { Button, Tabs } from 'antd'
 import SettingsBusinessData from './SettingsBusinessData'
 import { useCallback, useEffect, useState } from 'react'
 import { getBusinessByLoggedInUser } from '../helpers/queries/business-queries'
@@ -53,7 +53,10 @@ const SettingsBusiness = () => {
 
     return (
         <div className="w-full pl-5 mt-5">
-            <h1 className="text-2xl font-bold mb-4">Üzlet adatai beállítása</h1>
+            <div className="flex justify-between">
+                <h1 className="text-2xl font-bold mb-4">Üzlet adatai beállítása</h1>
+                <Button onClick={() => window.open(`/business/${business.id}`, '_blank')}>Előnézet megtekintése</Button>
+            </div>
             <Tabs items={tabItems} />
         </div>
     )

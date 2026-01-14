@@ -9,6 +9,8 @@ type CustomerDistributionData = {
     returningPercentage: number;
     topCustomerBookings: number;
     topCustomerName: string;
+    newGuestCount: number;
+    returningGuestCount: number;
 };
 
 const CustomerDistribution = () => {
@@ -44,10 +46,8 @@ const CustomerDistribution = () => {
 
             <div className="flex flex-col items-center gap-6 flex-1">
                 <div className="flex items-center gap-8 mt-2">
-                    {/* DINAMIKUS FÁNK GRAFIKON */}
                     <div className="relative size-32 flex items-center justify-center">
                         <svg className="size-full -rotate-90" viewBox="0 0 100 100">
-                            {/* Alap kör - Visszatérők (Zöld) */}
                             <circle
                                 cx="50"
                                 cy="50"
@@ -56,7 +56,6 @@ const CustomerDistribution = () => {
                                 strokeWidth="12"
                                 fill="transparent"
                             />
-                            {/* Dinamikus ív - Új ügyfelek (Primary/Kék) */}
                             <circle
                                 cx="50"
                                 cy="50"
@@ -86,7 +85,7 @@ const CustomerDistribution = () => {
                                 <p className="text-slate-500 text-xs uppercase tracking-wide font-semibold">Visszatérő</p>
                             </div>
                             <p className="text-xl font-bold text-slate-900 ml-4">
-                                {Math.round(data?.returningPercentage || 0)}%
+                                {Math.round(data?.returningPercentage || 0)}% ({data?.returningGuestCount} foglalás)
                             </p>
                         </div>
                         <div>
@@ -95,7 +94,7 @@ const CustomerDistribution = () => {
                                 <p className="text-slate-500 text-xs uppercase tracking-wide font-semibold">Új Ügyfél</p>
                             </div>
                             <p className="text-xl font-bold text-slate-900 ml-4">
-                                {Math.round(data?.newPercentage || 0)}%
+                                {Math.round(data?.newPercentage || 0)}% ({data?.newGuestCount} foglalás)
                             </p>
                         </div>
                     </div>

@@ -26,27 +26,29 @@ const Home = () => {
     }
     return (
         <>
-            <Carousel effect="fade" autoplay autoplaySpeed={8000} className="h-[50vh] mb-9" >
+            <Carousel effect="fade" autoplay autoplaySpeed={8000} className="h-[80vh] md:h-full mb-9" >
                 <div className="relative overflow-hidden rounded-lg">
                     <img
                         src={banner1}
                         alt="Banner 1"
-                        className="h-[50vh] object-cover object-center w-full"
+                        className="h-[80vh] md:h-full object-cover object-center w-full"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10"></div>
                     <div className="absolute inset-0 p-6 flex flex-col justify-center z-20 text-white">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
+                        <h1 className="text-2xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
                             Növeld bevételeidet a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">foglalási rendszerünkkel!</span>
                         </h1>
-                        <p className="text-lg max-w-2xl mb-10 text-gray-100">
+                        <p className="text-sm md:text-lg max-w-2xl mb-10 text-gray-100">
                             Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}>
+                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                                className="h-8 md:h-10 text-sm"
+                            >
                                 Partner regisztráció
                             </Button>
                         </div>
-                        <div className="flex gap-6 mt-5">
+                        <div className="flex flex-col md:flex-row gap-6 mt-5">
                             <div className="flex items-center gap-2">
                                 <FaCheckCircle size={18} className="text-green-500" />
                                 <p>30 napos ingyenes próba</p>
@@ -66,22 +68,24 @@ const Home = () => {
                     <img
                         src={banner2}
                         alt="Banner 1"
-                        className="h-[50vh] object-cover object-center w-full"
+                        className="h-[80vh] md:h-full object-cover object-center w-full"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10"></div>
                     <div className="absolute inset-0 p-6 flex flex-col justify-center z-20 text-white">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
+                        <h1 className="text-2xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
                             Növeld bevételeidet a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">foglalási rendszerünkkel!</span>
                         </h1>
-                        <p className="text-lg max-w-2xl mb-10 text-gray-100">
+                        <p className="text-sm md:text-lg max-w-2xl mb-10 text-gray-100">
                             Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget. Professzionális megoldás szépségipari és wellness vállalkozásoknak.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}>
+                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                                className="h-8 md:h-10 text-sm"
+                            >
                                 Partner regisztráció
                             </Button>
                         </div>
-                        <div className="flex gap-6 mt-5">
+                        <div className="flex flex-col md:flex-row gap-6 mt-5">
                             <div className="flex items-center gap-2">
                                 <FaCheckCircle size={18} className="text-green-500" />
                                 <p>30 napos ingyenes próba</p>

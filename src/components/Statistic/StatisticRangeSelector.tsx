@@ -21,7 +21,7 @@ const StatisticRangeSelector = () => {
     return (
         <div>
             <div className="flex flex-wrap items-center gap-3 bg-gray-50/50 rounded-xl w-fit">
-                <div className="flex bg-white p-1 rounded-lg shadow-sm border border-gray-100">
+                <div className="flex bg-white p-1 rounded-lg border border-gray-900/15">
                     {buttonItems.map((item) => (
                         <Button
                             key={item.key}
@@ -34,11 +34,12 @@ const StatisticRangeSelector = () => {
                     ))}
                 </div>
                 {rangeKey === 'custom' && (
-                    <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                    <div className="animate-in fade-in slide-in-from-left-4 duration-300 w-full sm:w-fit">
                         <DatePicker.RangePicker
                             allowClear={false}
                             placeholder={['Kezdet', 'Vége']}
                             className="h-10 rounded-lg border-gray-200 hover:border-blue-400"
+                            rootClassName="w-full"
                             onChange={(values) => {
                                 if (values?.[0] && values?.[1]) {
                                     setRange('custom', [values[0], values[1]]);
@@ -51,8 +52,8 @@ const StatisticRangeSelector = () => {
             {dateRange.from && dateRange.to && (
                 <>
                     <div className="flex items-center gap-2 mt-3">
-                        <span className="material-symbols-outlined text-slate-400 text-lg">
-                            <CiCalendarDate size={20} />
+                        <span className="material-symbols-outlined text-lg">
+                            <CiCalendarDate size={20} strokeWidth={1} />
                         </span>
                         <span className="text-slate-500 text-sm font-medium ">Kiválasztott időszak:</span>
                         <span className="bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">

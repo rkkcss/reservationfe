@@ -20,14 +20,14 @@ const EmployeeSelector = () => {
     }, [])
 
     return (
-        <div>
-            <Select size='large' className="w-56" value={selectedEmployeeFilter} onChange={(value) => setSelectedEmployeeFilter(value)} prefix={<FaRegAddressCard />}>
+        <>
+            <Select size='large' className="w-full sm:w-56" value={selectedEmployeeFilter} onChange={(value) => setSelectedEmployeeFilter(value)} prefix={<FaRegAddressCard />}>
                 <Select.Option value="all">Minden alkalmazott</Select.Option>
                 {employees.map(employee => (
                     <Select.Option key={employee.id} value={employee.user.id}>{employee.user.firstName} {employee.user.lastName}</Select.Option>
                 ))}
             </Select>
-        </div>
+        </>
     )
 }
 

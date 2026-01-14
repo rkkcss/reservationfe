@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { BusinessEmployee } from '../helpers/types/BusinessEmployee';
-import { API } from '../utils/API';
 import { useSelector } from 'react-redux';
 import { UserStore } from '../store/store';
 import { LiaIndustrySolid } from "react-icons/lia";
@@ -11,6 +10,7 @@ import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { businessEmployeeRoleLabels } from '../helpers/types/BusinessEmployeeRole';
 import Loading from '../components/Loading';
+import { getCurrentBusinessEmployeeOptions } from '../helpers/queries/business-employee';
 
 const ChooseBusiness = () => {
     const [businessEmployees, setBusinessEmployees] = useState<BusinessEmployee[]>([]);
@@ -21,7 +21,7 @@ const ChooseBusiness = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        API.get("/api/business-employee/current")
+        getCurrentBusinessEmployeeOptions()
             .then(res => {
                 if (res.status === 200) {
                     setBusinessEmployees(res.data);
@@ -45,7 +45,7 @@ const ChooseBusiness = () => {
                 <Alert className="mb-2" showIcon message={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
                 <Spin spinning={loading} indicator={<Loading size={30} />}>
                     <div>
-                        <div className="p-6 shadow-lg rounded-lg bg-white w-[600px]">
+                        <div className="p-6 shadow-lg rounded-lg bg-white w-full md:w-[600px]">
                             <ul className="flex flex-col gap-4">
                                 {businessEmployees.map((businessEmployee) => (
                                     <li key={businessEmployee.id}
