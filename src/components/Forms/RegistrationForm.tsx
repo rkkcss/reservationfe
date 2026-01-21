@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { UserWithPassword } from '../../helpers/types/User';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, FormInstance, Input } from 'antd';
 import { FaUser } from 'react-icons/fa';
 import { AiFillLock } from "react-icons/ai";
 import { MdLockReset, MdMail } from 'react-icons/md';
@@ -8,12 +8,12 @@ import { MdLockReset, MdMail } from 'react-icons/md';
 type RegistrationFormProps = {
   onSubmit?: (values: UserWithPassword) => void;
   submitText?: string;
+  form?: FormInstance<UserWithPassword>;
 }
 
-const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
+const RegistrationForm = ({ onSubmit, submitText, form }: RegistrationFormProps) => {
   const { t } = useTranslation("register");
-
-  const [form] = Form.useForm();
+  const [componentForm] = Form.useForm();
 
   const onFinish = (values: UserWithPassword) => {
     if (onSubmit) {
@@ -28,7 +28,7 @@ const RegistrationForm = ({ onSubmit, submitText }: RegistrationFormProps) => {
 
   return (
     <Form layout="vertical"
-      form={form}
+      form={form ? form : componentForm}
       onFinish={onFinish}
     >
       <div className="flex flex-col md:flex-row md:gap-5">

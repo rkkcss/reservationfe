@@ -126,6 +126,11 @@ const loginSlice = createSlice({
                 state.user = ({ ...state.user, firstName: action.payload.firstName, lastName: action.payload.lastName });
             }
 
+        },
+        increaseOnBoardingV(state) {
+            if (state.user) {
+                state.user = ({ ...state.user, onboardingVersion: state.user.onboardingVersion + 1 });
+            }
         }
     },
     extraReducers(builder) {
@@ -175,6 +180,6 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeNull } = loginSlice.actions;
+export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeNull, increaseOnBoardingV } = loginSlice.actions;
 
 export default loginSlice.reducer;

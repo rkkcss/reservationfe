@@ -12,18 +12,18 @@ notification.config({
     rtl: false,
 });
 type NotificationConfig = Omit<ArgsProps, 'key' | 'type'> & { message: React.ReactNode };
-// Notification manager - megakadályozza a duplikációt
+// Notification manager - manage multiple notifications
 class NotificationManager {
     private currentKey: string | null = null;
-    private timeout: number | null = null; // number a setTimeout visszatérési értéke
+    private timeout: number | null = null; // number a setTimeout returning value
 
     show(type: 'error' | 'warning' | 'success' | 'info', key: string, config: NotificationConfig) {
-        // Ha ugyanaz a notification már aktív, ne mutasd újra
+        // if key is the same as current key, do nothing
         if (this.currentKey === key) {
             return;
         }
 
-        // Ha van aktív notification, zárjuk be
+        // destroy previous notification
         if (this.currentKey) {
             notification.destroy(this.currentKey);
         }
@@ -52,7 +52,7 @@ class NotificationManager {
             clearTimeout(this.timeout);
         }
 
-        this.timeout = window.setTimeout(() => { // ✅ window.setTimeout
+        this.timeout = window.setTimeout(() => { // window.setTimeout
             this.currentKey = null;
         }, (config.duration || 4) * 1000);
     }

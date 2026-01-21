@@ -12,3 +12,7 @@ export const patchUserName = (userNames: ChangeUserName) => {
 export const patchUserLogin = (login: string) => {
     return API.patch("/api/change-login", login);
 }
+
+export const increaseOnboardingVersion = () => {
+    return API.patch("/api/account/tutorial/done");
+}

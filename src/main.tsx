@@ -39,7 +39,7 @@ createRoot(document.getElementById('root')!).render(
               controlHeight: 32,
               paddingContentHorizontal: 18,
               fontWeight: '600',
-              fontSize: 15
+              fontSize: 16
             },
           },
           token: {

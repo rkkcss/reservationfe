@@ -147,6 +147,7 @@ const CalendarPage = () => {
                 select={handleDateSelect}
                 eventClassNames="cursor-pointer hover:outline hover:opacity-80 hover:outline-2 hover:outline-blue-500 hover:outline-offset-1 duration-50 border-none transition-ease-in-out"
                 slotLabelClassNames="cursor-pointer hover:bg-blue-100 duration-50 transition-ease-in-out"
+                nowIndicator
             />
         </>
     );

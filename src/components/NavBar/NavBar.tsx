@@ -8,11 +8,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppDispatch, UserStore } from '../../store/store';
 import logo from '../../assets/logo.png';
-import { BsThreeDots } from "react-icons/bs";
 
 import LanguageSelector from './LanguageSelector';
 import { loginModal } from '../Login/loginModalController';
-import { menuItems, threeDotMenuItems, userMenuItems } from '../../constants/navBarItems';
+import { menuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
 import NotificationDropDown from './NotificationDropDown';
 import MobileMainMenu from './MobileMainMenu';
@@ -76,10 +75,13 @@ const NavBar = () => {
                                     {t('login')}
                                 </Button>
                             </li>
-                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full md:block hidden">
-                                <Dropdown arrow menu={{ items: threeDotMenuItems(t) }} trigger={['click']}>
+                            <li className="md:block hidden">
+                                {/* <Dropdown arrow menu={{ items: threeDotMenuItems(t) }} trigger={['click']}>
                                     <BsThreeDots size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
-                                </Dropdown>
+                                </Dropdown> */}
+                                <Button type="text" onClick={() => navigate("/register")}>
+                                    {t("register")}
+                                </Button>
                             </li>
                         </>
                     ) : (

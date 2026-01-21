@@ -11,6 +11,7 @@ export type User = {
     langKey: string;
     createdDate: Date;
     authorities: [Authorities];
+    onboardingVersion: number;
 };
 
 export type UserWithPassword = User & {

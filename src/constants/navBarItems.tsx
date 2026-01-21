@@ -6,7 +6,6 @@ import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Authorities } from '../helpers/types/Authorities';
 import { AppDispatch } from '../store/store';
 import { logoutUser, setActiveBusinessEmployeeNull } from '../redux/userSlice';
-import { Link } from 'react-router';
 import { LiaIndustrySolid } from 'react-icons/lia';
 import { PiUsersFourBold } from 'react-icons/pi';
 import { FiHome } from 'react-icons/fi';
@@ -95,15 +94,3 @@ export const userMenuItems = (
             }
         }
     ];
-
-export const threeDotMenuItems = (t: (key: string) => string) => [
-    {
-        key: 'register',
-        label: (
-            <Link to="/register" >
-                {t('register')}
-            </Link>
-        ),
-        link: '/register',
-    },
-]

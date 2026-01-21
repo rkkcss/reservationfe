@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { UserWithPassword } from "../helpers/types/User";
 import RegistrationForm from "../components/Forms/RegistrationForm";
 import { loginModal } from "../components/Login/loginModalController";
+import { notificationManager } from "../utils/notificationConfig";
 
 
 const Register = () => {
@@ -28,6 +29,8 @@ const Register = () => {
                 console.log('Registration successful:', response);
                 if (response.status === 201) {
                     form.resetFields();
+                    notificationManager.success("registration-success", { message: t("registrationSuccess"), duration: 10 });
+                    navigate("/home", { state: { openLogin: true } })
                 }
             })
             .catch((error: AxiosError) => {
@@ -66,6 +69,7 @@ const Register = () => {
                 <RegistrationForm
                     submitText={t("title")}
                     onSubmit={onFinish}
+                    form={form}
                 />
                 <div className="text-center w-full mt-4">
                     <Typography.Text type="secondary">
