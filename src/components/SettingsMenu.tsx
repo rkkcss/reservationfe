@@ -28,9 +28,10 @@ const SettingsMenu = () => {
     const settingsMenuItems = [
         {
             key: "opening-hours",
-            label: "Nyitvatartási idők",
+            label: "Saját munkaidő",
             icon: <FaRegClock size={20} />,
             roles: [Authorities.ROLE_USER],
+            permissions: [BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS],
             onClick: () => navigate("/settings/opening-hours")
         },
         {
@@ -106,12 +107,14 @@ const SettingsMenu = () => {
 
     return (
         <div className="min-h-72">
-            <Menu
-                items={filteredSettingsMenu}
-                inlineCollapsed={isMenuCollapsed}
-                className="!border-none h-full outline outline-gray-100 rounded-xl outline-2 md:w-72 md:max-w-72 !shadow-md"
-                selectedKeys={[settingsMenuItems.find(item => location.pathname.includes(item.key))?.key || ""]}
-            />
+            <div className="h-full border border-gray-200 rounded-xl md:w-72 md:max-w-72 bg-white">
+                <Menu
+                    items={filteredSettingsMenu}
+                    inlineCollapsed={isMenuCollapsed}
+                    className="sticky top-20 !border-none rounded-xl"
+                    selectedKeys={[settingsMenuItems.find(item => location.pathname.includes(item.key))?.key || ""]}
+                />
+            </div>
         </div>
     )
 }

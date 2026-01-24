@@ -10,7 +10,7 @@ const StepPersonalData: React.FC = () => {
                 label="Vendég neve"
                 rules={[{ required: true, message: 'Kérjük válasszon vendéget!' }]}
             >
-                <Input />
+                <Input placeholder="Vendég neve..." />
             </Form.Item>
 
             <Form.Item
@@ -18,7 +18,7 @@ const StepPersonalData: React.FC = () => {
                 label="Email"
                 rules={[{ required: true, message: 'E-mail címed...' }]}
             >
-                <Input />
+                <Input placeholder="E-mail címed..." />
             </Form.Item>
 
             <Form.Item
@@ -38,7 +38,7 @@ const StepPersonalData: React.FC = () => {
                     },
                 ]}
             >
-                <Input />
+                <Input placeholder="Telefonszámod..." />
             </Form.Item>
         </>
     );

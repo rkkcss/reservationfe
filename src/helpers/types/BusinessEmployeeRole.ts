@@ -11,3 +11,18 @@ export const businessEmployeeRoleLabels: Record<string, string> = {
     EMPLOYEE: 'Alkalmazott',
     OWNER: 'Tulajdonos'
 }
+
+export const employeeRolesExtended: Record<string, { label: string; color: string }> = {
+    [BUSINESS_EMPLOYEE_ROLE.OWNER]: {
+        label: "Tulajdonos",
+        color: "red",
+    },
+    [BUSINESS_EMPLOYEE_ROLE.MANAGER]: {
+        label: "Menedzser",
+        color: "blue",
+    },
+    [BUSINESS_EMPLOYEE_ROLE.EMPLOYEE]: {
+        label: "Alkalmazott",
+        color: "green",
+    },
+};

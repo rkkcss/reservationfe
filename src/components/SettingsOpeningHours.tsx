@@ -7,19 +7,28 @@ import { WorkingHours } from "../helpers/types/WorkingHours"
 import dayjs from "dayjs"
 import { MdDeleteOutline } from "react-icons/md"
 import { useAppSelector } from "../store/hooks"
+import { AxiosResponse } from "axios"
 
-console.log(dayjs.locale());
-const SettingsOpeningHours = () => {
+type SettingsOpeningHoursProps = {
+    handleSubmit: (values: { openingHours: WorkingHours[] }) => void,
+    fetchOpeningHours?: () => Promise<AxiosResponse<WorkingHours[]>>,
+}
+const SettingsOpeningHours = ({ handleSubmit, fetchOpeningHours }: SettingsOpeningHoursProps) => {
     const [form] = Form.useForm();
     const [workingHours, setWorkingHours] = useState<WorkingHours[]>([]);
     const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
-    // API hívás a workingHours adat betöltésére
     useEffect(() => {
-        getAllByBusinessOwner(Number(selectedBusinessEmployee?.business.id))
-            .then(res => {
+        if (fetchOpeningHours) {
+            fetchOpeningHours().then(res => {
                 setWorkingHours(res.data);
             });
+        } else {
+            getAllByBusinessOwner(Number(selectedBusinessEmployee?.business.id))
+                .then(res => {
+                    setWorkingHours(res.data);
+                });
+        }
     }, []);
 
     useEffect(() => {
@@ -34,30 +43,17 @@ const SettingsOpeningHours = () => {
         }
     }, [workingHours, form]);
 
-    const handleSubmit = (values: { openingHours: WorkingHours[] }) => {
-        console.log(values)
-        // const formattedOpeningHours = values.openingHours.map((item) => {
-        //     const formattedStartTime = dayjs(item.startTime).format("HH:mm");
-        //     const formattedEndTime = dayjs(item.endTime).format("HH:mm");
-
-        //     return { ...item, startTime: formattedStartTime, endTime: formattedEndTime };
-        // });
-
-        // updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(selectedBusinessEmployee?.user.id), formattedOpeningHours)
-        //     .then(res => {
-        //         console.log(res);
-        //     });
+    const onSubmit = (values: { openingHours: WorkingHours[] }) => {
+        handleSubmit(values);
     };
 
     return (
-        <div className="w-full pl-5 mt-5">
-            <h1 className="text-2xl font-bold mb-4">Nyitvatartási idő</h1>
-            <Form form={form} onFinish={handleSubmit}>
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <Form form={form} onFinish={onSubmit}>
                 <Form.List name="openingHours">
                     {(fields, { add, remove }) => (
                         <>
                             {Object.entries(DAY_OF_WEEK).map(([key, value]) => {
-                                // Az egyes napokhoz tartozó órák kiszűrése
                                 const dayHours = fields.filter(field => form.getFieldValue(["openingHours", field.name, "dayOfWeek"]) === Number(key));
 
                                 return (
@@ -78,14 +74,15 @@ const SettingsOpeningHours = () => {
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p className="text-gray-500 text-sm">Nem munkanap</p>
+                                                <p className="text-gray-500 text-sm mb-4">Nem munkanap</p>
                                             )}
                                             <Button
-                                                className="!w-full"
+                                                type="text"
+                                                className="text-primary"
                                                 icon={<FiPlus />}
                                                 onClick={() => add({ dayOfWeek: Number(key), startTime: null, endTime: null })}
                                             >
-                                                Új idő hozzáadása
+                                                Új idősáv hozzáadása
                                             </Button>
                                         </div>
                                     </div>

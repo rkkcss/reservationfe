@@ -1,6 +1,7 @@
 
 export const BUSINESS_PERMISSIONS = {
-    VIEW_SCHEDULE: 'VIEW_SCHEDULE',
+    VIEW_ALL_SCHEDULE: 'VIEW_ALL_SCHEDULE',
+    VIEW_OWN_SCHEDULE: 'VIEW_OWN_SCHEDULE',
     EDIT_OWN_SCHEDULE: 'EDIT_OWN_SCHEDULE',
     EDIT_ALL_SCHEDULES: 'EDIT_ALL_SCHEDULES',
     CREATE_BOOKING: 'CREATE_BOOKING',
@@ -41,7 +42,8 @@ export const permissionGroups = [
     {
         title: 'Naptár és Időbeosztás',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.VIEW_SCHEDULE, label: 'Naptár megtekintése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE, label: 'Mindenki időpontjának megtekintése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_OWN_SCHEDULE, label: 'Saját időpontjának megtekintése' },
             { key: BUSINESS_PERMISSIONS.EDIT_ALL_SCHEDULES, label: 'Mindenki időpontjának szerkesztése' },
             { key: BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE, label: 'Saját időpontjaim szerkesztése' },
             { key: BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS, label: 'Saját időbeosztás szerkesztése' },

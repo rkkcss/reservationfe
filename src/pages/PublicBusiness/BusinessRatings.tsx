@@ -6,7 +6,7 @@ import placeholderImage from '../../assets/placeholder.jpg'
 
 const BusinessRatings = () => {
     const { businessId } = useParams<{ businessId: string }>();
-    const { data } = usePagination<BusinessRating>(`/api/business-ratings/business/${businessId}`, 5);
+    const { data } = usePagination<BusinessRating[]>(`/api/business-ratings/business/${businessId}`, 5);
 
     return (
         <div>

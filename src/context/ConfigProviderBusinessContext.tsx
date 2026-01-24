@@ -53,8 +53,8 @@ const themes: Record<string, CustomTheme> = {
         secondaryTextColor: "",
         primaryButtonColor: "#d63384",
         primaryButtonTextColor: "#fff",
-        secondaryButtonColor: "#d63384",
-        secondaryButtonTextColor: "#fff",
+        secondaryButtonColor: "#f2f2f2",
+        secondaryButtonTextColor: "#212121",
     },
     black: {
         token: {

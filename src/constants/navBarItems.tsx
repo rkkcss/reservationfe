@@ -68,7 +68,7 @@ export const userMenuItems = (
 ): MenuItem[] => [
         {
             key: 'settings',
-            icon: <IoSettingsOutline strokeWidth={10} size={16} />,
+            icon: <IoSettingsOutline size={16} />,
             label: t('settings'),
             roles: [Authorities.ROLE_USER],
             onClick: () => navigate('/settings')
@@ -86,7 +86,7 @@ export const userMenuItems = (
         },
         {
             key: 'logout',
-            icon: <IoLogOutOutline size={18} />,
+            icon: <IoLogOutOutline size={16} />,
             label: t('logout'),
             roles: [Authorities.ROLE_USER],
             onClick: () => {

@@ -22,7 +22,7 @@ export function usePagination<T>(
 
     const initialPage = new URLSearchParams(location.search).get("page") || "0";
     const initialSort = new URLSearchParams(location.search).get("sort") || defaultSort;
-    const [data, setData] = useState<T[]>([]);
+    const [data, setData] = useState<T>(null as T);
     const [currentPage, setCurrentPage] = useState<number>(parseInt(initialPage, 10) || 0);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(`${endpoint}?page=${initialPage}`);
@@ -70,7 +70,7 @@ export function usePagination<T>(
     };
 
     const handleResponse = (
-        response: AxiosResponse<T[]>,
+        response: AxiosResponse<T>,
         pageUrl: string | null
     ) => {
         const headers = response.headers as
@@ -114,7 +114,7 @@ export function usePagination<T>(
                 const queryString = buildQueryString(page, sortParam, params);
                 const url = `${endpoint}?${queryString}`;
                 console.log(url);
-                const response = await API.get(url);
+                const response = await API.get<T>(url);
 
                 const linkHeader = response.headers.link;
                 if (linkHeader) {

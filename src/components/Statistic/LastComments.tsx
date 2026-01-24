@@ -20,7 +20,8 @@ const LastComments = () => {
 
     useEffect(() => {
         getBusinessRatingsQuery(Number(selectedBusinessEmployee?.business.id), STATIC_PARAMS).then(response => {
-            setComments(response.data);
+            console.log("RES", response)
+            setComments(response.data.ratings);
         }).finally(() => setLoading(false));
     }, []);
 

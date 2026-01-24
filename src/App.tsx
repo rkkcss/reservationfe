@@ -6,7 +6,6 @@ import HomeLayout from './layout/HomeLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Settings from './pages/Settings'
 import SettingsProfile from './components/SettingsProfile'
-import SettingsOpeningHours from './components/SettingsOpeningHours'
 import { Authorities } from './helpers/types/Authorities'
 import SettingsMyServices from './components/SettingsMyServices'
 import SettingsEmployees from './pages/SettingsEmployee/SettingsEmployees'
@@ -31,6 +30,7 @@ import { BUSINESS_PERMISSIONS } from './helpers/types/BusinessPermission'
 import { setupNotifications } from './utils/notificationConfig'
 import EmployeeActivation from './pages/Activations/EmployeeActivation'
 import LoginModal from './components/Login/LoginModal'
+import OpeningHours from './components/OpeningHours'
 
 function App() {
 
@@ -65,7 +65,7 @@ function App() {
                   <Route path="my-services" element={<SettingsMyServices />} />
                 </Route>
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS]} />}>
-                  <Route path="opening-hours" element={<SettingsOpeningHours />} />
+                  <Route path="opening-hours" element={<OpeningHours />} />
                 </Route>
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>
                   <Route path="business" element={<SettingsBusiness />} />

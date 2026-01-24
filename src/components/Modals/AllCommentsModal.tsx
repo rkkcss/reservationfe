@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BusinessRating } from "../../helpers/types/BusinessRating";
+import { BusinessRatingSummary } from "../../helpers/types/BusinessRating";
 import { useAppSelector } from "../../store/hooks";
 import { Divider, Modal, Rate, Select, Spin } from "antd";
 import dayjs from "dayjs";
@@ -15,15 +15,14 @@ type AllCommentsModalProps = {
 const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
     const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
     const [params, setParams] = useState('createdDate,desc');
-    const { data: comments,
+    const { data,
         totalItems,
         currentPage,
         fetchNextPage,
         fetchPrevPage,
         fetchPage,
         loading
-    } = usePagination<BusinessRating>("/api/business-ratings/business/" + selectedBusinessEmployee?.business.id, 5, params);
-
+    } = usePagination<BusinessRatingSummary>("/api/business-ratings/business/" + selectedBusinessEmployee?.business.id, 5, params);
 
     const handleSorting = (value: string) => {
         setParams(value);
@@ -36,8 +35,8 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
             <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-center gap-6 p-4 rounded-xl bg-slate-50 border border-slate-100">
                     <div className="flex flex-col">
-                        <span className="text-4xl font-black">4.9</span>
-                        <Rate disabled defaultValue={4.9} allowHalf />
+                        <span className="text-4xl font-black">{data?.averageRating}</span>
+                        <Rate disabled value={data?.averageRating} allowHalf />
                     </div>
                     <Divider type="vertical" className="h-12" />
                     <div className="flex flex-col">
@@ -57,7 +56,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
             <Spin spinning={loading} indicator={<Loading size={30} />}>
                 <div className="flex flex-col gap-4 mt-8 max-h-[50vh] overflow-y-auto">
                     {
-                        comments.map(comment => (
+                        data?.ratings.map(comment => (
                             <div key={comment.id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-2">
@@ -69,7 +68,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
                                             <p className="text-[10px] text-slate-500">{dayjs(comment.createdAt).fromNow()}</p>
                                         </div>
                                     </div>
-                                    <Rate disabled defaultValue={comment.number} allowHalf />
+                                    <Rate disabled value={comment.number} allowHalf />
                                 </div>
                                 <p className="text-xs text-slate-600 mt-2 leading-relaxed italic">
                                     "{comment.description}"

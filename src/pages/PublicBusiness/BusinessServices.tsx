@@ -26,7 +26,7 @@ const BusinessServices = () => {
         itemsPerPage,
         setRequestParams,
         loading
-    } = usePagination<Offering>(
+    } = usePagination<Offering[]>(
         `/api/offerings/public/business/${businessId}`,
         5
     );

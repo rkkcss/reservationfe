@@ -67,7 +67,7 @@ const EmployeeOfferings = () => {
 
             <div>
                 <div className="flex justify-between items-center">
-                    <h1 className="text-xl mb-6 font-bold">Szolgáltatások</h1>
+                    <h1 className="text-2xl font-semibold mb-6">Szolgáltatások</h1>
                     <Button type="primary" onClick={() => handleOpenOfferModal({} as Offering)}>Új szolgáltatás</Button>
                 </div>
                 <div>

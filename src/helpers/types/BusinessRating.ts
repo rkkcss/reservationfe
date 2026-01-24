@@ -11,4 +11,9 @@ export type BusinessRating = {
     };
     createdAt: string;
     updatedAt: string;
+};
+
+export type BusinessRatingSummary = {
+    ratings: BusinessRating[];
+    averageRating: number;
 }

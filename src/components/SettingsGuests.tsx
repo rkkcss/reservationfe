@@ -12,7 +12,7 @@ import AddOrEditGuestModal from "./Modals/AddOrEditGuestModal"
 
 const SettingsGuests = () => {
     const [guests, setGuests] = useState<Guest[] | null>([])
-    const { data, fetchNextPage, fetchPrevPage, totalItems, fetchPage, currentPage, setSort } = usePagination<Guest>(`/api/guests`);
+    const { data, fetchNextPage, fetchPrevPage, totalItems, fetchPage, currentPage, setSort } = usePagination<Guest[]>(`/api/guests`);
     const [editGuestModal, setEditGuestModal] = useState(false);
     const [editGuest, setEditGuest] = useState<Guest>({} as Guest);
 

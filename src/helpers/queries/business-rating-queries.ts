@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import API from "../../utils/API"
-import { BusinessRating } from "../types/BusinessRating";
+import { BusinessRatingSummary } from "../types/BusinessRating";
 
 export const getBusinessRatingsQuery = (businessId: number, params?: AxiosRequestConfig['params']) => {
-    return API.get<BusinessRating[]>(`/api/business-ratings/business/${businessId}`, { params: params });
+    return API.get<BusinessRatingSummary>(`/api/business-ratings/business/${businessId}`, { params: params });
 }

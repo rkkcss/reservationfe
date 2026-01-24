@@ -16,7 +16,7 @@ import SettingsServicesCard from '../components/SettingsServicesCard'
 const SettingsMyServices = () => {
     const [editOfferingModal, setEditOfferingModal] = useState(false);
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering>(`/api/offerings/business/${selectedBusinessEmployee?.business?.id}/my`)
+    const { data, setData, totalItems, currentPage, fetchNextPage, fetchPrevPage, fetchPage, loading } = usePagination<Offering[]>(`/api/offerings/business/${selectedBusinessEmployee?.business?.id}/my`)
     const [editOffer, setEditOffer] = useState<Offering>({} as Offering);
 
     const userHasPermission = useMemo(() => selectedBusinessEmployee?.permissions?.includes(BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES), [selectedBusinessEmployee]);

@@ -95,7 +95,7 @@ export const updateUserApi = createAsyncThunk<User, User>(
 export const updateUserImg = createAsyncThunk("updateUserImg", async (imageUrl: string, { dispatch }) => {
     await API.post("/api/account/change-image", { imageUrl: imageUrl });
     dispatch(setImageUrl(imageUrl));
-})
+});
 
 const loginSlice = createSlice({
     name: "store",

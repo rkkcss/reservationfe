@@ -12,6 +12,7 @@ export type User = {
     createdDate: Date;
     authorities: [Authorities];
     onboardingVersion: number;
+    fullName: string;
 };
 
 export type UserWithPassword = User & {

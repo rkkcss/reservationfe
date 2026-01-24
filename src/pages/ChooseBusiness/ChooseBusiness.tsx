@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logoutUser, setActiveBusinessEmployee } from '../../redux/userSlice';
 import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from 'react-icons/io5';
-import { businessEmployeeRoleLabels } from '../../helpers/types/BusinessEmployeeRole';
+import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
 import Loading from '../../components/Loading';
 import { getCurrentBusinessEmployeeOptions } from '../../helpers/queries/business-employee';
 import { useChooseBusinessTour } from './useChooseBusinessTour';
@@ -74,7 +74,10 @@ const ChooseBusiness = () => {
                                                     {businessEmployee.business.name}
                                                 </p>
                                                 <div>
-                                                    <Badge size="small" count={businessEmployeeRoleLabels[businessEmployee.role]} />
+                                                    <Badge size="small"
+                                                        count={employeeRolesExtended[businessEmployee.role].label}
+                                                        color={employeeRolesExtended[businessEmployee.role].color}
+                                                    />
                                                 </div>
                                             </div>
                                         </li>

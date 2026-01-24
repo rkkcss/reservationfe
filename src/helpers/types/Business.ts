@@ -7,7 +7,7 @@ export type Business = {
     services?: string[],
     address?: string,
     phoneNumber?: string,
-    openingHours?: WorkingHours[],
+    openingHours: WorkingHours[],
     breakBetweenAppointmentsMin?: number,
     appointmentApprovalRequired: boolean,
     logo: string,

@@ -134,7 +134,7 @@ const CalendarPage = () => {
 
             <FullCalendar
                 ref={calendarRef}
-                viewClassNames="mt-4"
+                viewClassNames="mt-4 bg-white"
                 height="70vh"
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="timeGridWeek"

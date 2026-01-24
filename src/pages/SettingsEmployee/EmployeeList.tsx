@@ -1,4 +1,4 @@
-import { Button, Dropdown, Table } from 'antd'
+import { Button, Dropdown, Table, Tag } from 'antd'
 import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
 import { MenuProps } from 'antd/lib';
 import { useNavigate } from 'react-router';
@@ -6,11 +6,12 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { usePagination } from '../../hooks/usePagination';
 import { useSelector } from 'react-redux';
 import { UserStore } from '../../store/store';
+import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
 
 const EmployeeList = () => {
     const navigate = useNavigate();
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const { data } = usePagination<BusinessEmployee>('/api/business-employee/business/' + selectedBusinessEmployee?.business.id + '/employees');
+    const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/business/' + selectedBusinessEmployee?.business.id + '/employees');
 
     const getActionDropDownItems = (): MenuProps['items'] => [
         {
@@ -41,6 +42,16 @@ const EmployeeList = () => {
             title: 'Email',
             dataIndex: ['user', 'email'],
             key: "email"
+        },
+        {
+            title: 'Pozicio',
+            dataIndex: ['role'],
+            key: "role",
+            render: (role: string) => (
+                <Tag color={employeeRolesExtended[role]?.color}>
+                    {employeeRolesExtended[role]?.label || role}
+                </Tag>
+            )
         },
         {
             title: '',

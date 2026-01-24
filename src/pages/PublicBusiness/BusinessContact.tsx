@@ -67,10 +67,16 @@ const BusinessContact = () => {
                     </p>
                 </div>
             }
-
+            <p className="leading-10 text-lg" style={{ color: selectedTheme.primaryTextColor }}>Nyitvatartás:</p>
             {
-                business.openingHours &&
-                <p className="leading-10 text-lg" style={{ color: selectedTheme.primaryTextColor }}>Nyitvatartás:</p>
+                business.openingHours?.length === 0 &&
+                <div>
+                    <p className="text-xs text-center mt-4 text-gray-600"
+                        style={{ color: selectedTheme.secondaryTextColor }}
+                    >
+                        Nincs megadva nyitvatartás!
+                    </p>
+                </div>
             }
             {groupedHours && Object.entries(groupedHours).map(([dayOfWeekKey, intervals]) => (
                 <div key={dayOfWeekKey} className="flex justify-between text-slate-500 mb-2">

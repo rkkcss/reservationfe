@@ -1,8 +1,8 @@
 import { Tabs } from 'antd'
 import EmployeeInformations from './EmployeeInformations'
 import EmployeePermissions from './EmployeePermissions'
-import SettingsOpeningHours from '../../components/SettingsOpeningHours'
 import EmployeeOfferings from './EmployeeOfferings'
+import EmployeeWorkingHours from './EmployeeWorkingHours'
 
 const EmployeeTabs = () => {
     const tabs = [
@@ -19,7 +19,7 @@ const EmployeeTabs = () => {
         {
             key: 'working-hours',
             label: 'Munkabeosztás',
-            children: <SettingsOpeningHours />
+            children: <EmployeeWorkingHours />
         },
         {
             key: 'services',
