@@ -58,10 +58,10 @@ API.interceptors.response.use(
         if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method || '')) {
             if (config.showSuccessNotification !== false) {
                 const defaultMessages: Record<string, string> = {
-                    'POST': i18n.t('success.created'),
-                    'PUT': i18n.t('success.updated'),
-                    'PATCH': i18n.t('success.updated'),
-                    'DELETE': i18n.t('success.deleted')
+                    'POST': i18n.t('server-response:success.created'),
+                    'PUT': i18n.t('server-response:success.updated'),
+                    'PATCH': i18n.t('server-response:success.updated'),
+                    'DELETE': i18n.t('server-response:success.deleted')
                 };
 
                 // Custom success message or default

@@ -49,7 +49,7 @@ const ChooseBusiness = () => {
                             <div className="p-6 shadow-lg rounded-lg bg-white w-full md:w-[600px]">
                                 <ul className="flex flex-col gap-4">
                                     {businessEmployees.map((businessEmployee, index) => (
-                                        <li key={businessEmployee.id}
+                                        <li key={businessEmployee?.id}
                                             onClick={() => handleSelectBusinessEmployee(businessEmployee)}
                                             className="
                                         flex group items-center 

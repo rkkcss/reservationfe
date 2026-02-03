@@ -15,6 +15,9 @@ export const BUSINESS_PERMISSIONS = {
     MANAGE_BUSINESS_SETTINGS: 'MANAGE_BUSINESS_SETTINGS',
     EDIT_OWN_WORKING_HOURS: 'EDIT_OWN_WORKING_HOURS',
     EDIT_ALL_WORKING_HOURS: 'EDIT_ALL_WORKING_HOURS',
+    VIEW_ALL_GUESTS: 'VIEW_ALL_GUESTS',
+    VIEW_OWN_STATISTICS: 'VIEW_OWN_STATISTICS',
+    VIEW_ALL_STATISTICS: 'VIEW_ALL_STATISTICS',
 } as const;
 
 export type BusinessPermission =
@@ -35,6 +38,8 @@ export const BusinessEmployeePermissonLabels: Record<string, string> = {
     MANAGE_BUSINESS_SETTINGS: 'Üzlet beállításai',
     EDIT_OWN_WORKING_HOURS: 'Saját munkaidőbeosztás szerkesztése',
     EDIT_ALL_WORKING_HOURS: 'Minden munkaidőbeosztás szerkesztése',
+    VIEW_OWN_STATISTICS: 'Saját statisztika megtekintése',
+    VIEW_ALL_STATISTICS: 'Minden statisztika megtekintése'
 }
 
 
@@ -69,7 +74,8 @@ export const permissionGroups = [
     {
         title: 'Adminisztráció',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.VIEW_STATISTICS, label: 'Statisztikák megtekintése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS, label: 'Minden statisztika megtekintése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, label: 'Saját statisztika megtekintése' },
             { key: BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES, label: 'Alkalmazottak kezelése' },
             { key: BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS, label: 'Üzlet beállításai' },
         ]

@@ -22,7 +22,7 @@ export function usePagination<T>(
 
     const initialPage = new URLSearchParams(location.search).get("page") || "0";
     const initialSort = new URLSearchParams(location.search).get("sort") || defaultSort;
-    const [data, setData] = useState<T>(null as T);
+    const [data, setData] = useState<T>(undefined as unknown as T);
     const [currentPage, setCurrentPage] = useState<number>(parseInt(initialPage, 10) || 0);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(`${endpoint}?page=${initialPage}`);

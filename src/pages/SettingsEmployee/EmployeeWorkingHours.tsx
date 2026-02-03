@@ -4,7 +4,7 @@ import { useBusinessEmployee } from '../../context/BusinessEmployeeContext'
 import { useAppSelector } from '../../store/hooks'
 import dayjs from 'dayjs'
 import { WorkingHours } from '../../helpers/types/WorkingHours'
-import SettingsOpeningHours from '../../components/SettingsOpeningHours'
+import SettingsOpeningHours from '../../components/OpeningHours/SettingsOpeningHours'
 
 const EmployeeWorkingHours = () => {
     const { businessEmployee } = useBusinessEmployee();

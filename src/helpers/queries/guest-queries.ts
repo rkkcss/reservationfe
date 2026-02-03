@@ -14,6 +14,6 @@ export const patchGuest = (guest: Guest) => {
     return API.patch(`/api/guests/${guest.id}`, guest);
 }
 
-export const createQuest = (guest: Guest) => {
-    return API.post("/api/guests", guest);
+export const createQuest = (businessId: number, guest: Guest) => {
+    return API.post(`/api/guests/business/${businessId}`, guest);
 }

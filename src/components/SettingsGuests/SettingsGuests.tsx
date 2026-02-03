@@ -1,20 +1,31 @@
 import { useEffect, useState } from "react"
-import { Guest } from "../helpers/types/Guest"
-import { usePagination } from "../hooks/usePagination"
+import { Guest } from "../../helpers/types/Guest"
+import { usePagination } from "../../hooks/usePagination"
 import { Button, Table, TablePaginationConfig } from "antd"
 import { MdEditNote } from "react-icons/md"
 import { IoCheckmarkCircle, IoCloseCircleSharp } from "react-icons/io5"
-import CustomPagination from "./CustomPagination"
+import CustomPagination from "../CustomPagination"
 import { FilterValue, SorterResult } from "antd/es/table/interface"
-import { createQuest, patchGuest } from "../helpers/queries/guest-queries"
-import AddOrEditGuestModal from "./Modals/AddOrEditGuestModal"
+import { createQuest, patchGuest } from "../../helpers/queries/guest-queries"
+import AddOrEditGuestModal from "../Modals/AddOrEditGuestModal"
+import { useAppSelector } from "../../store/hooks"
+import SettingsGuestsHeader from "./SettingsGuestsHeader"
+import { BUSINESS_PERMISSIONS } from "../../helpers/types/BusinessPermission"
+import useSelectedEmployee from "../../hooks/useSelectedEmployee"
 
 
 const SettingsGuests = () => {
     const [guests, setGuests] = useState<Guest[] | null>([])
-    const { data, fetchNextPage, fetchPrevPage, totalItems, fetchPage, currentPage, setSort } = usePagination<Guest[]>(`/api/guests`);
     const [editGuestModal, setEditGuestModal] = useState(false);
     const [editGuest, setEditGuest] = useState<Guest>({} as Guest);
+    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
+    const { data, fetchNextPage, fetchPrevPage, totalItems, fetchPage, currentPage, setSort, setRequestParams } = usePagination<Guest[]>(
+        `/api/guests/business/${selectedBusinessEmployee?.business.id}`,
+        10,
+        "",
+        { employeeSearchParam: "all" }
+    );
+    const { hasPermission } = useSelectedEmployee();
 
     useEffect(() => {
         if (data) {
@@ -29,7 +40,7 @@ const SettingsGuests = () => {
 
     const handleGuestsChange = (guest: Guest) => {
         if (!guest.id) {
-            createQuest(guest).then(res => {
+            createQuest(Number(selectedBusinessEmployee?.business.id), guest).then(res => {
                 if (res.status !== 201) {
                     console.error("Failed to create guest");
                     return;
@@ -41,20 +52,14 @@ const SettingsGuests = () => {
             })
         } else {
             patchGuest(guest).then(res => {
-                if (res.status !== 200) {
-                    console.error("Failed to update guest");
-                    return;
+                if (res.status === 200) {
+                    const updatedFromBackend = res.data;
+
+                    setGuests(prev => {
+                        if (!prev) return [updatedFromBackend];
+                        return prev.map(g => g.id === updatedFromBackend.id ? updatedFromBackend : g);
+                    });
                 }
-                setGuests(prev => {
-                    if (!prev) return [guest];
-                    const existingGuestIndex = prev.findIndex(g => g.id === guest.id);
-                    if (existingGuestIndex > -1) {
-                        const updatedGuests = [...prev];
-                        updatedGuests[existingGuestIndex] = guest;
-                        return updatedGuests;
-                    }
-                    return [...prev, guest];
-                })
             })
         }
 
@@ -76,7 +81,7 @@ const SettingsGuests = () => {
 
     const columns = [
         {
-            title: 'Név',
+            title: (<span className="font-semibold">Név</span>),
             dataIndex: 'name',
             key: 'name',
             sorter: true,
@@ -92,7 +97,7 @@ const SettingsGuests = () => {
             key: 'phoneNumber',
         },
         {
-            title: 'Státusz',
+            title: (<span className="font-semibold">Státusz</span>),
             dataIndex: 'canBook',
             key: 'canBook',
             render: (text: boolean) => (
@@ -102,6 +107,11 @@ const SettingsGuests = () => {
             ),
             sorter: true
         },
+        ...(hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_GUESTS) ? [{
+            title: (<span className="font-semibold">Kihez tartozik a vendég</span>),
+            dataIndex: ['businessEmployee', 'user', 'fullName'],
+            key: 'businessEmployee',
+        }] : []),
         {
             title: 'Műveletek',
             key: 'actions',
@@ -114,7 +124,7 @@ const SettingsGuests = () => {
                     />
                 </span>
             ),
-        }
+        },
     ]
 
     return (
@@ -131,12 +141,18 @@ const SettingsGuests = () => {
                     <h1 className="text-2xl font-semibold">
                         Vendégek kezelése
                     </h1>
-                    <Button type="primary" onClick={() => handleOpenGuestEditModal({ id: null, name: '', email: '', phoneNumber: '', canBook: true })}>
+
+                    <Button type="primary" onClick={() => handleOpenGuestEditModal({} as Guest)}>
                         Vendég hozzáadása
                     </Button>
                 </div>
-                <div className="flex justify-end">
-                    <p className="text-base mt-8 mb-2">
+
+                <div className="flex justify-between items-center my-4">
+                    {
+                        hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_GUESTS) &&
+                        <SettingsGuestsHeader setQueryParams={setRequestParams} />
+                    }
+                    <p className="text-base ml-auto mr-0">
                         <span className="font-semibold">{totalItems || 0}</span> találat összesen
                     </p>
                 </div>
@@ -151,7 +167,7 @@ const SettingsGuests = () => {
                     fetchNextPage={fetchNextPage}
                     fetchPrevPage={fetchPrevPage}
                     totalItems={totalItems || 0}
-                    currentPage={currentPage} // Assuming 0-based index for current page
+                    currentPage={currentPage}
                     fetchPage={fetchPage}
                 />
             </div>

@@ -48,7 +48,7 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
     ], [handleViewChange, getCurrentView]);
 
     return (
-        <div className="flex flex-col md:flex-row items-center gap-3 mt-11 mb-2 justify-between">
+        <div className="flex flex-col md:flex-row items-center gap-3 justify-between">
             <div className="flex items-center">
                 {
                     hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE) &&

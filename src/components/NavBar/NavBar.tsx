@@ -13,8 +13,8 @@ import LanguageSelector from './LanguageSelector';
 import { loginModal } from '../Login/loginModalController';
 import { menuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
-import NotificationDropDown from './NotificationDropDown';
 import MobileMainMenu from './MobileMainMenu';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 const NavBar = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -86,16 +86,30 @@ const NavBar = () => {
                         </>
                     ) : (
                         <>
-                            <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full cursor-pointer relative">
+                            {/* <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full cursor-pointer relative">
                                 <NotificationDropDown />
-                            </li>
-                            <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
-                                <Dropdown arrow menu={{ items: profileMenuItems }} trigger={['click']}>
-                                    <FiUser size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
+                            </li> */}
+                            <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full relative">
+                                <Dropdown
+                                    arrow={{ pointAtCenter: true }}
+                                    placement="bottomRight"
+                                    menu={{ items: profileMenuItems }}
+                                    trigger={['click']}>
+                                    <div className="flex items-center gap-0.5 cursor-pointer">
+                                        <FiUser size="1.5rem" className="group-hover:text-primary transition" />
+                                        <IoMdArrowDropdown size={14} className=" group-hover:text-primary mt-1" />
+                                    </div>
                                 </Dropdown>
+                                {/* <div className="absolute bottom-0 right-1 h-3 w-3 rounded-full bg-gray-400">
+                                    <IoMdArrowDropdown size={12} />
+                                </div> */}
                             </li>
                         </>
                     )}
+
+                    {/* <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
+
+                    </li> */}
 
                     <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
                         <LanguageSelector />

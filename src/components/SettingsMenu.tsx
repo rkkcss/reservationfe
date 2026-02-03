@@ -58,13 +58,6 @@ const SettingsMenu = () => {
             onClick: () => navigate("/settings/business")
         },
         {
-            key: "guests",
-            label: "Vendégek",
-            icon: <PiUsersThree size={20} strokeWidth={1} />,
-            roles: [Authorities.ROLE_USER],
-            onClick: () => navigate("/settings/guests")
-        },
-        {
             key: "security",
             label: "Biztonság",
             icon: <GoShieldLock size={20} />,

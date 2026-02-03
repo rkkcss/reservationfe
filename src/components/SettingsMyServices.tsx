@@ -93,7 +93,7 @@ const SettingsMyServices = () => {
             </div>
             <Spin spinning={loading}>
                 {
-                    data.length === 0 ?
+                    !data || data.length === 0 ?
                         <div className="flex flex-col justify-center items-center mt-20">
                             <p className="text-gray-500 mb-4">Még nincs egy szolgáltatásod sem.</p>
                         </div>
@@ -102,15 +102,13 @@ const SettingsMyServices = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                                 {
                                     data && data?.map((offer) => (
-                                        <>
-                                            <SettingsServicesCard
-                                                key={offer.id}
-                                                offer={offer}
-                                                handleDeleteOffer={handleDeleteOffer}
-                                                handleEditOffer={handleEditOffer}
-                                                editable={userHasPermission}
-                                            />
-                                        </>
+                                        <SettingsServicesCard
+                                            key={offer.id}
+                                            offer={offer}
+                                            handleDeleteOffer={handleDeleteOffer}
+                                            handleEditOffer={handleEditOffer}
+                                            editable={userHasPermission}
+                                        />
                                     ))
                                 }
                                 {

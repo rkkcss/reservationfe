@@ -53,6 +53,12 @@ export const menuItems = (
             label: t('pricing'),
             link: 'pricing',
             icon: <MdOutlineLibraryBooks size={20} strokeWidth={0} />
+        },
+        {
+            key: 'guests',
+            label: t('guests'),
+            roles: [Authorities.ROLE_USER],
+            link: 'guests',
         }
     ];
 

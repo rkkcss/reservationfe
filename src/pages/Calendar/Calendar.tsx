@@ -129,8 +129,9 @@ const CalendarPage = () => {
             <div className="mt-4">
                 <PendingAppointments />
             </div>
-
-            <CalendarHeader dateRange={dateRange} employees={employees} handleEmployeeChange={handleEmployeeChange} />
+            <div className="p-4 mt-7 rounded-xl border border-gray-300 bg-white">
+                <CalendarHeader dateRange={dateRange} employees={employees} handleEmployeeChange={handleEmployeeChange} />
+            </div>
 
             <FullCalendar
                 ref={calendarRef}

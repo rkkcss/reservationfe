@@ -6,11 +6,13 @@ import { Guest } from '../../helpers/types/Guest'
 import { useCallback, useEffect, useState } from 'react'
 import { getOfferingByLoggedInEmployee } from '../../helpers/queries/offering-queries'
 import { Offering } from '../../helpers/types/Offering'
-import { MdDeleteForever } from 'react-icons/md'
+import { MdCheckCircleOutline, MdDeleteForever } from 'react-icons/md'
 import AddOrEditGuestModalWButton from './AddOrEditGuestModalWButton'
 import { useTranslation } from 'react-i18next'
 import { BiUser } from 'react-icons/bi'
 import { useAppSelector } from '../../store/hooks'
+import { CgSandClock } from "react-icons/cg";
+import { IoCloseCircleOutline } from 'react-icons/io5'
 
 type AddAppointmentAdminProps = {
     open: boolean,
@@ -169,13 +171,23 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                     >
                         <Select placeholder="Időpont státusza">
                             <Select.Option value="PENDING" label="PENDING">
-                                <span className="text-yellow-500">{t("pendingApproval")}</span>
+                                <div className="flex items-center gap-1">
+                                    <CgSandClock size={20} />
+                                    <span>{t("pendingApproval")}</span>
+                                </div>
                             </Select.Option>
                             <Select.Option value="CONFIRMED" label="CONFIRMED">
-                                <span className="text-green-500">{t("confirmed")}</span>
+                                <div className="flex items-center gap-1">
+                                    <MdCheckCircleOutline size={20} className="text-green-500" />
+                                    <span>{t("confirmed")}</span>
+                                </div>
                             </Select.Option>
                             <Select.Option value="CANCELLED" label="CANCELLED">
-                                <span className="text-red-500">{t("rejected")}</span>
+                                <div className="flex items-center gap-1">
+                                    <IoCloseCircleOutline size={20} strokeWidth={2} className="text-red-500" />
+                                    <span>{t("rejected")}</span>
+                                </div>
+
                             </Select.Option>
                         </Select>
                     </Form.Item>

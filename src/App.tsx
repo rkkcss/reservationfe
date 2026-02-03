@@ -12,7 +12,7 @@ import SettingsEmployees from './pages/SettingsEmployee/SettingsEmployees'
 import AboutPage from './pages/AboutPage'
 import NotFound from './pages/NotFound'
 import SettingsBusiness from './components/SettingsBusiness'
-import SettingsGuests from './components/SettingsGuests'
+import SettingsGuests from './components/SettingsGuests/SettingsGuests'
 import CancelAppointment from './components/CancelAppointment'
 import PricePage from './pages/PricePage'
 import DashboardLayout from './pages/Dashboard'
@@ -31,6 +31,7 @@ import { setupNotifications } from './utils/notificationConfig'
 import EmployeeActivation from './pages/Activations/EmployeeActivation'
 import LoginModal from './components/Login/LoginModal'
 import OpeningHours from './components/OpeningHours'
+import Swagger from './pages/Swagger'
 
 function App() {
 
@@ -70,7 +71,6 @@ function App() {
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>
                   <Route path="business" element={<SettingsBusiness />} />
                 </Route>
-                <Route path="guests" element={<SettingsGuests />} />
                 <Route path="security" element={<SettingsSecurity />} />
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES,]} />} >
                   <Route path="employees" element={<SettingsEmployees />} />
@@ -79,10 +79,16 @@ function App() {
               </Route>
               <Route path="dashboard" element={<DashboardLayout />} />
               <Route path="calendar" element={<CalendarLayout />} />
+              <Route path="guests" element={<SettingsGuests />} />
             </Route>
           </Route>
         </Route>
         <Route path="/account/activate" element={<RegisterActivation />} />
+        {/* ADMIN ROUTE */}
+
+        <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_ADMIN]} />}>
+          <Route element={<Swagger />} path="/swagger"></Route>
+        </Route>
       </Routes >
     </>
   )

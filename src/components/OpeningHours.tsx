@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { updateWorkingHours } from '../helpers/queries/working-hours-queries';
 import { WorkingHours } from '../helpers/types/WorkingHours';
 import { useAppSelector } from '../store/hooks';
-import SettingsOpeningHours from './SettingsOpeningHours'
+import SettingsOpeningHours from './OpeningHours/SettingsOpeningHours'
 
 const OpeningHours = () => {
     const { selectedBusinessEmployee } = useAppSelector((state) => state.userStore);
