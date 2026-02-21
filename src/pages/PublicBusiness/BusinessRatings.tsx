@@ -1,21 +1,23 @@
 import { useParams } from 'react-router'
 import { usePagination } from '../../hooks/usePagination';
 import { Card, Divider, Rate } from 'antd';
-import { BusinessRating } from '../../helpers/types/BusinessRating';
+import { BusinessRatingSummary } from '../../helpers/types/BusinessRating';
 import placeholderImage from '../../assets/placeholder.jpg'
+
+
 
 const BusinessRatings = () => {
     const { businessId } = useParams<{ businessId: string }>();
-    const { data } = usePagination<BusinessRating[]>(`/api/business-ratings/business/${businessId}`, 5);
+    const { data } = usePagination<BusinessRatingSummary>(`/api/business-ratings/business/${businessId}`, 5);
 
     return (
         <div>
-            {data?.length === 0 ? (
+            {data?.ratings?.length === 0 ? (
                 <div className="w-full mt-4 text-center text-xl">Nincsenek vélemények!</div>
             ) : (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {
-                        data?.map((rating) => (
+                        data?.ratings?.map((rating) => (
                             <li key={rating.id}>
                                 <Card styles={{ body: { padding: '6px 12px' } }} >
                                     <div className="flex justify-between items-center">

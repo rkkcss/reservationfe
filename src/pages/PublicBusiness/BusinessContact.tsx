@@ -82,13 +82,13 @@ const BusinessContact = () => {
                 <div key={dayOfWeekKey} className="flex justify-between text-slate-500 mb-2">
                     <p className="font-semibold" style={{ color: selectedTheme.primaryTextColor }}>{DAY_OF_WEEK[Number(dayOfWeekKey)]}:</p>
 
-                    <div className="ml-4 text-gray-900">
+                    <div className="ml-4 text-gray-800">
                         {intervals.map((interval, index) => (
                             <p key={index} className="flex justify-between w-full">
                                 <span className="flex-1 text-right" style={{ color: selectedTheme.secondaryTextColor }}>
-                                    {dayjs(interval.startTime, "HH:mm:ss").format("HH:mm")}
+                                    {dayjs(interval.startTime, "HH:mm").format("HH:mm")}
                                     -
-                                    {dayjs(interval.endTime, "HH:mm:ss").format("HH:mm")}
+                                    {dayjs(interval.endTime, "HH:mm").format("HH:mm")}
                                 </span>
                             </p>
                         ))}

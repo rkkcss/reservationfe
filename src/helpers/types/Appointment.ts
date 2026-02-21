@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs"
 import { Guest } from "./Guest"
 import { Offering } from "./Offering"
+import { BusinessEmployee } from "./BusinessEmployee";
 
 export const APPOINTMENT_STATUSES = {
     PENDING: 'PENDING',
@@ -19,4 +20,9 @@ export type Appointment = {
     note?: string;
     offering: Offering;
     guest?: Guest;
+    businessEmployee: BusinessEmployee;
 };
+
+export type CreateAdminAppointmentRequest = Appointment & {
+    employeeId: number;
+}

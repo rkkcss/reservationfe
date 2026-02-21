@@ -1,6 +1,6 @@
 // LoginModal.tsx
 import { useState, useEffect } from "react";
-import { Alert, Button, Form, Input, Modal } from "antd";
+import { Alert, Button, Form, Input, Modal, Typography } from "antd";
 import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
@@ -67,13 +67,17 @@ const LoginModal = () => {
             open={isOpen}
             onCancel={() => loginModal.close()}
             footer={null}
-            title={t("loginHeader")}
+            title={
+                <p className="text-2xl font-bold">
+                    {t("loginHeader")}
+                </p>
+            }
             width={400}
         >
             {errorMsg &&
                 <Alert showIcon className="my-4" type="error" message={errorMsg} />
             }
-            <Form form={form} layout="vertical" onFinish={submitLogin}>
+            <Form form={form} layout="vertical" onFinish={submitLogin} className={`${!errorMsg && 'pt-4'} px-1`}>
                 <Form.Item name="username" label={t("username")}
                     rules={[{ required: true, message: t("required") }]}
                 >
@@ -93,9 +97,11 @@ const LoginModal = () => {
                     </Button>
                 </div>
             </Form>
-            <Button size="small" type="text" onClick={handleNavigateRegister} className="w-full mt-4">
-                {t("dontHaveAccountLink")}
-            </Button>
+            <div className="mt-4 text-center text-sm">
+                <Typography.Link onClick={handleNavigateRegister} className="">
+                    {t("dontHaveAccountLink")}
+                </Typography.Link>
+            </div>
         </Modal>
     );
 };

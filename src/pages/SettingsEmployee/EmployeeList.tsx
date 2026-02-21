@@ -71,7 +71,7 @@ const EmployeeList = () => {
         },
     ]
     return (
-        <Table dataSource={data} columns={dataColumns} />
+        <Table dataSource={data} columns={dataColumns} scroll={{ x: 10 }} />
     )
 }
 

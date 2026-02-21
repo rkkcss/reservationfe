@@ -2,8 +2,8 @@ import { API } from "../../utils/API"
 import { Guest } from "../types/Guest";
 
 
-export const getAllGuestsBySearch = (params: string) => {
-    return API.get("/api/guests/search", { params: { searchString: params } });
+export const getAllGuestsBySearch = (businessId: number, params: string) => {
+    return API.get(`/api/guests/business/${businessId}/search`, { params: { searchString: params } });
 }
 
 export const getAllGuestsByLoggedInUser = (params?: string) => {

@@ -39,6 +39,7 @@ export const appointmentToEvent = (app: Appointment): EventInput => {
             guest: app.guest,
             offering: app.offering,
             note: app.note || '',
+            businessEmployee: app.businessEmployee,
         },
     };
 };
@@ -51,4 +52,5 @@ export const eventToAppointment = (event: EventImpl): Appointment => ({
     status: event.extendedProps.status,
     note: event.extendedProps.note || '',
     offering: event.extendedProps.offering,
+    businessEmployee: event.extendedProps.businessEmployee,
 });

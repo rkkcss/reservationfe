@@ -14,7 +14,7 @@ const OpeningHoursForm = ({ form, onSubmit }: OpeningHoursFormProps) => {
     const [componentForm] = useForm();
 
     return (
-        <Form form={form !== undefined ? form : componentForm} onFinish={onSubmit}>
+        <Form form={form ? form : componentForm} onFinish={onSubmit}>
             <Form.List name="openingHours">
                 {(fields, { add, remove }) => (
                     <>

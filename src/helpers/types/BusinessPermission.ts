@@ -1,7 +1,6 @@
 
 export const BUSINESS_PERMISSIONS = {
     VIEW_ALL_SCHEDULE: 'VIEW_ALL_SCHEDULE',
-    VIEW_OWN_SCHEDULE: 'VIEW_OWN_SCHEDULE',
     EDIT_OWN_SCHEDULE: 'EDIT_OWN_SCHEDULE',
     EDIT_ALL_SCHEDULES: 'EDIT_ALL_SCHEDULES',
     CREATE_BOOKING: 'CREATE_BOOKING',
@@ -39,45 +38,55 @@ export const BusinessEmployeePermissonLabels: Record<string, string> = {
     EDIT_OWN_WORKING_HOURS: 'Saját munkaidőbeosztás szerkesztése',
     EDIT_ALL_WORKING_HOURS: 'Minden munkaidőbeosztás szerkesztése',
     VIEW_OWN_STATISTICS: 'Saját statisztika megtekintése',
-    VIEW_ALL_STATISTICS: 'Minden statisztika megtekintése'
+    VIEW_ALL_STATISTICS: 'Minden statisztika megtekintése',
+    VIEW_ALL_GUESTS: 'Mindenki vendég megtekintése',
+    VIEW_ALL_SCHEDULE: 'Mindenki időpontjának megtekintése',
 }
 
 
 export const permissionGroups = [
     {
-        title: 'Naptár és Időbeosztás',
+        title: 'Naptár és Beosztás',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE, label: 'Mindenki időpontjának megtekintése' },
-            { key: BUSINESS_PERMISSIONS.VIEW_OWN_SCHEDULE, label: 'Saját időpontjának megtekintése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_ALL_SCHEDULES, label: 'Mindenki időpontjának szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_OWN_SCHEDULE, label: 'Saját időpontjaim szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS, label: 'Saját időbeosztás szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_ALL_WORKING_HOURS, label: 'Minden időbeosztás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE, label: 'Összesített naptár megtekintése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_ALL_WORKING_HOURS, label: 'Mindenki munkaidejének módosítása' },
+            { key: BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS, label: 'Saját munkaidő módosítása' },
         ]
     },
     {
-        title: 'Foglalások',
+        title: 'Foglalások kezelése',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.CREATE_BOOKING, label: 'Foglalás létrehozása' },
-            { key: BUSINESS_PERMISSIONS.EDIT_OWN_BOOKINGS, label: 'Saját foglalások szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_ALL_BOOKINGS, label: 'Minden foglalás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.CREATE_BOOKING, label: 'Új foglalás rögzítése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_ALL_BOOKINGS, label: 'Minden foglalás módosítása/törlése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_OWN_BOOKINGS, label: 'Saját foglalások módosítása' },
         ]
     },
     {
-        title: 'Szolgáltatások',
+        title: 'Szolgáltatások és Portfólió',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.VIEW_SERVICES, label: 'Szolgáltatások megtekintése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES, label: 'Saját szolgáltatások szerkesztése' },
-            { key: BUSINESS_PERMISSIONS.EDIT_ALL_SERVICES, label: 'Minden szolgáltatás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.VIEW_SERVICES, label: 'Szolgáltatások listázása' },
+            { key: BUSINESS_PERMISSIONS.EDIT_ALL_SERVICES, label: 'Összes szolgáltatás szerkesztése' },
+            { key: BUSINESS_PERMISSIONS.EDIT_OWN_SERVICES, label: 'Saját szolgáltatások kezelése' },
         ]
     },
     {
-        title: 'Adminisztráció',
+        title: 'Ügyfélkezelés',
         permissions: [
-            { key: BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS, label: 'Minden statisztika megtekintése' },
-            { key: BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, label: 'Saját statisztika megtekintése' },
-            { key: BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES, label: 'Alkalmazottak kezelése' },
-            { key: BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS, label: 'Üzlet beállításai' },
+            { key: BUSINESS_PERMISSIONS.VIEW_ALL_GUESTS, label: 'Vendégadatbázis megtekintése' },
+        ]
+    },
+    {
+        title: 'Üzleti adatok és Statisztika',
+        permissions: [
+            { key: BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS, label: 'Teljes üzleti statisztika' },
+            { key: BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, label: 'Saját teljesítmény statisztika' },
+        ]
+    },
+    {
+        title: 'Rendszerbeállítások',
+        permissions: [
+            { key: BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES, label: 'Alkalmazottak és jogosultságok' },
+            { key: BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS, label: 'Üzlet alapbeállításai' },
         ]
     }
 ];

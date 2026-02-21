@@ -5,10 +5,10 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import huLocal from "@fullcalendar/core/locales/hu";
 import dayjs from "dayjs";
-import { Appointment } from "../../helpers/types/Appointment";
+import { Appointment, CreateAdminAppointmentRequest } from "../../helpers/types/Appointment";
 import { appointmentToEvent, eventToAppointment } from "../../services/calendar-service";
 import { useCalendar } from "../../context/CalendarContext";
-import AddAppointmentAdmin from "../../components/Modals/AddAppointmentAdmin";
+import AddAppointmentAdmin from "../../components/Modals/AddAppointmentAdmin/AddAppointmentAdmin";
 import PendingAppointments from "../../components/PendingAppointments/PendingAppointments";
 import CalendarHeader from "./CalendarHeader";
 import type { DateSelectArg, DatesSetArg, EventClickArg, EventInput } from "@fullcalendar/core";
@@ -77,11 +77,11 @@ const CalendarPage = () => {
         setDateRange(`${startStr} - ${endStr}`);
     };
 
-    const handleAddAppointment = (appointment: Appointment) => {
+    const handleAddAppointment = (appointment: CreateAdminAppointmentRequest) => {
         if (!appointment.id) {
             dispatch(createAppointmentThunk({
                 businessId: Number(selectedBusinessEmployee?.business.id),
-                employeeId: Number(selectedBusinessEmployee?.user.id),
+                employeeId: appointment.employeeId ?? Number(selectedBusinessEmployee?.user.id),
                 appointment
             }));
         } else {

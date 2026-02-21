@@ -9,7 +9,7 @@ type AxiosResponseHeaders = {
 type AxiosHeaderValue = string | number | boolean | null;
 
 // Optional request paraméterek típusa
-type RequestParams = Record<string, string | number | boolean | null | undefined>;
+export type RequestParams = Record<string, string | number | boolean | null | undefined>;
 
 export function usePagination<T>(
     endpoint: string,
