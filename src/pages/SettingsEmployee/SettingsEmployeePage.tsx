@@ -1,10 +1,10 @@
 
 import { useNavigate } from "react-router";
-import { Button, Image } from "antd";
+import { Button } from "antd";
 import { FaChevronLeft } from "react-icons/fa";
-import defaultImg from "../../assets/defaultUserImg.png"
 import EmployeeTabs from "./EmployeeTabs";
 import { useBusinessEmployee } from "../../context/BusinessEmployeeContext";
+import UserAvatar from "../../components/UserAvatar";
 
 const SettingsEmployeePage = () => {
     const { businessEmployee } = useBusinessEmployee();
@@ -20,13 +20,7 @@ const SettingsEmployeePage = () => {
             </div>
             <div className="mt-4">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src={businessEmployee?.user?.imageUrl ? businessEmployee.user?.imageUrl : defaultImg}
-                        preview={false}
-                        className="rounded-full"
-                        width={100}
-                        height={100}
-                    />
+                    <UserAvatar className="w-20 h-20" />
                     <div>
                         <p className="text-3xl">
                             {businessEmployee?.user?.firstName} {businessEmployee?.user?.lastName}

@@ -117,10 +117,10 @@ const Home = () => {
                     </Link> */}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <Card className="shdow-lg bg-gray-50 border border-gray-100" bordered={false}
+                    <Card className="shdow-lg bg-gray-50 border border-gray-100 group" bordered={false}
                         cover={
-                            <div className="relative">
-                                <img src={m1} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom" />
+                            <div className="relative overflow-hidden">
+                                <img src={m1} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                 <div className="absolute bottom-4 left-4 text-white">
                                     <h3 className="text-xl font-bold">Fodrászok és Borbélyok</h3>
@@ -147,10 +147,10 @@ const Home = () => {
                             Részletek fodrászoknak
                         </Button>
                     </Card>
-                    <Card className="shadow-lg bg-gray-50 border border-gray-100" bordered={false}
+                    <Card className="shadow-lg bg-gray-50 border border-gray-100 group" bordered={false}
                         cover={
-                            <div className="relative">
-                                <img src={m2} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom" />
+                            <div className="relative overflow-hidden">
+                                <img src={m2} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                 <div className="absolute bottom-4 left-4 text-white">
                                     <h3 className="text-xl font-bold">Műkörmösök és Kozmetikusok</h3>

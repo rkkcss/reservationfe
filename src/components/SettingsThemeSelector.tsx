@@ -7,6 +7,7 @@ import defaultTheme from '../assets/default-theme.png'
 import pinkTheme from '../assets/pink-theme.png'
 import { useForm } from 'antd/es/form/Form'
 import { changeBusinessTheme } from '../helpers/queries/business-queries'
+import { useAppSelector } from '../store/hooks'
 
 type SettingsThemeSelectorProps = {
     theme: string,
@@ -15,6 +16,7 @@ type SettingsThemeSelectorProps = {
 
 const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelectorProps) => {
     const [form] = useForm();
+    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
     useEffect(() => {
         const lowerCaseTheme = theme;
@@ -23,7 +25,7 @@ const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelecto
 
     const handleThemeChange = ({ theme }: { theme: string }) => {
         setBusinessTheme(theme);
-        changeBusinessTheme({ theme })
+        changeBusinessTheme(Number(selectedBusinessEmployee?.business.id), { theme })
             .then(res => {
                 if (res.status === 200) {
                     notification.success({ message: "Sikeresen megváltoztattad az oldalad témáját!", placement: "bottom" })
@@ -36,7 +38,7 @@ const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelecto
             <p className="text-lg mb-2 mt-4 font-semibold">Oldalad témájának módosítása</p>
             <Form form={form} layout="vertical" id="theme-chang" onFinish={handleThemeChange}>
                 <Form.Item name="theme">
-                    <Radio.Group rootClassName="flex w-full justify-between" options={
+                    <Radio.Group rootClassName="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between" options={
                         [
                             {
                                 value: "BLACK",
@@ -87,7 +89,7 @@ const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelecto
                     }>
                     </Radio.Group>
                 </Form.Item>
-                <Button type="primary" htmlType="submit">Mentés</Button>
+                <Button type="primary" htmlType="submit" className="w-full sm:w-fit mt-4">Mentés</Button>
             </Form>
         </div>
     )

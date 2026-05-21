@@ -7,7 +7,10 @@
 
 body div#root>div {
     min-height: 100svh;
-    background-color: #f6f6f6;
+    background:
+        radial-gradient(ellipse at top right, rgba(232, 222, 249, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom left, rgba(249, 197, 234, 0.2) 0%, transparent 60%),
+        #faf9fd;
 }
 
 .ant-modal-mask,

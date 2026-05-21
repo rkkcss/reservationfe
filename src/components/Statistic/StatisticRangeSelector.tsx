@@ -19,9 +19,9 @@ const StatisticRangeSelector = () => {
         setRange(key);
     }
     return (
-        <div>
-            <div className="flex flex-wrap items-center gap-3 bg-gray-50/50 rounded-xl w-fit">
-                <div className="flex bg-white p-1 rounded-lg border border-gray-900/15">
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center md:w-fit gap-3 bg-gray-50/50 rounded-xl w-full">
+                <div className="flex flex-wrap p-1 rounded-lg flex-1">
                     {buttonItems.map((item) => (
                         <Button
                             key={item.key}
@@ -51,11 +51,13 @@ const StatisticRangeSelector = () => {
             </div>
             {dateRange.from && dateRange.to && (
                 <>
-                    <div className="flex items-center gap-2 mt-3">
-                        <span className="material-symbols-outlined text-lg">
-                            <CiCalendarDate size={20} strokeWidth={1} />
-                        </span>
-                        <span className="text-slate-500 text-sm font-medium ">Kiválasztott időszak:</span>
+                    <div className="flex flex-col md:flex-row md:items-center gap-2">
+                        <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-lg">
+                                <CiCalendarDate size={20} strokeWidth={1} />
+                            </span>
+                            <span className="text-slate-500 text-sm font-medium ">Kiválasztott időszak:</span>
+                        </div>
                         <span className="bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
                             <span className="mr-2 text-slate-900 text-sm font-bold">
                                 {dayjs(new Date(dateRange.from)).format('YYYY. MMMM DD.')}

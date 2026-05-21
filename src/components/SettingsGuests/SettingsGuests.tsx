@@ -157,6 +157,7 @@ const SettingsGuests = () => {
                     </p>
                 </div>
                 <Table
+                    className="overflow-x-auto"
                     dataSource={guests || []}
                     rowKey="id"
                     columns={columns}

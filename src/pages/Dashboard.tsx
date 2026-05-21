@@ -16,9 +16,15 @@ function Dashboard() {
                 <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-tight">Statisztika és Elemzés</h1>
                 <p className="text-slate-500 text-base font-normal">Kövesd nyomon szolgáltatásaid teljesítményét valós idejű adatokkal.</p>
             </div>
-            <div className="flex flex-col md:flex-row justify-between items-start my-6 gap-3 md:gap-0">
+            <div className="flex flex-col lg:flex-row justify-between items-start my-6 gap-3 md:gap-0">
                 <StatisticRangeSelector />
-                <EmployeeSelector />
+                <div className="mt-6 lg:mt-0">
+                    <EmployeeSelector />
+                </div>
+            </div>
+
+            <div className="my-8">
+
             </div>
             <BusinessSummary />
 

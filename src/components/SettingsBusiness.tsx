@@ -59,7 +59,7 @@ const SettingsBusiness = () => {
 
     return (
         <div className="w-full pl-5 mt-5">
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row justify-between">
                 <h1 className="text-2xl font-bold mb-4">Üzlet adatai beállítása</h1>
                 <Button onClick={() => window.open(`/business/${business.id}`, '_blank')}>Előnézet megtekintése</Button>
             </div>

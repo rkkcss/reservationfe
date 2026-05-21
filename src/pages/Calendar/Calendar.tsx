@@ -129,7 +129,7 @@ const CalendarPage = () => {
             <div className="mt-4">
                 <PendingAppointments />
             </div>
-            <div className="p-4 mt-7 rounded-xl border border-gray-300 bg-white">
+            <div className="py-4 mt-7 rounded-xl">
                 <CalendarHeader dateRange={dateRange} employees={employees} handleEmployeeChange={handleEmployeeChange} />
             </div>
 
@@ -149,6 +149,7 @@ const CalendarPage = () => {
                 eventClassNames="cursor-pointer hover:outline hover:opacity-80 hover:outline-2 hover:outline-blue-500 hover:outline-offset-1 duration-50 border-none transition-ease-in-out"
                 slotLabelClassNames="cursor-pointer hover:bg-blue-100 duration-50 transition-ease-in-out"
                 nowIndicator
+                longPressDelay={350}
             />
         </>
     );

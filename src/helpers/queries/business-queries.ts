@@ -28,6 +28,6 @@ type ChangeBusinessThemeType = {
     theme: string
 }
 
-export const changeBusinessTheme = (data: ChangeBusinessThemeType) => {
-    return API.post(`${DEFAULT_PATH}/theme`, data);
+export const changeBusinessTheme = (businessId: number, data: ChangeBusinessThemeType) => {
+    return API.post(`${DEFAULT_PATH}/${businessId}/theme`, data);
 }

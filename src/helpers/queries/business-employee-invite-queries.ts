@@ -21,3 +21,7 @@ export const activateBusinessEmployeeInvite = (inviteToken: string, data?: UserW
         }
     });
 }
+
+export const getAllPendingInvitations = () => {
+    return API.get(`/api/employee-invite/pending`);
+}

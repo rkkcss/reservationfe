@@ -1,6 +1,6 @@
 // LoginModal.tsx
 import { useState, useEffect } from "react";
-import { Alert, Button, Form, Input, Modal, Typography } from "antd";
+import { Alert, Button, Divider, Form, Input, Modal, Typography } from "antd";
 import { loginModal, setLoginModalController } from "./loginModalController";
 import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
@@ -8,6 +8,7 @@ import { LoginForm, loginUser } from "../../redux/userSlice";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -62,6 +63,11 @@ const LoginModal = () => {
         navigate("/register");
     };
 
+    const handleGoogleLogin = () => {
+        console.log(import.meta.env.VITE_API_URL)
+        window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`;
+    };
+
     return (
         <Modal
             open={isOpen}
@@ -72,7 +78,7 @@ const LoginModal = () => {
                     {t("loginHeader")}
                 </p>
             }
-            width={400}
+            width={450}
         >
             {errorMsg &&
                 <Alert showIcon className="my-4" type="error" message={errorMsg} />
@@ -102,6 +108,12 @@ const LoginModal = () => {
                     {t("dontHaveAccountLink")}
                 </Typography.Link>
             </div>
+            <Divider orientation="center">
+                <span className="text-sm">vagy</span>
+            </Divider>
+            <Button className="w-full" onClick={handleGoogleLogin} icon={<FcGoogle />} type="text">
+                Folytatás Google-lal
+            </Button>
         </Modal>
     );
 };

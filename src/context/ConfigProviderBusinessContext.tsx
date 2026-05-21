@@ -17,6 +17,7 @@ type CustomTheme = {
     secondaryTextColor: string;
     primaryButtonColor: string;
     primaryButtonTextColor: string;
+    primaryButtonColorHover: string;
     secondaryButtonColor: string;
     secondaryButtonTextColor: string;
 };
@@ -36,6 +37,7 @@ const themes: Record<string, CustomTheme> = {
         secondaryTextColor: "",
         primaryButtonColor: "#1e90ff",
         primaryButtonTextColor: "#fff",
+        primaryButtonColorHover: "#1e90ff",
         secondaryButtonColor: "#1e90ff",
         secondaryButtonTextColor: "#fff",
     },
@@ -53,6 +55,7 @@ const themes: Record<string, CustomTheme> = {
         secondaryTextColor: "",
         primaryButtonColor: "#d63384",
         primaryButtonTextColor: "#fff",
+        primaryButtonColorHover: "#d63384",
         secondaryButtonColor: "#f2f2f2",
         secondaryButtonTextColor: "#212121",
     },
@@ -70,6 +73,7 @@ const themes: Record<string, CustomTheme> = {
         secondaryTextColor: "#B0B3B8",
         primaryButtonColor: "#1f1f1f",
         primaryButtonTextColor: "#E2E5E9",
+        primaryButtonColorHover: "#333334",
         secondaryButtonColor: "rgba(252, 252, 252, 0.2)",
         secondaryButtonTextColor: "#fcfcfc",
     },
@@ -87,6 +91,7 @@ const themes: Record<string, CustomTheme> = {
         secondaryTextColor: "",
         primaryButtonColor: "#fa8c16",
         primaryButtonTextColor: "#fff",
+        primaryButtonColorHover: "#fa8c16",
         secondaryButtonColor: "#fa8c16",
         secondaryButtonTextColor: "#fff",
     },
@@ -179,7 +184,7 @@ export const ConfigProviderBusinessProvider = ({ children }: { children: ReactNo
                             defaultBorderColor: "transparent",
                             //primary
                             colorPrimary: selectedTheme.primaryButtonColor,
-                            colorPrimaryHover: selectedTheme.primaryButtonColor,
+                            colorPrimaryHover: selectedTheme.primaryButtonColorHover,
                             colorPrimaryActive: selectedTheme.primaryButtonColor,
                             colorPrimaryBorderHover: "yellow",
                         },

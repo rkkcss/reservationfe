@@ -1,7 +1,6 @@
-import { Button, Dropdown, Select } from 'antd';
-import { MenuProps } from 'antd/lib';
+import { Button, Select } from 'antd';
 import { useCallback, useMemo } from 'react'
-import { FaAngleDown, FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useCalendar } from '../../context/CalendarContext';
 import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
 import useSelectedEmployee from '../../hooks/useSelectedEmployee';
@@ -28,28 +27,22 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
     const handlePrev = () => calendarRef.current?.getApi().prev();
     const handleToday = () => calendarRef.current?.getApi().today();
 
-    const viewItems = useMemo<MenuProps['items']>(() => [
+    const viewItems = useMemo(() => [
         {
-            key: 'week',
-            label: <div className="flex items-center gap-1">
-                <FaCheck className={getCurrentView === 'timeGridWeek' ? 'visible' : 'invisible'} />
-                Heti nézet
-            </div>,
+            key: 'timeGridWeek',
+            label: "Heti nézet",
             onClick: () => handleViewChange('timeGridWeek'),
         },
         {
-            key: 'day',
-            label: <div className="flex items-center gap-1">
-                <FaCheck className={getCurrentView === 'timeGridDay' ? 'visible' : 'invisible'} />
-                Napi nézet
-            </div>,
+            key: 'timeGridDay',
+            label: "Napi nézet",
             onClick: () => handleViewChange('timeGridDay'),
         },
     ], [handleViewChange, getCurrentView]);
 
     return (
         <div className="flex flex-col md:flex-row items-center gap-3 justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
                 {
                     hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE) &&
                     <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)} className="w-48">
@@ -69,13 +62,17 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
                         }
                     </Select>
                 }
-
-                <Dropdown menu={{ items: viewItems }} trigger={['click']}>
-                    <Button type="text" className="flex items-center gap-1" onClick={e => e.preventDefault()}>
-                        {getCurrentView === 'timeGridDay' ? 'Napi nézet' : 'Heti nézet'}
-                        <FaAngleDown size={20} />
-                    </Button>
-                </Dropdown>
+                <Select
+                    className="w-48"
+                    onSelect={handleViewChange}
+                    value={getCurrentView}
+                >
+                    {viewItems.map(item => (
+                        <Select.Option key={item.key} value={item.key}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
             </div>
             <div className="flex items-center gap-2">
                 <Button onClick={handleToday}>Ma</Button>

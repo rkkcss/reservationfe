@@ -9,17 +9,15 @@ import SettingsProfile from './components/SettingsProfile'
 import { Authorities } from './helpers/types/Authorities'
 import SettingsMyServices from './components/SettingsMyServices'
 import SettingsEmployees from './pages/SettingsEmployee/SettingsEmployees'
-import AboutPage from './pages/AboutPage'
 import NotFound from './pages/NotFound'
 import SettingsBusiness from './components/SettingsBusiness'
 import SettingsGuests from './components/SettingsGuests/SettingsGuests'
 import CancelAppointment from './components/CancelAppointment'
-import PricePage from './pages/PricePage'
 import DashboardLayout from './pages/Dashboard'
 import CalendarLayout from './layout/CalendarLayout'
 import Register from './pages/Register'
 import RegisterActivation from './pages/Activations/RegisterActivation'
-import { useEffect } from 'react'
+import { lazy, useEffect } from 'react'
 import { fetchCsrfToken } from './helpers/queries/account-queries'
 import SettingsSecurity from './components/SettingsSecurity'
 import RequireBusiness from './components/RequireBusiness'
@@ -31,7 +29,12 @@ import { setupNotifications } from './utils/notificationConfig'
 import EmployeeActivation from './pages/Activations/EmployeeActivation'
 import LoginModal from './components/Login/LoginModal'
 import OpeningHours from './components/OpeningHours'
-import Swagger from './pages/Swagger'
+import OAuthSuccess from './utils/OAuthSuccess'
+
+export const AboutPage = lazy(() => import('./pages/AboutPage'));
+export const PricePage = lazy(() => import('./pages/PricePage'));
+export const Swagger = lazy(() => import('./pages/Swagger'));
+
 
 function App() {
 
@@ -45,7 +48,7 @@ function App() {
     <>
       <LoginModal />
       <Routes>
-        <Route path="/employee-invite/activate" element={<EmployeeActivation />} />
+        <Route path="/employee-invite/:token" element={<EmployeeActivation />} />
         <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
         <Route path="/business/:businessId" element={<BusinessPageWrap />} />
         <Route element={<HomeLayout />}>
@@ -83,6 +86,7 @@ function App() {
             </Route>
           </Route>
         </Route>
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route path="/account/activate" element={<RegisterActivation />} />
         {/* ADMIN ROUTE */}
 

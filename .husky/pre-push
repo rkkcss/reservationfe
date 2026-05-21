@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "=== Frontend Pre-Push Ellenőrzés ==="
+
+# 1. Build tesztelése (ha nem fordul le, megállítja a pusht)
+npm run build && echo "✅ Frontend build sikeres!"

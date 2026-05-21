@@ -31,12 +31,10 @@ const EmployeeWorkingHours = () => {
         <>
             <p className="text-2xl font-semibold mb-2">Munkabeosztás</p>
             <p className="text-gray-600 mb-6">Állítsd be mettől meddig tudjon dolgozni a munkatárs</p>
-            <div className="bg-white p-5 rounded-xl">
-                <SettingsOpeningHours
-                    handleSubmit={handleOpeningHoursSubmit}
-                    fetchOpeningHours={fetchEmployeeWorkingHours}
-                />
-            </div>
+            <SettingsOpeningHours
+                handleSubmit={handleOpeningHoursSubmit}
+                fetchOpeningHours={fetchEmployeeWorkingHours}
+            />
         </>
     )
 }

@@ -1,10 +1,16 @@
-import { Tabs } from 'antd'
+import { Grid, Select, Tabs } from 'antd'
+import { useState } from 'react'
 import EmployeeInformations from './EmployeeInformations'
 import EmployeePermissions from './EmployeePermissions'
 import EmployeeOfferings from './EmployeeOfferings'
 import EmployeeWorkingHours from './EmployeeWorkingHours'
 
+const { useBreakpoint } = Grid
+
 const EmployeeTabs = () => {
+    const screens = useBreakpoint()
+    const [activeKey, setActiveKey] = useState('info')
+
     const tabs = [
         {
             key: 'info',
@@ -28,9 +34,25 @@ const EmployeeTabs = () => {
         }
     ]
 
+    const activeTab = tabs.find(tab => tab.key === activeKey)
 
     return (
-        <Tabs items={tabs} />
+        <div>
+            {screens.lg
+                ? <Tabs activeKey={activeKey} onChange={setActiveKey} items={tabs} />
+                : (
+                    <>
+                        <Select
+                            value={activeKey}
+                            onChange={setActiveKey}
+                            options={tabs.map(tab => ({ label: tab.label, value: tab.key }))}
+                            style={{ width: '100%', marginBottom: 16 }}
+                        />
+                        {activeTab?.children}
+                    </>
+                )
+            }
+        </div>
     )
 }
 

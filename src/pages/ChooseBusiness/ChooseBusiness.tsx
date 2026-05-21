@@ -1,26 +1,28 @@
 import { useEffect, useState } from 'react'
 import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
-import { LiaIndustrySolid } from "react-icons/lia";
-import { Alert, Badge, Button, Spin, Tour } from 'antd';
+import { Alert, Button, Divider, Spin, Tour } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logoutUser, setActiveBusinessEmployee } from '../../redux/userSlice';
 import { useNavigate } from 'react-router';
 import { IoLogOutOutline } from 'react-icons/io5';
-import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
 import Loading from '../../components/Loading';
 import { getCurrentBusinessEmployeeOptions } from '../../helpers/queries/business-employee';
 import { useChooseBusinessTour } from './useChooseBusinessTour';
+import { activateBusinessEmployeeInvite, getAllPendingInvitations } from '../../helpers/queries/business-employee-invite-queries';
+import { BusinessEmployeeInvite } from '../../helpers/types/BusinessEmployeeInvite';
+import ChooseBusinessItem from './ChooseBusinessItem';
 
 const ChooseBusiness = () => {
     const [businessEmployees, setBusinessEmployees] = useState<BusinessEmployee[]>([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAppSelector((state) => state.userStore)
     const dispatch = useAppDispatch();
-    const [logoError, setLogoError] = useState(false);
     const navigate = useNavigate();
     const { openTour, steps, handleClose, refs } = useChooseBusinessTour();
 
-    useEffect(() => {
+    const [pendingInvitations, setPendingInvitations] = useState<BusinessEmployeeInvite[]>([]);
+
+    const fetchPendingInvitations = () => {
         getCurrentBusinessEmployeeOptions()
             .then(res => {
                 if (res.status === 200) {
@@ -28,12 +30,33 @@ const ChooseBusiness = () => {
                 }
             })
             .finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        fetchPendingInvitations();
+
+        getAllPendingInvitations().then(res => {
+            setPendingInvitations(res.data);
+        })
     }, []);
 
     const handleSelectBusinessEmployee = (businessEmployee: BusinessEmployee) => {
         dispatch(setActiveBusinessEmployee(businessEmployee));
         navigate("/dashboard");
     }
+
+    const handleOnApprove = (invitation: BusinessEmployeeInvite) => {
+        if (!invitation.token) {
+            console.warn("Nincs token!")
+        }
+        activateBusinessEmployeeInvite(invitation.token).then(res => {
+            if (res.status === 204) {
+                fetchPendingInvitations();
+                setPendingInvitations(prev => prev.filter(i => i.id !== invitation.id));
+            }
+        })
+    }
+
     return (
         <>
             <div className="flex items-center justify-center h-screen flex-col gap-20">
@@ -43,46 +66,53 @@ const ChooseBusiness = () => {
                     </span>
                 </h1>
                 <div>
-                    <Alert className="mb-2" showIcon message={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
+                    {
+                        businessEmployees.length > 0 &&
+                        < Alert className="mb-2" showIcon message={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
+                    }
+
                     <Spin spinning={loading} indicator={<Loading size={30} />}>
                         <div>
                             <div className="p-6 shadow-lg rounded-lg bg-white w-full md:w-[600px]">
-                                <ul className="flex flex-col gap-4">
-                                    {businessEmployees.map((businessEmployee, index) => (
-                                        <li key={businessEmployee?.id}
-                                            onClick={() => handleSelectBusinessEmployee(businessEmployee)}
-                                            className="
-                                        flex group items-center 
-                                        outline outline-1 outline-gray-300 
-                                        hover:outline-indigo-600 
-                                        hover:text-indigo-600 
-                                        cursor-pointer p-2 
-                                        rounded-lg "
-                                            ref={index === 0 ? refs.listRef : null}
-                                        >
-                                            {(!businessEmployee.business.logo || logoError) ? (
-                                                <LiaIndustrySolid className="w-10 h-10 " />
-                                            ) : (
-                                                <img
-                                                    src={businessEmployee.business.logo}
-                                                    onError={() => setLogoError(true)}
-                                                    className="w-10 h-10 rounded-full"
-                                                />
-                                            )}
-                                            <div className="ml-2">
-                                                <p className="text-base font-semibold leading-3">
-                                                    {businessEmployee.business.name}
-                                                </p>
-                                                <div>
-                                                    <Badge size="small"
-                                                        count={employeeRolesExtended[businessEmployee.role].label}
-                                                        color={employeeRolesExtended[businessEmployee.role].color}
+                                {
+                                    businessEmployees.length > 0 &&
+                                    <ul className="flex flex-col gap-4">
+                                        {businessEmployees.map((businessEmployee, index) => (
+                                            <ChooseBusinessItem
+                                                key={businessEmployee.id}
+                                                logo={businessEmployee.business.logo}
+                                                businessName={businessEmployee.business.name}
+                                                role={businessEmployee.role}
+                                                onClick={() => handleSelectBusinessEmployee(businessEmployee)}
+                                                ref={index === 0 ? refs.listRef : null}
+                                            />
+                                        ))}
+                                    </ul>
+                                }
+
+                                {
+                                    pendingInvitations.length > 0 &&
+                                    <>
+                                        <Divider rootClassName={`${businessEmployees.length === 0 && "!mt-0"}`}>Meghivók</Divider>
+                                        <Alert className="mb-2" showIcon type="warning" message={"Az alábbi vállalkozásokba kaptál meghivást."} />
+                                        <ul className="flex flex-col gap-4">
+                                            {pendingInvitations.map((invitation, index) => (
+                                                <>
+                                                    <ChooseBusinessItem
+                                                        key={invitation.id}
+                                                        logo={invitation.business.logo}
+                                                        businessName={invitation.business.name}
+                                                        role={invitation.role}
+                                                        onApprove={() => handleOnApprove(invitation)}
+                                                        onDecline={() => console.log("decline")}
+                                                        isInvitation={true}
+                                                        ref={index === 0 ? refs.listRef : null}
                                                     />
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
+                                                </>
+                                            ))}
+                                        </ul>
+                                    </>
+                                }
                                 <Button type="text"
                                     className="w-full mt-4"
                                     icon={<IoLogOutOutline size={20} />}

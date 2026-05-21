@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react"
 import { activateBusinessEmployeeInvite, getActivateBusinessEmployeeInviteQuery } from "../../helpers/queries/business-employee-invite-queries"
-import { useLocation, useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { Alert, Button, Result } from "antd";
-import { EmployeeInviteActivateType } from "../../helpers/types/BusinessEmployeeInvite";
 import { UserWithPassword } from "../../helpers/types/User";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getAccountInfo, logoutUser } from "../../redux/userSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { getAccountInfo } from "../../redux/userSlice";
 import RegistrationForm from "../../components/Forms/RegistrationForm";
 import { AxiosError } from "axios";
-import { loginModal } from "../../components/Login/loginModalController";
+import { BusinessEmployeeInvite } from "../../helpers/types/BusinessEmployeeInvite";
 
 const EmployeeActivation = () => {
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    const [invite, setInvite] = useState<EmployeeInviteActivateType | null>(null);
+    const { token } = useParams();
+    const [invite, setInvite] = useState<BusinessEmployeeInvite | null>(null);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [error, setError] = useState<string | null>(null);
-    const { user } = useAppSelector(state => state.userStore);
 
     useEffect(() => {
         if (token) {
@@ -34,28 +30,6 @@ const EmployeeActivation = () => {
                 });
         }
     }, []);
-
-    const joinToBusiness = async () => {
-        if (!token) return;
-
-        if (!user) {
-            loginModal.open(() => activateBusinessEmployeeInvite(token));
-            return;
-        }
-
-        if (user.email === invite?.businessEmployeeInvite.email) {
-            await activateBusinessEmployeeInvite(token);
-            return;
-        }
-
-        await dispatch(logoutUser());
-        loginModal.open(async () => {
-            const res = await activateBusinessEmployeeInvite(token);
-            if (res.status === 204) {
-                navigate('/choose-business');
-            }
-        });
-    };
 
     const activateAndRegisterUser = async (values: UserWithPassword) => {
         if (!token) return;
@@ -112,34 +86,22 @@ const EmployeeActivation = () => {
                             Csatlakozz hozzánk!
                         </h1>
                         <p className="text-lg text-gray-600">
-                            <span className="font-semibold text-indigo-600">{invite?.businessEmployeeInvite.business.name}</span> csapata vár rád
+                            <span className="font-semibold text-indigo-600">{invite?.business.name}</span> csapata vár rád
                         </p>
                     </div>
 
                     {/* Card */}
                     <div className="bg-white rounded-2xl shadow-2xl p-10 border border-gray-100">
                         {
-                            invite?.userExists ? (
-                                <>
-                                    <Alert
-                                        message={"Már létezik fiókod a rendszerben. Egyszerű kattintással csatlakozhatsz a csapathoz, bejelentkezés után."}
-                                        type="info"
-                                        showIcon
-                                        className="mb-6 border-l-4 border-blue-500 rounded-lg"
-                                    />
-                                    <Button type="primary" className="w-full" onClick={joinToBusiness}>Csatlakozás</Button>
-                                </>
-                            )
-                                :
-                                <>
-                                    <Alert
-                                        message="Hozd létre a fiókodat, hogy csatlakozhass a csapathoz"
-                                        type="info"
-                                        showIcon
-                                        className="mb-6 border-l-4 border-blue-500 rounded-lg"
-                                    />
-                                    <RegistrationForm onSubmit={activateAndRegisterUser} />
-                                </>
+                            <>
+                                <Alert
+                                    message="Hozd létre a fiókodat, hogy csatlakozhass a csapathoz"
+                                    type="info"
+                                    showIcon
+                                    className="mb-6 border-l-4 border-blue-500 rounded-lg"
+                                />
+                                <RegistrationForm onSubmit={activateAndRegisterUser} />
+                            </>
                         }
 
                     </div>

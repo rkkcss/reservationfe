@@ -18,6 +18,7 @@ export interface MenuItem {
     roles?: string[];
     onClick?: () => void;
     type?: 'divider';
+    isBeta?: boolean;
 }
 
 export const menuItems = (
@@ -27,7 +28,8 @@ export const menuItems = (
             key: 'dashboard',
             label: t('dashboard'),
             roles: [Authorities.ROLE_USER],
-            link: 'dashboard'
+            link: 'dashboard',
+            isBeta: true,
         },
         {
             key: 'home',

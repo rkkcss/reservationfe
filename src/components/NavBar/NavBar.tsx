@@ -1,7 +1,6 @@
 // components/NavBar/NavBar.tsx
-import { Button, Dropdown, MenuProps } from 'antd';
+import { Badge, Button, Dropdown, MenuProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { FiUser } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -15,6 +14,7 @@ import { menuItems, userMenuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
 import MobileMainMenu from './MobileMainMenu';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import UserAvatar from '../UserAvatar';
 
 const NavBar = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +45,7 @@ const NavBar = () => {
                 icon: item.icon,
                 label: item.label!,
                 onClick: item.onClick,
+                isBeta: item.isBeta,
             };
         });
 
@@ -64,6 +65,9 @@ const NavBar = () => {
                                 }
                             >
                                 {t(item.label!)}
+                                {item.isBeta && (
+                                    <Badge count={t('Béta')} className="ml-1.5 -mt-0.5" style={{ border: 'none' }} color='volcano' />
+                                )}
                             </NavLink>
                         </li>
                     ))}
@@ -96,7 +100,8 @@ const NavBar = () => {
                                     menu={{ items: profileMenuItems }}
                                     trigger={['click']}>
                                     <div className="flex items-center gap-0.5 cursor-pointer">
-                                        <FiUser size="1.5rem" className="group-hover:text-primary transition" />
+                                        <UserAvatar />
+                                        {/* <FiUser size="1.5rem" className="group-hover:text-primary transition" /> */}
                                         <IoMdArrowDropdown size={14} className=" group-hover:text-primary mt-1" />
                                     </div>
                                 </Dropdown>
@@ -119,7 +124,7 @@ const NavBar = () => {
                         <IoMenu size="1.5rem" className="cursor-pointer" onClick={() => setMenuDrawerOpen(true)} />
                     </div>
                 </ul>
-            </Header>
+            </Header >
             <MobileMainMenu
                 open={menuDrawerOpen}
                 onClose={() => setMenuDrawerOpen(false)}
