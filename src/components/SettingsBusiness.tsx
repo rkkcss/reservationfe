@@ -4,7 +4,6 @@ import SettingsBusinessData from './SettingsBusinessData'
 import { useCallback, useEffect, useState } from 'react'
 import { getBusinessByLoggedInUser } from '../helpers/queries/business-queries'
 import { Business } from '../helpers/types/Business'
-import SettingsCoverImage from './SettingsCoverImage'
 import SettingsThemeSelector from './SettingsThemeSelector'
 import { useAppSelector } from '../store/hooks'
 import BusinessOpeningHours from './BusinessOpeningHours/BusinessOpeningHours'
@@ -23,11 +22,11 @@ const SettingsBusiness = () => {
 
     }, [])
 
-    const setBusinessLogo = useCallback((logo: string) => {
-        setBusiness(prev => {
-            return { ...prev, logo: logo }
-        })
-    }, [])
+    // const setBusinessLogo = useCallback((logo: string) => {
+    //     setBusiness(prev => {
+    //         return { ...prev, logo: logo }
+    //     })
+    // }, [])
 
     const setBusinessTheme = useCallback((theme: string) => {
         setBusiness(prev => {
@@ -40,7 +39,7 @@ const SettingsBusiness = () => {
             key: "1",
             label: "Megjelenés",
             children: <>
-                <SettingsCoverImage imageURL={business.logo} setBusinessLogo={setBusinessLogo} />
+                {/* <SettingsCoverImage imageURL={business.logo} setBusinessLogo={setBusinessLogo} /> */}
                 <SettingsThemeSelector setBusinessTheme={setBusinessTheme} theme={business.theme} />
             </>
 
