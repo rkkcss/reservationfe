@@ -23,7 +23,6 @@ const BusinessServices = () => {
         fetchPage,
         fetchPrevPage,
         currentPage,
-        itemsPerPage,
         setRequestParams,
         loading
     } = usePagination<Offering[]>(
@@ -119,7 +118,6 @@ const BusinessServices = () => {
                                         fetchPage={fetchPage}
                                         fetchPrevPage={fetchPrevPage}
                                         totalItems={totalItems}
-                                        pageSize={itemsPerPage}
                                     />
                                 </div>
                             </>

@@ -23,7 +23,9 @@ export function usePagination<T>(
     const initialSort = queryParams.get("sort") || defaultSort;
 
     // State-ek
-    const [data, setData] = useState<T | null>(null);
+    const [data, setData] = useState<T>(
+        (Array.isArray([] as unknown as T) ? [] : {}) as T
+    );
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);

@@ -26,7 +26,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
 
     const handleSorting = (value: string) => {
         setParams(value);
-        fetchPage(0, value);
+        fetchPage(0);
     }
 
 
