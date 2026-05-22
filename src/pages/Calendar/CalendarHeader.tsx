@@ -45,34 +45,40 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
             <div className="flex items-center gap-4">
                 {
                     hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE) &&
-                    <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)} className="w-48">
-                        <Select.Option value="all" key="all">Összes megtekintése</Select.Option>
-                        {
-                            employees.map(employee => (
-                                <Select.Option value={employee.user.fullName} key={employee.id}>
-                                    <div className="flex items-center">
-                                        {
-                                            user?.fullName === employee.user.fullName &&
-                                            <strong className="mr-1">(Me) </strong>
-                                        }
-                                        {employee.user.fullName}
-                                    </div>
-                                </Select.Option>
-                            ))
-                        }
-                    </Select>
+                    <div className="flex flex-col">
+                        <label>Munkatárs:</label>
+                        <Select defaultValue={"all"} defaultActiveFirstOption onChange={(e) => handleEmployeeChange(e)} className="w-48">
+                            <Select.Option value="all" key="all">Összes megtekintése</Select.Option>
+                            {
+                                employees.map(employee => (
+                                    <Select.Option value={employee.user.fullName} key={employee.id}>
+                                        <div className="flex items-center">
+                                            {
+                                                user?.fullName === employee.user.fullName &&
+                                                <strong className="mr-1">(Me) </strong>
+                                            }
+                                            {employee.user.fullName}
+                                        </div>
+                                    </Select.Option>
+                                ))
+                            }
+                        </Select>
+                    </div>
                 }
-                <Select
-                    className="w-48"
-                    onSelect={handleViewChange}
-                    value={getCurrentView}
-                >
-                    {viewItems.map(item => (
-                        <Select.Option key={item.key} value={item.key}>
-                            {item.label}
-                        </Select.Option>
-                    ))}
-                </Select>
+                <div className="flex flex-col">
+                    <label>Nézet:</label>
+                    <Select
+                        className="w-48"
+                        onSelect={handleViewChange}
+                        value={getCurrentView}
+                    >
+                        {viewItems.map(item => (
+                            <Select.Option key={item.key} value={item.key}>
+                                {item.label}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
             </div>
             <div className="flex items-center gap-2">
                 <Button onClick={handleToday}>Ma</Button>

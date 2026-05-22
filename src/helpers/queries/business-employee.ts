@@ -1,7 +1,8 @@
 import API from "../../utils/API";
+import { BusinessEmployee } from "../types/BusinessEmployee";
 
 export const getEmployeesByBusinessId = (businessId: number) => {
-    return API.get(`/api/business-employee/business/${businessId}/employees`);
+    return API.get<BusinessEmployee[]>(`/api/business-employee/business/${businessId}/employees`);
 
 };
 

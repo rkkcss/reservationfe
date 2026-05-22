@@ -56,7 +56,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
             <Spin spinning={loading} indicator={<Loading size={30} />}>
                 <div className="flex flex-col gap-4 mt-8 max-h-[50vh] overflow-y-auto">
                     {
-                        data?.ratings.map(comment => (
+                        data.ratings?.map(comment => (
                             <div key={comment.id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-2">
