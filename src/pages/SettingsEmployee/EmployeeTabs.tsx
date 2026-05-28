@@ -4,12 +4,17 @@ import EmployeeInformations from './EmployeeInformations'
 import EmployeePermissions from './EmployeePermissions'
 import EmployeeOfferings from './EmployeeOfferings'
 import EmployeeWorkingHours from './EmployeeWorkingHours'
+import EmployeeStatus from './EmployeeStatus'
+import { useAppSelector } from '../../store/hooks'
+import { useBusinessEmployee } from '../../context/BusinessEmployeeContext'
 
 const { useBreakpoint } = Grid
 
 const EmployeeTabs = () => {
-    const screens = useBreakpoint()
+    const screens = useBreakpoint();
     const [activeKey, setActiveKey] = useState('info')
+    const { user } = useAppSelector(state => state.userStore);
+    const { businessEmployee } = useBusinessEmployee();
 
     const tabs = [
         {
@@ -31,8 +36,16 @@ const EmployeeTabs = () => {
             key: 'services',
             label: 'Szolgáltatások',
             children: <EmployeeOfferings />
+        },
+        {
+            key: 'status',
+            label: 'Státusz',
+            children: <EmployeeStatus />
         }
-    ]
+    ].filter(tab => {
+        if (tab.key === 'status' && user?.id === businessEmployee?.user?.id) return false;
+        return true;
+    });
 
     const activeTab = tabs.find(tab => tab.key === activeKey)
 

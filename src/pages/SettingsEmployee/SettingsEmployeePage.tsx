@@ -1,10 +1,11 @@
 
 import { useNavigate } from "react-router";
-import { Button } from "antd";
+import { Badge, Button } from "antd";
 import { FaChevronLeft } from "react-icons/fa";
 import EmployeeTabs from "./EmployeeTabs";
 import { useBusinessEmployee } from "../../context/BusinessEmployeeContext";
 import UserAvatar from "../../components/UserAvatar";
+import { employeeRolesExtended } from "../../helpers/types/BusinessEmployeeRole";
 
 const SettingsEmployeePage = () => {
     const { businessEmployee } = useBusinessEmployee();
@@ -23,10 +24,13 @@ const SettingsEmployeePage = () => {
                     <UserAvatar className="w-20 h-20" />
                     <div>
                         <p className="text-3xl">
-                            {businessEmployee?.user?.firstName} {businessEmployee?.user?.lastName}
+                            {businessEmployee.user.firstName} {businessEmployee.user.lastName}
                         </p>
                         <p>
-                            {businessEmployee?.role}
+                            <Badge
+                                count={employeeRolesExtended[businessEmployee.role].label}
+                                color={employeeRolesExtended[businessEmployee.role].color}
+                            />
                         </p>
                     </div>
                 </div>

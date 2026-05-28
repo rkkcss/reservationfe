@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { BusinessRatingSummary } from "../../helpers/types/BusinessRating";
 import { useAppSelector } from "../../store/hooks";
-import { Divider, Modal, Rate, Select, Spin } from "antd";
+import { Avatar, Divider, Modal, Rate, Select, Spin } from "antd";
 import dayjs from "dayjs";
 import { usePagination } from "../../hooks/usePagination";
 import CustomPagination from "../CustomPagination";
 import Loading from "../Loading";
-import { getInitials } from "../../helpers/NameShorter";
 
 type AllCommentsModalProps = {
     onClose: () => void;
@@ -60,9 +59,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
                             <div key={comment.id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-2">
-                                        <div className="size-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
-                                            {getInitials(comment.guest.name)}
-                                        </div>
+                                        <Avatar src={`https://ui-avatars.com/api/?name=${encodeURIComponent(comment.guest.name)}&background=random`} />
                                         <div>
                                             <p className="text-sm font-bold text-slate-900">{comment.guest.name}</p>
                                             <p className="text-[10px] text-slate-500">{dayjs(comment.createdAt).fromNow()}</p>
