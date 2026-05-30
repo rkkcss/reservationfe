@@ -20,7 +20,7 @@ export type State = {
     error: boolean;
     msg: string | null;
     theme: string;
-    selectedBusinessEmployee: BusinessEmployee | null;
+    selectedBusinessEmployee: BusinessEmployee;
 };
 
 const initialState: State = {
@@ -29,7 +29,7 @@ const initialState: State = {
     error: false,
     msg: "",
     theme: "light",
-    selectedBusinessEmployee: null,
+    selectedBusinessEmployee: {} as BusinessEmployee,
 };
 
 export const getAccountInfo = createAsyncThunk<User>(
@@ -113,8 +113,8 @@ const loginSlice = createSlice({
         setActiveBusinessEmployee(state, action: PayloadAction<BusinessEmployee>) {
             state.selectedBusinessEmployee = action.payload;
         },
-        setActiveBusinessEmployeeNull(state) {
-            state.selectedBusinessEmployee = null;
+        setActiveBusinessEmployeeDefault(state) {
+            state.selectedBusinessEmployee = {} as BusinessEmployee;
         },
         setImageUrl(state, action) {
             if (state.user) {
@@ -164,7 +164,7 @@ const loginSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.loading = false;
                 state.user = null;
-                state.selectedBusinessEmployee = null;
+                state.selectedBusinessEmployee = {} as BusinessEmployee;
                 notificationManager.success("success-logout", {
                     message: i18next.t("login-modal:logoutSuccessfully"),
                 });
@@ -180,6 +180,6 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeNull, increaseOnBoardingV } = loginSlice.actions;
+export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeDefault, increaseOnBoardingV } = loginSlice.actions;
 
 export default loginSlice.reducer;

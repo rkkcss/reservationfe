@@ -30,6 +30,7 @@ import EmployeeActivation from './pages/Activations/EmployeeActivation'
 import LoginModal from './components/Login/LoginModal'
 import OpeningHours from './components/OpeningHours'
 import OAuthSuccess from './utils/OAuthSuccess'
+import LoginLayout from './layout/LoginLayout'
 
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
@@ -62,7 +63,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_USER]} />}>
           <Route path="/choose-business" element={<ChooseBusiness />}></Route>
           <Route element={<RequireBusiness />}>
-            <Route element={<HomeLayout />} >
+            <Route element={<LoginLayout />} >
               <Route path="settings" element={<Settings />}>
                 <Route path="profile" element={<SettingsProfile />} />
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_SERVICES]} />} >
@@ -80,7 +81,9 @@ function App() {
                   <Route path="employee/:employeeId" element={<EmployeeLayout />} />
                 </Route>
               </Route>
-              <Route path="dashboard" element={<DashboardLayout />} />
+              <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS]} />}>
+                <Route path="dashboard" element={<DashboardLayout />} />
+              </Route>
               <Route path="calendar" element={<CalendarLayout />} />
               <Route path="guests" element={<SettingsGuests />} />
             </Route>

@@ -1,4 +1,4 @@
-import { Button, Select } from 'antd';
+import { Button, Radio, Select } from 'antd';
 import { useCallback, useMemo } from 'react'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useCalendar } from '../../context/CalendarContext';
@@ -6,6 +6,7 @@ import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
 import useSelectedEmployee from '../../hooks/useSelectedEmployee';
 import { BUSINESS_PERMISSIONS } from '../../helpers/types/BusinessPermission';
 import { useAppSelector } from '../../store/hooks';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
 
 type CalendarHeaderProps = {
     dateRange?: string;
@@ -27,22 +28,20 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
     const handlePrev = () => calendarRef.current?.getApi().prev();
     const handleToday = () => calendarRef.current?.getApi().today();
 
-    const viewItems = useMemo(() => [
+    const viewItems: CheckboxGroupProps<string>['options'] = useMemo(() => [
         {
-            key: 'timeGridWeek',
+            value: 'timeGridWeek',
             label: "Heti nézet",
-            onClick: () => handleViewChange('timeGridWeek'),
         },
         {
-            key: 'timeGridDay',
+            value: 'timeGridDay',
             label: "Napi nézet",
-            onClick: () => handleViewChange('timeGridDay'),
         },
     ], [handleViewChange, getCurrentView]);
 
     return (
         <div className="flex flex-col md:flex-row items-end gap-3 justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-end gap-4">
                 {
                     hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE) &&
                     <div className="flex flex-col">
@@ -65,20 +64,14 @@ const CalendarHeader = ({ dateRange, employees, handleEmployeeChange }: Calendar
                         </Select>
                     </div>
                 }
-                <div className="flex flex-col">
-                    <label>Nézet:</label>
-                    <Select
-                        className="w-48"
-                        onSelect={handleViewChange}
-                        value={getCurrentView}
-                    >
-                        {viewItems.map(item => (
-                            <Select.Option key={item.key} value={item.key}>
-                                {item.label}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+                <Radio.Group
+                    className="rounded-full!"
+                    options={viewItems} defaultValue=""
+                    onChange={(e) => handleViewChange(e.target.value)}
+                    optionType="button"
+                    value={getCurrentView}
+                    buttonStyle="solid"
+                />
             </div>
             <div className="flex items-center gap-2">
                 <Button onClick={handleToday}>Ma</Button>

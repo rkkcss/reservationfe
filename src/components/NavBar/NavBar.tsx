@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppDispatch, UserStore } from '../../store/store';
-import logo from '../../assets/logo.png';
 
 import LanguageSelector from './LanguageSelector';
 import { loginModal } from '../Login/loginModalController';
@@ -52,10 +51,11 @@ const NavBar = () => {
 
     return (
         <>
-            <Header className="bg-[#f1f5ff]/60 outline outline-1 outline-gray-300 backdrop-blur-xl shadow-xl mb-4 sticky top-0 z-20 px-1 sm:px-4 md:px-6">
+            <Header className="bg-white mb-4 sticky top-0 z-20 px-1 sm:px-4 md:px-6 border-b border-slate-200">
                 <ul className="flex gap-2 items-center h-full">
-                    <img src={logo} className="h-12 min-h-12 cursor-pointer" alt="logo" onClick={() => navigate('/')} />
 
+                    {/* TODO: implement logic for logo */}
+                    {/* <img src={logo} className="h-12 min-h-12 cursor-pointer" alt="logo" onClick={() => navigate('/')} /> */}
                     {filteredMenuItems.map(item => (
                         <li key={item.key} className="hidden md:block">
                             <NavLink
@@ -80,9 +80,6 @@ const NavBar = () => {
                                 </Button>
                             </li>
                             <li className="md:block hidden">
-                                {/* <Dropdown arrow menu={{ items: threeDotMenuItems(t) }} trigger={['click']}>
-                                    <BsThreeDots size="1.5rem" onClick={(e) => e.preventDefault()} className="cursor-pointer" />
-                                </Dropdown> */}
                                 <Button type="text" onClick={() => navigate("/register")}>
                                     {t("register")}
                                 </Button>

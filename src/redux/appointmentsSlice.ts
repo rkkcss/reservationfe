@@ -12,7 +12,7 @@ import { Appointment, APPOINTMENT_STATUSES } from '../helpers/types/Appointment'
 import { notification } from 'antd';
 import dayjs from 'dayjs';
 import { UserStore } from '../store/store';
-import { logoutUser, setActiveBusinessEmployeeNull } from './userSlice';
+import { logoutUser, setActiveBusinessEmployeeDefault } from './userSlice';
 
 export type AppointmentsState = {
     pendingAppointments: Appointment[],
@@ -172,7 +172,7 @@ const appointmentsSlice = createSlice({
                 state.appointments = [];
                 state.pendingAppointments = [];
             })
-            .addCase(setActiveBusinessEmployeeNull, (state) => {
+            .addCase(setActiveBusinessEmployeeDefault, (state) => {
                 state.appointments = [];
                 state.pendingAppointments = [];
             })
