@@ -1,5 +1,6 @@
 {
     "success.created": "Sikeresen létrehozva",
     "success.updated": "Sikeresen frissítve",
-    "success.deleted": "Sikeresen törölve"
+    "success.deleted": "Sikeresen törölve",
+    "incorrect-password": "Helytelen jelszó"
 }

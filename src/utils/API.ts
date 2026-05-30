@@ -147,7 +147,7 @@ API.interceptors.response.use(
         // Any another error
         if (messageKey) {
             notificationManager.error(`error-${status}`, {
-                message: i18n.t(messageKey),
+                message: i18n.t(`server-response:${messageKey}`),
                 duration: 4
             });
         } else {

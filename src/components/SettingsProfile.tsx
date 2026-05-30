@@ -1,6 +1,7 @@
 import ChangeName from './ChangeName'
 import ChangeLoginName from './ChangeLoginName';
 import { useAppSelector } from '../store/hooks';
+import ChangePassword from './ChangePassword';
 
 const SettingsProfile = () => {
     const { user } = useAppSelector(state => state.userStore)
@@ -13,6 +14,9 @@ const SettingsProfile = () => {
             </div>
             <div className="bg-white rounded-lg shadow-md p-4 mt-6">
                 <ChangeLoginName login={user?.login} />
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-4 mt-6">
+                <ChangePassword />
             </div>
         </div>
     )

@@ -16,3 +16,7 @@ export const patchUserLogin = (login: string) => {
 export const increaseOnboardingVersion = () => {
     return API.patch("/api/account/tutorial/done");
 }
+
+export const changePassword = ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }) => {
+    return API.post("/api/account/change-password", { currentPassword, newPassword });
+}
