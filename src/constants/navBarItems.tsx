@@ -5,7 +5,7 @@ import { MdOutlineLibraryBooks } from 'react-icons/md';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Authorities } from '../helpers/types/Authorities';
 import { AppDispatch } from '../store/store';
-import { logoutUser, setActiveBusinessEmployeeNull } from '../redux/userSlice';
+import { logoutUser, setActiveBusinessEmployeeDefault } from '../redux/userSlice';
 import { LiaIndustrySolid } from 'react-icons/lia';
 import { PiUsersFourBold } from 'react-icons/pi';
 import { FiHome } from 'react-icons/fi';
@@ -24,13 +24,6 @@ export interface MenuItem {
 export const menuItems = (
     t: (key: string) => string,
 ): MenuItem[] => [
-        {
-            key: 'dashboard',
-            label: t('dashboard'),
-            roles: [Authorities.ROLE_USER],
-            link: 'dashboard',
-            isBeta: true,
-        },
         {
             key: 'home',
             label: t('home'),
@@ -65,7 +58,7 @@ export const menuItems = (
     ];
 
 const handleAccountChangeBusiness = (dispatch: AppDispatch, navigate: (path: string, options?: { replace: boolean }) => void) => {
-    dispatch(setActiveBusinessEmployeeNull());
+    dispatch(setActiveBusinessEmployeeDefault());
     navigate('/choose-business', { replace: true });
 }
 

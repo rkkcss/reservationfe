@@ -129,7 +129,7 @@ const CalendarPage = () => {
             <div className="mt-4">
                 <PendingAppointments />
             </div>
-            <div className="py-4 mt-7 rounded-xl">
+            <div className="pb-4 rounded-xl">
                 <CalendarHeader dateRange={dateRange} employees={employees} handleEmployeeChange={handleEmployeeChange} />
             </div>
 

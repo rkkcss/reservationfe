@@ -98,6 +98,7 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
                 footer={null}
                 onCancel={onClose}
                 destroyOnClose
+                className="add-appointment-steps"
             >
                 <Steps current={current} size="small" style={{ marginBottom: 24 }} labelPlacement="vertical">
                     {steps.map((item) => (
