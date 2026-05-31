@@ -2,5 +2,6 @@
     "success.created": "Sikeresen létrehozva",
     "success.updated": "Sikeresen frissítve",
     "success.deleted": "Sikeresen törölve",
-    "incorrect-password": "Helytelen jelszó"
+    "incorrect-password": "Helytelen jelszó",
+    "password-reset-not-fit": "A link lejárt vagy helytelen"
 }

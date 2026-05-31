@@ -2,5 +2,6 @@
     "success.created": "Successfully created",
     "success.updated": "Successfully updated",
     "success.deleted": "Successfully deleted",
-    "incorrect-password": "Incorrect password"
+    "incorrect-password": "Incorrect password",
+    "password-reset-not-fit": "The link has expired or incorrect."
 }
