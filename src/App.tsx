@@ -31,6 +31,8 @@ import LoginModal from './components/Login/LoginModal'
 import OpeningHours from './components/OpeningHours'
 import OAuthSuccess from './utils/OAuthSuccess'
 import LoginLayout from './layout/LoginLayout'
+import PasswordResetRequest from './pages/PasswordReset/PasswordResetRequest'
+import PasswordResetFinish from './pages/PasswordReset/PasswordResetFinish'
 
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
@@ -91,6 +93,8 @@ function App() {
         </Route>
         <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route path="/account/activate" element={<RegisterActivation />} />
+        <Route path="/account/reset/init" element={<PasswordResetRequest />} />
+        <Route path="/account/reset/finish" element={<PasswordResetFinish />} />
         {/* ADMIN ROUTE */}
 
         <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_ADMIN]} />}>

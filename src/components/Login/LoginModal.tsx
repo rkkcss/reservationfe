@@ -68,6 +68,11 @@ const LoginModal = () => {
         window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`;
     };
 
+    const navigateAndCloseModal = (url: string) => {
+        loginModal.close();
+        navigate(url);
+    };
+
     return (
         <Modal
             open={isOpen}
@@ -83,7 +88,7 @@ const LoginModal = () => {
             {errorMsg &&
                 <Alert showIcon className="my-4" type="error" message={errorMsg} />
             }
-            <Form form={form} layout="vertical" onFinish={submitLogin} className={`${!errorMsg && 'pt-4'} px-1`}>
+            <Form form={form} layout="vertical" onFinish={submitLogin} >
                 <Form.Item name="username" label={t("username")}
                     rules={[{ required: true, message: t("required") }]}
                 >
@@ -103,8 +108,10 @@ const LoginModal = () => {
                     </Button>
                 </div>
             </Form>
+            <Button type="default" className="w-full mt-4 mb-6" onClick={() => navigateAndCloseModal("/account/reset/init")}>{t("forgotPassword")}</Button>
+
             <div className="mt-4 text-center text-sm">
-                <Typography.Link onClick={handleNavigateRegister} className="">
+                <Typography.Link onClick={handleNavigateRegister}>
                     {t("dontHaveAccountLink")}
                 </Typography.Link>
             </div>
