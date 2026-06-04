@@ -6,6 +6,7 @@ import { ConfigProvider } from "antd";
 import { AliasToken } from "antd/es/theme/internal";
 
 type CustomTheme = {
+    selectorBg: string;
     token: Partial<AliasToken>;
     background: string;
     backgroundColor: string;
@@ -20,80 +21,119 @@ type CustomTheme = {
     primaryButtonColorHover: string;
     secondaryButtonColor: string;
     secondaryButtonTextColor: string;
+    optionActiveBg: string;
+    optionSelectedBg: string;
 };
 
 const themes: Record<string, CustomTheme> = {
     blue: {
         token: {
             colorPrimary: '#1e90ff',
+            colorBgContainer: 'transparent',
+            colorText: '#64748b', // selectedTheme.secondaryTextColor megfelelője
+            colorBgElevated: '#ffffff', // a lenyíló lista háttere kék témánál fehér
         },
+        selectorBg: '#ffffff',
+        optionActiveBg: '#e6f7ff', // finom kék hover a listában
+        optionSelectedBg: '#bae7ff', // erősebb kék kijelölés a listában
         backgroundColor: '#f0f2f5',
         background: 'bg-gradient-to-br from-sky-300 via-blue-200 to-cyan-300',
-        headerText1Color: "",
-        pTextColor: "",
-        borderColor: "",
-        cardBgColor: "",
-        primaryTextColor: "",
-        secondaryTextColor: "",
+        headerText1Color: "#002c6d",
+        pTextColor: "#334155",
+        borderColor: "#cbd5e1",
+        cardBgColor: "#ffffff",
+        primaryTextColor: "#1e293b",
+        secondaryTextColor: "#64748b",
         primaryButtonColor: "#1e90ff",
         primaryButtonTextColor: "#fff",
-        primaryButtonColorHover: "#1e90ff",
-        secondaryButtonColor: "#1e90ff",
-        secondaryButtonTextColor: "#fff",
+        primaryButtonColorHover: "#187bcd",
+        secondaryButtonColor: "#ffffff",
+        secondaryButtonTextColor: "#1e90ff",
     },
     pink: {
         token: {
             colorPrimary: '#d63384',
+            colorBgContainer: 'transparent',
+            colorText: '#6b21a8', // selectedTheme.secondaryTextColor megfelelője
+            colorBgElevated: '#ffffff',
         },
+        selectorBg: '#ffffff',
+        optionActiveBg: '#fce4ec', // finom pink hover a listában
+        optionSelectedBg: '#f8bbd0', // erősebb pink kijelölés a listában
         backgroundColor: '#fce4ec',
         background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
-        headerText1Color: "",
-        pTextColor: "",
-        borderColor: "border-pink-300",
-        cardBgColor: "",
-        primaryTextColor: "",
-        secondaryTextColor: "",
+        headerText1Color: "#4a0033",
+        pTextColor: "#4f46e5",
+        borderColor: "#f9a8d4",
+        cardBgColor: "rgba(255, 255, 255, 0.8)",
+        primaryTextColor: "#2e0854",
+        secondaryTextColor: "#6b21a8",
         primaryButtonColor: "#d63384",
         primaryButtonTextColor: "#fff",
-        primaryButtonColorHover: "#d63384",
+        primaryButtonColorHover: "#b8266e",
         secondaryButtonColor: "#f2f2f2",
         secondaryButtonTextColor: "#212121",
     },
     black: {
         token: {
             colorPrimary: '#E2E5E9',
+            colorBgContainer: '#262626',      // Az input mezők belső sötét háttere
+            colorBgElevated: '#1d1d1f',       // A Modal fő háttere (ez már jó a képeden)
+            colorText: '#ffffff',             // Fő szövegszínek
+            colorTextHeading: '#ffffff',      // Modal címe és aktív lépések címe
+
+            // --- ÚJ FIXEK A KÉP ALAPJÁN ---
+            colorTextDescription: '#e5e7eb',  // A Steps (lépésjelző) szövegeinek a színe
+            colorTextDisabled: '#6b7280',     // Az inaktív lépések számai (2, 3, 4) és vonalai láthatóbbak lesznek
+            colorTextPlaceholder: '#6b7280',  // Az Input mezők placeholder szövege ("Vendég neve...")
+            colorIcon: '#A0A5AD',             // A Modal bezáró (X) gombjának a színe
+            colorIconHover: '#ffffff',        // Bezáró gomb hover színe
+            colorTextQuaternary: '#4b5563',   // EZ A LÉNYEG: az inaktív lépések számai (3, 4) és a köztük lévő vonalak színe
+            colorTextTertiary: '#9ca3af',
         },
-        backgroundColor: '#1f1f1f',
-        background: 'bg-gradient-to-br from-gray-800 via-purple-800 to-black',
-        headerText1Color: "",
+        // Közvetlenül a gyökérben lévő dropdown kulcsaid:
+        selectorBg: '#262626',
+        optionActiveBg: '#3f3f46',
+        optionSelectedBg: '#4b5563',
+
+        backgroundColor: '#141414',
+        background: 'bg-gradient-to-br from-gray-900 via-purple-950 to-black',
+        headerText1Color: "#ffffff",
         pTextColor: "#E2E5E9",
-        borderColor: "transparent",
-        cardBgColor: "#333334",
-        primaryTextColor: "#E2E5E9",
-        secondaryTextColor: "#B0B3B8",
-        primaryButtonColor: "#1f1f1f",
+        borderColor: "rgba(255, 255, 255, 0.15)",
+        cardBgColor: "#1d1d1f",
+        primaryTextColor: "#ffffff",
+        secondaryTextColor: "#A0A5AD",
+        primaryButtonColor: "#262626",
         primaryButtonTextColor: "#E2E5E9",
-        primaryButtonColorHover: "#333334",
-        secondaryButtonColor: "rgba(252, 252, 252, 0.2)",
-        secondaryButtonTextColor: "#fcfcfc",
+        primaryButtonColorHover: "#3f3f46",
+        secondaryButtonColor: "rgba(255, 255, 255, 0.08)",
+        secondaryButtonTextColor: "#E2E5E9",
     },
     orange: {
         token: {
             colorPrimary: '#fa8c16',
+            colorBgContainer: 'transparent',
+            colorText: '#8c8c8c', // selectedTheme.secondaryTextColor megfelelője
+            colorBgElevated: '#ffffff',
         },
+        selectorBg: '#ffffff',
+        optionActiveBg: '#fff7e6', // finom narancs hover a listában
+        optionSelectedBg: '#ffe7ba', // erősebb narancs kijelölés a listában
+
         backgroundColor: '#fff7e6',
         background: 'bg-gradient-to-br from-orange-400 via-yellow-300 to-pink-300',
-        headerText1Color: "",
-        pTextColor: "",
-        borderColor: "border-orange-400",
-        cardBgColor: "",
-        primaryTextColor: "",
-        secondaryTextColor: "",
+        headerText1Color: "#612500",
+        pTextColor: "#434343",
+        borderColor: "#ffd591",
+        cardBgColor: "#ffffff",
+        primaryTextColor: "#262626",
+        secondaryTextColor: "#8c8c8c",
         primaryButtonColor: "#fa8c16",
         primaryButtonTextColor: "#fff",
-        primaryButtonColorHover: "#fa8c16",
-        secondaryButtonColor: "#fa8c16",
-        secondaryButtonTextColor: "#fff",
+        primaryButtonColorHover: "#d46b08",
+        secondaryButtonColor: "#ffffff",
+        secondaryButtonTextColor: "#fa8c16",
     },
 };
 type ConfigProviderBusinessContextType = {
@@ -166,12 +206,12 @@ export const ConfigProviderBusinessProvider = ({ children }: { children: ReactNo
                             colorBgTextActive: "yellow"
                         },
                         Select: {
-                            // colorBgContainer: "transparent",
-                            // colorPrimary: "yellow",
-                            // colorText: selectedTheme.secondaryTextColor,
-                            // // selectorBg: "black",
-                            // optionActiveBg: "yellow",
-                            // optionSelectedBg: "black",
+                            colorBgContainer: selectedTheme.token.colorBgContainer,
+                            colorPrimary: selectedTheme.token.colorText,
+                            colorText: selectedTheme.secondaryTextColor,
+                            selectorBg: selectedTheme.selectorBg,
+                            optionActiveBg: selectedTheme.optionActiveBg,
+                            optionSelectedBg: selectedTheme.optionSelectedBg,
                         },
                         Button: {
                             //default button

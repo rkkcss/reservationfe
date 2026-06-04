@@ -42,7 +42,7 @@ const ChooseBusiness = () => {
 
     const handleSelectBusinessEmployee = (businessEmployee: BusinessEmployee) => {
         dispatch(setActiveBusinessEmployee(businessEmployee));
-        navigate("/dashboard");
+        navigate("/calendar");
     }
 
     const handleOnApprove = (invitation: BusinessEmployeeInvite) => {
@@ -74,6 +74,10 @@ const ChooseBusiness = () => {
                     <Spin spinning={loading} indicator={<Loading size={30} />}>
                         <div>
                             <div className="p-6 shadow-lg rounded-lg bg-white w-full md:w-[600px]">
+                                {
+                                    businessEmployees.length === 0 &&
+                                    <Alert className="mb-2" showIcon message={"Nem tartozol meg egy vállalkozáshoz sem."} />
+                                }
                                 {
                                     businessEmployees.length > 0 &&
                                     <ul className="flex flex-col gap-4">

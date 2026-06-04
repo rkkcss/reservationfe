@@ -12,6 +12,21 @@ export const APPOINTMENT_STATUSES = {
 export type AppointmentStatus =
     typeof APPOINTMENT_STATUSES[keyof typeof APPOINTMENT_STATUSES];
 
+export const APPOINTMENT_STATUSES_EXTENDED: Record<string, { label: string; color: string }> = {
+    [APPOINTMENT_STATUSES.PENDING]: {
+        label: "Elfogadásra vár",
+        color: "gray",
+    },
+    [APPOINTMENT_STATUSES.CONFIRMED]: {
+        label: "Elfogadva",
+        color: "green",
+    },
+    [APPOINTMENT_STATUSES.CANCELLED]: {
+        label: "Elutasítva",
+        color: "red",
+    },
+} as const;
+
 export type Appointment = {
     id: number | null;
     startDate?: Date | Dayjs | string;

@@ -1,15 +1,27 @@
-import { Badge, Button, Divider, Image, Menu } from 'antd'
+import { Badge, Button, Divider, Image, Menu, Popover } from 'antd'
 import { useNavigate } from 'react-router';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import logo from '../../assets/logo.png';
 import UserAvatar from '../UserAvatar';
-import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
+import { BUSINESS_EMPLOYEE_ROLE, employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
 import { useLeftNavbar } from './useLeftNavbar';
+import { RiSpaceShipLine } from 'react-icons/ri';
+import { useState } from 'react';
+import { logoutUser, setActiveBusinessEmployeeDefault } from '../../redux/userSlice';
+import { LiaIndustrySolid } from 'react-icons/lia';
+import { IoLogOutOutline } from 'react-icons/io5';
 
 const LeftNavbar = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const filteredSettingsMenu = useLeftNavbar();
     const { user, selectedBusinessEmployee } = useAppSelector(state => state.userStore);
+    const [popoverOpen, setPopoverOpen] = useState(false);
+
+    const handleAccountChangeBusiness = (navigate: (path: string, options?: { replace: boolean }) => void) => {
+        dispatch(setActiveBusinessEmployeeDefault());
+        navigate('/choose-business', { replace: true });
+    }
 
     return (
         <div className="relative">
@@ -20,20 +32,44 @@ const LeftNavbar = () => {
                 </div>
                 <Menu
                     items={filteredSettingsMenu}
-                    className="!border-none rounded-xl w-64"
+                    className="!border-none rounded-xl overflow-y-auto w-full"
                 />
-                <div className="block mt-auto mb-0 px-4">
+                <div className="block mt-auto mb-0 px-4 pb-4">
                     <Divider />
-                    <Button size="large" type="text" className="flex w-full h-fit py-1 px-1 gap-2 text-left justify-start items-center">
-                        <UserAvatar />
-                        <div>
-                            <p className="text-sm font-semibold">{user?.fullName}</p>
-                            <Badge color={employeeRolesExtended[selectedBusinessEmployee?.role].color}
-                                count={employeeRolesExtended[selectedBusinessEmployee?.role].label}
-                            />
-                        </div>
+                    <Popover
+                        open={popoverOpen}
+                        onOpenChange={(open) => setPopoverOpen(open)}
+                        content={
+                            <div className="flex flex-col">
+                                <Button type="text" className="!text-left justify-start" icon={<LiaIndustrySolid size={20} />} onClick={() => handleAccountChangeBusiness(navigate)}>Fiók váltás</Button>
+                                <Button type="text" danger className=" mt-2" icon={<IoLogOutOutline size={20} />} onClick={() => dispatch(logoutUser())}>Kijelentkezés</Button>
+                            </div>
+                        }
+                        placement={"right"}
+                        trigger="click"
+                    >
+                        <Button size="large" type="text" className="flex w-full h-fit py-1 px-1 gap-2 text-left justify-start items-center">
+                            <UserAvatar />
+                            <div>
+                                <p className="text-sm font-semibold">{user?.fullName}</p>
+                                <Badge color={employeeRolesExtended[selectedBusinessEmployee?.role].color}
+                                    count={employeeRolesExtended[selectedBusinessEmployee?.role].label}
+                                />
+                                {
+                                    BUSINESS_EMPLOYEE_ROLE.OWNER === selectedBusinessEmployee.role &&
+                                    <Badge color={"cyan"}
+                                        count={"Próba időszak"}
+                                        className="ml-2"
+                                    />
+                                }
+                            </div>
+                        </Button>
+                    </Popover>
+                    <Button type="primary" className="!w-full mt-6">
+                        <RiSpaceShipLine className="text-xl" />
+                        Upgrade
                     </Button>
-                    <Button type="text" danger className="!w-full my-4" onClick={() => navigate('/logout')}>Kijelentkezés</Button>
+
                 </div>
             </div>
         </div>

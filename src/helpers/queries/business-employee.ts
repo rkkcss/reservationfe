@@ -9,3 +9,7 @@ export const getEmployeesByBusinessId = (businessId: number) => {
 export const getCurrentBusinessEmployeeOptions = () => {
     return API.get("/api/business-employee/current");
 }
+
+export const changeBusinessEmployeeStatus = ({ employeeId, status }: { employeeId: number, status: boolean }) => {
+    return API.patch(`/api/business-employee/${employeeId}/status`, status);
+}

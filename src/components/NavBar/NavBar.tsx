@@ -1,22 +1,20 @@
 // components/NavBar/NavBar.tsx
-import { Badge, Button, Dropdown, MenuProps } from 'antd';
+import { Badge, Button } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { AppDispatch, UserStore } from '../../store/store';
+import { UserStore } from '../../store/store';
 
 import LanguageSelector from './LanguageSelector';
 import { loginModal } from '../Login/loginModalController';
-import { menuItems, userMenuItems } from '../../constants/navBarItems';
+import { menuItems } from '../../constants/navBarItems';
 import { IoMenu } from 'react-icons/io5';
 import MobileMainMenu from './MobileMainMenu';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import UserAvatar from '../UserAvatar';
+import GlobalSearch from '../GlobalSearch/GlobalSearch';
 
 const NavBar = () => {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { t } = useTranslation("nav-bar");
     const { user } = useSelector((state: UserStore) => state.userStore);
@@ -31,23 +29,6 @@ const NavBar = () => {
             }
             return item.roles.some(role => userRoles.includes(role));
         });
-
-    const profileMenuItems: MenuProps['items'] = userMenuItems(t, navigate, dispatch)
-        .filter(item => item?.roles?.some(role => userRoles.includes(role)))
-        .map(item => {
-            if (item.type === 'divider') {
-                return { type: 'divider' as const };
-            }
-
-            return {
-                key: item.key!,
-                icon: item.icon,
-                label: item.label!,
-                onClick: item.onClick,
-                isBeta: item.isBeta,
-            };
-        });
-
 
     return (
         <>
@@ -74,7 +55,8 @@ const NavBar = () => {
 
                     {!user ? (
                         <>
-                            <li className="ml-auto">
+                            <div className="ml-auto mr-0" />
+                            <li className="">
                                 <Button type="primary" onClick={() => loginModal.open()}>
                                     {t('login')}
                                 </Button>
@@ -86,33 +68,11 @@ const NavBar = () => {
                             </li>
                         </>
                     ) : (
-                        <>
-                            {/* <li className="ml-auto p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full cursor-pointer relative">
-                                <NotificationDropDown />
-                            </li> */}
-                            <li className="ml-auto p-[3px] hover:text-primary hover:bg-slate-200 transition rounded-full relative">
-                                <Dropdown
-                                    arrow={{ pointAtCenter: true }}
-                                    placement="bottomRight"
-                                    menu={{ items: profileMenuItems }}
-                                    trigger={['click']}>
-                                    <div className="flex items-center gap-0.5 cursor-pointer">
-                                        <UserAvatar size={28} />
-                                        <IoMdArrowDropdown size={14} className=" group-hover:text-primary mt-1" />
-                                    </div>
-                                </Dropdown>
-                            </li>
-                        </>
+                        <GlobalSearch />
                     )}
-
-                    {/* <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
-
-                    </li> */}
-
-                    <li className="p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
+                    <li className="md:block hidden p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
                         <LanguageSelector />
                     </li>
-
                     <div className="md:hidden">
                         <IoMenu size="1.5rem" className="cursor-pointer" onClick={() => setMenuDrawerOpen(true)} />
                     </div>

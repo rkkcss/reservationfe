@@ -34,7 +34,7 @@ export const BusinessEmployeeProvider = ({ children }: { children: ReactNode }) 
     }, [employeeId]);
 
     return (
-        <Spin spinning={isLoading} indicator={<Loading size={30} />}>
+        <Spin spinning={isLoading} indicator={<Loading size={30} />} wrapperClassName="w-full">
             {businessEmployee && (
                 <BusinessEmployeeContext.Provider value={{ businessEmployee }}>
                     {children}

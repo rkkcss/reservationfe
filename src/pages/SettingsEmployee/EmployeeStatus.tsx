@@ -2,15 +2,17 @@ import { Alert, Modal, Switch } from 'antd'
 import { useBusinessEmployee } from '../../context/BusinessEmployeeContext'
 import { BASIC_ENTITY_STATUSES } from '../../helpers/types/BasicEntityStatus';
 import { useState } from 'react';
+import { changeBusinessEmployeeStatus } from '../../helpers/queries/business-employee';
 
 const EmployeeStatus = () => {
     const { businessEmployee } = useBusinessEmployee();
     const [isChecked, setIsChecked] = useState(businessEmployee?.status === BASIC_ENTITY_STATUSES.ACTIVE);
 
-    const handleStatusChange = () => {
+    const handleStatusChange = (e: boolean) => {
         Modal.confirm({
             content: "Biztosan meg szeretne változtatni az alkalmazott akkalmazott állapotot?",
             onOk: () => {
+                changeBusinessEmployeeStatus({ employeeId: businessEmployee.id, status: e });
                 setIsChecked(!isChecked);
             }
         });
@@ -26,7 +28,7 @@ const EmployeeStatus = () => {
                     unCheckedChildren="Inaktív"
                     checked={isChecked}
                     className="w-fit"
-                    onClick={() => handleStatusChange()}
+                    onClick={(e) => handleStatusChange(e)}
                 />
             </div>
         </>

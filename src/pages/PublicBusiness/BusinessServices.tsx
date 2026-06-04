@@ -77,7 +77,7 @@ const BusinessServices = () => {
                     <div className='flex flex-col'>
                         <label className="font-semibold text-xs"
                             style={{ color: selectedTheme.secondaryTextColor }}
-                        >Szűrés alkalmazottra:</label>
+                        >Alkalmazottak</label>
                         <Select
                             value={selectedEmployee}
                             onChange={handleEmployeeFilter}

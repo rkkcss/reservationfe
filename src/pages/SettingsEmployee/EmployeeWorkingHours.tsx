@@ -21,7 +21,7 @@ const EmployeeWorkingHours = () => {
             return { ...item, startTime: formattedStartTime, endTime: formattedEndTime };
         });
 
-        updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(businessEmployee?.user.id), formattedOpeningHours)
+        updateWorkingHours(Number(selectedBusinessEmployee?.business.id), Number(businessEmployee?.id), formattedOpeningHours)
             .then(res => {
                 console.log(res);
             });
