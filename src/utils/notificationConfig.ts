@@ -11,7 +11,7 @@ notification.config({
     maxCount: 1,
     rtl: false,
 });
-type NotificationConfig = Omit<ArgsProps, 'key' | 'type'> & { message: React.ReactNode };
+type NotificationConfig = Omit<ArgsProps, 'key' | 'type'> & { title: React.ReactNode };
 // Notification manager - manage multiple notifications
 class NotificationManager {
     private currentKey: string | null = null;

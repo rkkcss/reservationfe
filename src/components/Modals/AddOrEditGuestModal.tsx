@@ -20,7 +20,7 @@ const AddOrEditGuestModal = ({ open, onClose, guest, onOk }: AddOrEditGuestModal
     };
 
     return (
-        <Modal onCancel={onClose} open={open} title={guest?.id ? "Vendég szerkesztése" : "Új vendég hozzáadása"} footer={null} destroyOnClose>
+        <Modal onCancel={onClose} open={open} title={guest?.id ? "Vendég szerkesztése" : "Új vendég hozzáadása"} footer={null} destroyOnHidden>
             <Form layout="vertical" onFinish={onFinish}
                 className="mt-5"
                 initialValues={guest}

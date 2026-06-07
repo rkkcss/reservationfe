@@ -68,7 +68,7 @@ API.interceptors.response.use(
                 const message = config.successMessage || (method ? defaultMessages[method] : undefined) || i18n.t('success.default');
 
                 notificationManager.success(`success-${method}-${Date.now()}`, {
-                    message: message,
+                    title: message,
                     duration: 3
                 });
             }
@@ -84,7 +84,7 @@ API.interceptors.response.use(
         // 401 - Unauthorized
         if (status === 401) {
             notificationManager.warning('unauthorized', {
-                message: i18n.t('session.expired'),
+                title: i18n.t('session.expired'),
                 description: i18n.t('session.expired.description'),
                 duration: 3
             });
@@ -102,7 +102,7 @@ API.interceptors.response.use(
         // 403 - Forbidden
         if (status === 403) {
             notificationManager.error('forbidden', {
-                message: messageKey ? i18n.t(messageKey) : i18n.t('error.forbidden'),
+                title: messageKey ? i18n.t(messageKey) : i18n.t('error.forbidden'),
                 description: i18n.t('error.forbidden.description'),
                 duration: 4
             });
@@ -114,7 +114,7 @@ API.interceptors.response.use(
         if (status === 404) {
             if (error.config?.showNotFoundNotification) {
                 notificationManager.error('not-found', {
-                    message: messageKey ? i18n.t(messageKey) : i18n.t('error.not.found'),
+                    title: messageKey ? i18n.t(messageKey) : i18n.t('error.not.found'),
                     duration: 3
                 });
             }
@@ -125,7 +125,7 @@ API.interceptors.response.use(
         // 500+ - Server Error
         if (status >= 500) {
             notificationManager.error('server-error', {
-                message: i18n.t('error.server'),
+                title: i18n.t('error.server'),
                 description: messageKey ? i18n.t(messageKey) : i18n.t('error.server.description'),
                 duration: 4
             });
@@ -136,7 +136,7 @@ API.interceptors.response.use(
         // Network Error
         if (!error.response) {
             notificationManager.error('network-error', {
-                message: i18n.t('error.network'),
+                title: i18n.t('error.network'),
                 description: i18n.t('error.network.description'),
                 duration: 4
             });
@@ -147,12 +147,12 @@ API.interceptors.response.use(
         // Any another error
         if (messageKey) {
             notificationManager.error(`error-${status}`, {
-                message: i18n.t(`server-response:${messageKey}`),
+                title: i18n.t(`server-response:${messageKey}`),
                 duration: 4
             });
         } else {
             notificationManager.error('unknown-error', {
-                message: i18n.t('error.unknown'),
+                title: i18n.t('error.unknown'),
                 duration: 4
             });
         }

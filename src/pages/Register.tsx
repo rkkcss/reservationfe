@@ -31,7 +31,7 @@ const Register = () => {
                 console.log('Registration successful:', response);
                 if (response.status === 201) {
                     form.resetFields();
-                    notificationManager.success("registration-success", { message: t("registrationSuccess"), duration: 10 });
+                    notificationManager.success("registration-success", { title: t("registrationSuccess"), duration: 10 });
                     navigate("/home", { state: { openLogin: true } })
                 }
             })

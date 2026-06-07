@@ -19,7 +19,7 @@ const Home = () => {
 
     const handleNavigateRegister = () => {
         if (user) {
-            notificationManager.show("info", "already-logged-in", { message: "Be vagy jelentkezve", description: "Kijelentkezés után tudsz regisztrálni újra." });
+            notificationManager.show("info", "already-logged-in", { title: "Be vagy jelentkezve", description: "Kijelentkezés után tudsz regisztrálni újra." });
             return;
         };
         navigate("/register");

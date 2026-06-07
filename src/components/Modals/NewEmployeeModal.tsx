@@ -22,7 +22,7 @@ const NewEmployeeModal = ({ onCancel }: NewEmployeeModalProps) => {
             })
             .catch((error: AxiosError) => {
                 console.log(error)
-                notificationManager.error("employee-invite-create-failed", { message: error.message });
+                notificationManager.error("employee-invite-create-failed", { title: error.message });
             });
     }
 

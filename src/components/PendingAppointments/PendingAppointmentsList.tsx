@@ -12,7 +12,7 @@ const PendingAppointmentsList = ({ open, onClose }: PendingAppointmentsListProps
     const { pendingAppointments } = useAppSelector((state) => state.appointmentStore);
 
     return (
-        <Drawer open={open} title="Függőben lévő időpontok" placement="right" width={800} onClose={onClose} destroyOnClose>
+        <Drawer open={open} title="Függőben lévő időpontok" placement="right" width={800} onClose={onClose} destroyOnHidden>
             <ul>
                 {pendingAppointments.map((appointment) => (
                     <PendingAppointment key={appointment.id} appointment={appointment} />

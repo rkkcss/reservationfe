@@ -12,12 +12,11 @@ const EmployeeList = () => {
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
     const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/business/' + selectedBusinessEmployee.business.id + '/employees');
 
-
     const dataColumns = [
         {
             title: 'Nev',
             key: "id",
-            render: (_: string, record: BusinessEmployee) => `${record.user.firstName} ${record.user.lastName}`
+            render: (_: string, record: BusinessEmployee) => `${record.user.fullName}`
         },
         {
             title: 'Email',

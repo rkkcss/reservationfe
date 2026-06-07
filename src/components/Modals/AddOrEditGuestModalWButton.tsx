@@ -27,7 +27,7 @@ const AddOrEditGuestModalWButton = ({ afterSubmit }: AddOrEditGuestModalWButtonP
         <>
             <AddOrEditGuestModal onOk={handleGuestSubmit} onClose={() => setAddGuestModal(false)} open={addGuestModal} guest={{} as Guest} />
             <Tooltip title="Új vendég hozzáadása">
-                <Button className="mt-1.5" onClick={() => setAddGuestModal(true)} shape="default" size="large">
+                <Button className="mt-1.5" onClick={() => setAddGuestModal(true)} size="large">
                     <FiUserPlus size={20} />
                 </Button>
             </Tooltip>

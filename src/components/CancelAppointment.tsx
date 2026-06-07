@@ -42,14 +42,14 @@ const CancelAppointment = () => {
         setCancelLoading(true);
         cancelAppointmentByGuestWithToken(modifierToken)
             .then(() => {
-                notificationManager.success("appointment-cancelled", { message: 'Az időpont sikeresen lemondva' });
+                notificationManager.success("appointment-cancelled", { title: 'Az időpont sikeresen lemondva' });
                 setCancelSuccess(true);
                 setAppointment(null);
                 // Visszairányítás is lehetne pl:
                 // navigate('/');
             })
             .catch(() => {
-                notificationManager.error("appointment-cancel-failed", { message: 'Nem sikerült lemondani az időpontot, próbálja újra később' });
+                notificationManager.error("appointment-cancel-failed", { title: 'Nem sikerült lemondani az időpontot, próbálja újra később' });
             })
             .finally(() => setCancelLoading(false));
     };

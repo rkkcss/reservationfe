@@ -166,7 +166,7 @@ const loginSlice = createSlice({
                 state.user = null;
                 state.selectedBusinessEmployee = {} as BusinessEmployee;
                 notificationManager.success("success-logout", {
-                    message: i18next.t("login-modal:logoutSuccessfully"),
+                    title: i18next.t("login-modal:logoutSuccessfully"),
                 });
             })
             .addCase(logoutUser.rejected, (state: State, action) => {

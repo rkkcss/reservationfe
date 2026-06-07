@@ -7,16 +7,12 @@ import { Offering } from "../../../helpers/types/Offering";
 import { createAppointmentByGuestQuery } from "../../../helpers/queries/appointment-queries";
 import StepConfirm from "./StepConfirm";
 
-const { Step } = Steps;
-
 type AddAppointmentStepsProps = {
     offer: Offering;
     open: boolean;
     onClose: () => void;
     businessId: number;
 }
-
-
 
 const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmentStepsProps) => {
     const [current, setCurrent] = useState(0);
@@ -44,21 +40,16 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
         },
         {
             title: "Megerősítés",
-            fields:
-                <>
-                    <StepConfirm form={form} />
-                </>
-            ,
+            fields: <StepConfirm form={form} />,
         },
     ];
-
 
     useEffect(() => {
         if (!open) {
             setCurrent(0);
             form.resetFields();
         }
-    }, [open])
+    }, [open, form]);
 
     const next = async () => {
         try {
@@ -68,7 +59,6 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
             console.log("Validációs hiba:", err);
         }
     };
-
 
     const prev = () => {
         setCurrent(current - 1);
@@ -80,7 +70,7 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
             ...values,
             date: values.date?.format("YYYY-MM-DD"),
             businessId: businessId,
-        }
+        };
         console.log("Beküldött adatok:", values);
         createAppointmentByGuestQuery(businessId, offer.businessEmployee?.user?.id, values)
             .then(() => {
@@ -88,7 +78,10 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
             });
     };
 
-
+    const stepItems = steps.map((item) => ({
+        key: item.title,
+        title: item.title,
+    }));
 
     return (
         <>
@@ -97,14 +90,17 @@ const AddAppointmentSteps = ({ offer, open, onClose, businessId }: AddAppointmen
                 open={open}
                 footer={null}
                 onCancel={onClose}
-                destroyOnClose
+                destroyOnHidden
                 className="add-appointment-steps"
             >
-                <Steps current={current} size="small" style={{ marginBottom: 24 }} labelPlacement="vertical">
-                    {steps.map((item) => (
-                        <Step key={item.title} title={item.title} />
-                    ))}
-                </Steps>
+                {/* Itt a JSX gyermekek helyett az items propot használjuk */}
+                <Steps
+                    current={current}
+                    size="small"
+                    style={{ marginBottom: 24 }}
+                    titlePlacement="vertical"
+                    items={stepItems}
+                />
 
                 <Form form={form} layout="vertical">
                     {steps[current].fields}

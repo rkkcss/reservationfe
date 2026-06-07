@@ -28,7 +28,7 @@ const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelecto
         changeBusinessTheme(Number(selectedBusinessEmployee?.business.id), { theme })
             .then(res => {
                 if (res.status === 200) {
-                    notification.success({ message: "Sikeresen megváltoztattad az oldalad témáját!", placement: "bottom" })
+                    notification.success({ title: "Sikeresen megváltoztattad az oldalad témáját!", placement: "bottom" })
                 }
             })
     }

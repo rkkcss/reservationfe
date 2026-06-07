@@ -120,7 +120,7 @@ const appointmentsSlice = createSlice({
                 state.loading = false;
             })
             .addCase(fetchPendingAppointments.rejected, (state) => {
-                notification.error({ message: "Hiba a függőben lévő időpontok lekérésekor!", placement: "bottom" });
+                notification.error({ title: "Hiba a függőben lévő időpontok lekérésekor!", placement: "bottom" });
                 state.loading = false;
             })
             .addCase(fetchPendingAppointments.pending, (state) => {

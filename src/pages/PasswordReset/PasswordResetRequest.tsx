@@ -12,7 +12,7 @@ const PasswordResetRequest = () => {
         passwordResetRequest(mail)
             .then(() => {
                 notificationManager.success("password-reset-request", {
-                    message: "Sikeres kiküldés",
+                    title: "Sikeres kiküldés",
                     description: "Elküldtük e-mailben a jelszó visszaállito linket.",
                     duration: 5
                 })

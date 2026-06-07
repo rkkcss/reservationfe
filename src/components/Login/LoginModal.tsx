@@ -115,7 +115,7 @@ const LoginModal = () => {
                     {t("dontHaveAccountLink")}
                 </Typography.Link>
             </div>
-            <Divider orientation="center">
+            <Divider>
                 <span className="text-sm">vagy</span>
             </Divider>
             <Button className="w-full" onClick={handleGoogleLogin} icon={<FcGoogle />} type="text">

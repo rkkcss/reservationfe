@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { BiUser } from 'react-icons/bi'
 import useSelectedEmployee from '../../../hooks/useSelectedEmployee'
 import { BUSINESS_PERMISSIONS } from '../../../helpers/types/BusinessPermission'
-import { EmployeeSelector } from './EmployeeSelector'
+import { EmployeeFormSelector } from './EmployeeSelector'
 import { StatusSelector } from './StatusSelector'
 import { DateRangeSelector } from './DateRangeSelector'
 import { useAppointmentForm } from './useAddAppointmentForm'
@@ -52,7 +52,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
             onCancel={onClose}
             title={appointment?.id ? t("editAppointment") : t("addAppointment")}
             footer={null}
-            destroyOnClose
+            destroyOnHidden
         >
             <div className="mt-8">
                 <Form
@@ -68,7 +68,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                     </Form.Item>
 
                     {hasPermission(BUSINESS_PERMISSIONS.EDIT_ALL_BOOKINGS) && (
-                        <EmployeeSelector
+                        <EmployeeFormSelector
                             options={employeeOptions}
                             loadOptions={getEmployeeOptions}
                         />
@@ -77,9 +77,8 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                     <div className="flex items-center gap-2">
                         <Form.Item label={t("guest")} name="guestId" className="flex-1 w-full">
                             <Select
-                                size="large"
-                                showSearch
-                                onSearch={searchInGuests}
+                                size="small"
+                                showSearch={{ onSearch: searchInGuests }}
                                 options={searchedGuests.map(g => ({ label: g.name, value: g.id }))}
                                 labelRender={(e) => (
                                     <div className="flex items-center gap-1">
@@ -99,6 +98,7 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                                     </div>
                                 )}
                                 allowClear
+                                className="rounded-lg h-10"
                             />
                         </Form.Item>
                         <AddOrEditGuestModalWButton afterSubmit={afterGuestSubmit} />

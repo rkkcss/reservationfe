@@ -15,7 +15,7 @@ const PasswordResetFinish = () => {
         passwordResetWithKey({ key, newPassword })
             .then(() => {
                 notificationManager.success("password-reset-finish",
-                    { message: "Sikeres jelszó visszaállítás" });
+                    { title: "Sikeres jelszó visszaállítás" });
                 navigate("/home", { state: { openLogin: true } });
             });
 
