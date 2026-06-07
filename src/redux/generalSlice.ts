@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export type GeneralState = {
     theme: string,
-    isCalendarAlertOpen: boolean
+    isCalendarAlertOpen: boolean,
+    isLeftMenuCollapsed: boolean
 };
 
 const initialState: GeneralState = {
     theme: 'light',
     isCalendarAlertOpen: false,
+    isLeftMenuCollapsed: false
 };
 
 const generalSlice = createSlice({
@@ -19,9 +21,12 @@ const generalSlice = createSlice({
         },
         closeCalendarAlert: (state) => {
             state.isCalendarAlertOpen = false;
+        },
+        toggleLeftMenu: (state) => {
+            state.isLeftMenuCollapsed = !state.isLeftMenuCollapsed;
         }
     }
 });
 
-export const { openCalendarAlert, closeCalendarAlert } = generalSlice.actions;
+export const { openCalendarAlert, closeCalendarAlert, toggleLeftMenu } = generalSlice.actions;
 export default generalSlice.reducer;

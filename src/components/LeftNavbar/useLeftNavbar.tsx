@@ -42,19 +42,28 @@ export const useLeftNavbar = (): MenuProps['items'] => {
         const settingsMenuItems: MenuItemDefinition[] = [
             // ÁTTEKINTÉS
             {
-                key: 'dashboard',
-                label: 'Dashboard',
-                icon: <MdOutlineDashboard size={20} />,
+                key: 'overview',
+                type: 'group',
+                label: 'Áttekintő',
+                icon: <CiShop size={20} />,
                 roles: [Authorities.ROLE_USER],
-                permissions: [BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS],
-                onClick: () => navigate('dashboard'),
-                isBeta: true
-            }, {
-                key: 'calendar',
-                label: 'Naptár',
-                roles: [Authorities.ROLE_USER],
-                onClick: () => navigate('calendar'),
-                icon: <CiCalendar size={20} strokeWidth={1} />
+                children: [
+                    {
+                        key: 'dashboard',
+                        label: 'Dashboard',
+                        icon: <MdOutlineDashboard size={20} />,
+                        roles: [Authorities.ROLE_USER],
+                        permissions: [BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS],
+                        onClick: () => navigate('dashboard'),
+                        isBeta: true
+                    }, {
+                        key: 'calendar',
+                        label: 'Naptár',
+                        roles: [Authorities.ROLE_USER],
+                        onClick: () => navigate('calendar'),
+                        icon: <CiCalendar size={20} strokeWidth={1} />
+                    },
+                ]
             },
             // CSOPORT: SZEMÉLYES MENÜPONTOK
             {
@@ -156,13 +165,14 @@ export const useLeftNavbar = (): MenuProps['items'] => {
                     icon: item.icon,
                     label: item.label,
                     onClick: item.onClick,
-                    className: "md:!rounded-full md:!w-fit",
+                    className: "md:!rounded-full",
                 };
 
                 if (item.type === 'group') {
                     return {
                         ...baseOutput,
                         type: 'group',
+                        className: "md:w-unset",
                         children: item.children
                             ? item.children
                                 .filter(hasAccess)
@@ -171,7 +181,7 @@ export const useLeftNavbar = (): MenuProps['items'] => {
                                     icon: child.icon,
                                     label: child.label,
                                     onClick: child.onClick,
-                                    className: "md:!rounded-full md:!w-fit !ps-4"
+                                    className: "md:!rounded-full md:!w-fit !px-4"
                                 }))
                             : []
                     };
