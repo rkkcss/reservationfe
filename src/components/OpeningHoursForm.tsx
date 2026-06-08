@@ -28,6 +28,9 @@ const OpeningHoursForm = ({ form, onSubmit }: OpeningHoursFormProps) => {
                                         {dayHours.length > 0 ? (
                                             dayHours.map((field) => (
                                                 <div key={field.key} className="flex gap-2 items-start">
+                                                    <Form.Item name={[field.name, "dayOfWeek"]} hidden>
+                                                        <input type="hidden" />
+                                                    </Form.Item>
                                                     <Form.Item rules={[{ required: true, message: "Kötelező mező" }]} name={[field.name, "startTime"]}>
                                                         <TimePicker needConfirm={false} format="HH:mm" minuteStep={30} />
                                                     </Form.Item>
