@@ -27,7 +27,7 @@ const useGlobalSearch = () => {
 
     useEffect(() => {
         if (qString.length > 2) {
-            getGlobalSearch(Number(selectedBusinessEmployee.business.id), qString)
+            getGlobalSearch(Number(selectedBusinessEmployee?.business.id), qString)
                 .then(res => {
                     setData(res.data);
                 })

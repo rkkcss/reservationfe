@@ -20,7 +20,7 @@ export type State = {
     error: boolean;
     msg: string | null;
     theme: string;
-    selectedBusinessEmployee: BusinessEmployee;
+    selectedBusinessEmployee: BusinessEmployee | null;
 };
 
 const initialState: State = {
@@ -29,7 +29,7 @@ const initialState: State = {
     error: false,
     msg: "",
     theme: "light",
-    selectedBusinessEmployee: {} as BusinessEmployee,
+    selectedBusinessEmployee: null,
 };
 
 export const getAccountInfo = createAsyncThunk<User>(
@@ -114,7 +114,7 @@ const loginSlice = createSlice({
             state.selectedBusinessEmployee = action.payload;
         },
         setActiveBusinessEmployeeDefault(state) {
-            state.selectedBusinessEmployee = {} as BusinessEmployee;
+            state.selectedBusinessEmployee = null;
         },
         setImageUrl(state, action) {
             if (state.user) {

@@ -25,7 +25,7 @@ const RequireBusiness = () => {
         }
     }, [dispatch])
 
-    if (!selectedBusinessEmployee || !selectedBusinessEmployee.id) {
+    if (!selectedBusinessEmployee) {
         return <Navigate to="/choose-business" replace />;
     }
 

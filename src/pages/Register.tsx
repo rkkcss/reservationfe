@@ -28,7 +28,6 @@ const Register = () => {
 
         API.post('/api/register', finalUser)
             .then(response => {
-                console.log('Registration successful:', response);
                 if (response.status === 201) {
                     form.resetFields();
                     notificationManager.success("registration-success", { title: t("registrationSuccess"), duration: 10 });

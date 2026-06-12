@@ -68,7 +68,7 @@ const ChooseBusiness = () => {
                 <div>
                     {
                         businessEmployees.length > 0 &&
-                        < Alert className="mb-2" showIcon message={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
+                        <Alert className="mb-2" showIcon title={"Válasszd ki melyik vállalkozásba szeretnél belépni."} />
                     }
 
                     <Spin spinning={loading} indicator={<Loading size={30} />}>
@@ -76,7 +76,7 @@ const ChooseBusiness = () => {
                             <div className="p-6 shadow-lg rounded-lg bg-white w-full md:w-[600px]">
                                 {
                                     businessEmployees.length === 0 &&
-                                    <Alert className="mb-2" showIcon message={"Nem tartozol meg egy vállalkozáshoz sem."} />
+                                    <Alert className="mb-2" showIcon title={"Nem tartozol meg egy vállalkozáshoz sem."} />
                                 }
                                 {
                                     businessEmployees.length > 0 &&
@@ -84,6 +84,7 @@ const ChooseBusiness = () => {
                                         {businessEmployees.map((businessEmployee, index) => (
                                             <ChooseBusinessItem
                                                 key={businessEmployee.id}
+                                                businessEmployeeId={businessEmployee.id}
                                                 logo={businessEmployee.business.logo}
                                                 businessName={businessEmployee.business.name}
                                                 role={businessEmployee.role}

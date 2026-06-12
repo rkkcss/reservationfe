@@ -8,10 +8,11 @@ type AxiosResponseHeaders = Record<string, AxiosHeaderValue | undefined>;
 export type RequestParams = Record<string, string | number | boolean | null | undefined>;
 
 export function usePagination<T>(
-    endpoint: string,
+    endpoint: string | null,
     itemsPerPage = 10,
     defaultSort: string = "",
-    additionalParams: RequestParams = {}
+    additionalParams: RequestParams = {},
+    syncUrl: boolean = true
 ) {
     const location = useLocation();
     const navigate = useNavigate();
@@ -34,6 +35,7 @@ export function usePagination<T>(
     const [error, setError] = useState<Error | null>(null);
     const [sort, setSort] = useState<string>(initialSort);
     const [requestParams, setRequestParams] = useState<RequestParams>(additionalParams);
+    const [extraHeaders, setExtraHeaders] = useState<AxiosResponseHeaders>({});
 
     const parseLinkHeader = (linkHeader: string) => {
         return linkHeader.split(",").reduce((acc, part) => {
@@ -84,20 +86,25 @@ export function usePagination<T>(
                 setTotalItems(totalCount);
                 setData(response.data);
                 setCurrentPage(page);
-
-                // URL szinkronizáció
-                navigate({ search: `?${queryString}` }, { replace: true });
+                setExtraHeaders(headers);
+                // URL sync
+                if (syncUrl) {
+                    navigate({ search: `?${queryString}` }, { replace: true });
+                }
+                // navigate({ search: `?${queryString}` }, { replace: true });
             } catch (err) {
                 setError(err as Error);
             } finally {
                 setLoading(false);
             }
         },
-        [endpoint, navigate, buildQueryString]
+        [endpoint, navigate, buildQueryString, syncUrl]
     );
 
     // EGYETLEN effekt a változások figyelésére
     useEffect(() => {
+        if (!endpoint) return;
+
         // Ha nem az első futás, vagy ha a mount-kor kell az adat
         if (isFirstRun.current) {
             fetchPage(initialPage, sort, requestParams);
@@ -128,5 +135,6 @@ export function usePagination<T>(
         setSort,
         requestParams,
         setRequestParams,
+        extraHeaders
     };
 }

@@ -33,6 +33,8 @@ import OAuthSuccess from './utils/OAuthSuccess'
 import LoginLayout from './layout/LoginLayout'
 import PasswordResetRequest from './pages/PasswordReset/PasswordResetRequest'
 import PasswordResetFinish from './pages/PasswordReset/PasswordResetFinish'
+import AuthenticatedLayout from './layout/AuthenticatedLayout'
+import AllNotification from './pages/AllNotification/AllNotification'
 
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
@@ -63,31 +65,34 @@ function App() {
           <Route element={<NotFound />} path="/not-found" />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_USER]} />}>
-          <Route path="/choose-business" element={<ChooseBusiness />}></Route>
-          <Route element={<RequireBusiness />}>
-            <Route element={<LoginLayout />} >
-              <Route path="settings" element={<Settings />}>
-                <Route path="profile" element={<SettingsProfile />} />
-                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_SERVICES]} />} >
-                  <Route path="my-services" element={<SettingsMyServices />} />
+          <Route element={<AuthenticatedLayout />} >
+            <Route path="/choose-business" element={<ChooseBusiness />}></Route>
+            <Route element={<RequireBusiness />}>
+              <Route element={<LoginLayout />} >
+                <Route path="settings" element={<Settings />}>
+                  <Route path="profile" element={<SettingsProfile />} />
+                  <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_SERVICES]} />} >
+                    <Route path="my-services" element={<SettingsMyServices />} />
+                  </Route>
+                  <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS]} />}>
+                    <Route path="opening-hours" element={<OpeningHours />} />
+                  </Route>
+                  <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>
+                    <Route path="business" element={<SettingsBusiness />} />
+                  </Route>
+                  <Route path="security" element={<SettingsSecurity />} />
+                  <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES,]} />} >
+                    <Route path="employees" element={<SettingsEmployees />} />
+                    <Route path="employee/:employeeId" element={<EmployeeLayout />} />
+                  </Route>
                 </Route>
-                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.EDIT_OWN_WORKING_HOURS]} />}>
-                  <Route path="opening-hours" element={<OpeningHours />} />
+                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS]} />}>
+                  <Route path="dashboard" element={<DashboardLayout />} />
                 </Route>
-                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_BUSINESS_SETTINGS]} />}>
-                  <Route path="business" element={<SettingsBusiness />} />
-                </Route>
-                <Route path="security" element={<SettingsSecurity />} />
-                <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.MANAGE_EMPLOYEES,]} />} >
-                  <Route path="employees" element={<SettingsEmployees />} />
-                  <Route path="employee/:employeeId" element={<EmployeeLayout />} />
-                </Route>
+                <Route path="calendar" element={<CalendarLayout />} />
+                <Route path="guests" element={<SettingsGuests />} />
+                <Route path="notifications" element={<AllNotification />} />
               </Route>
-              <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS]} />}>
-                <Route path="dashboard" element={<DashboardLayout />} />
-              </Route>
-              <Route path="calendar" element={<CalendarLayout />} />
-              <Route path="guests" element={<SettingsGuests />} />
             </Route>
           </Route>
         </Route>

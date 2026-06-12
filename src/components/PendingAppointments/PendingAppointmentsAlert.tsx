@@ -48,8 +48,10 @@ const PendingAppointmentsAlert = ({ dataLength, onViewClick }: PendingAppointmen
                     }
                 </div>}
             showIcon
-            closable={dataLength === 0}
-            onClose={() => dispatch(closeCalendarAlert())}
+            closable={{
+                closeIcon: dataLength === 0,
+                onClose: () => dispatch(closeCalendarAlert()),
+            }}
         />
     )
 }

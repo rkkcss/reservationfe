@@ -10,7 +10,7 @@ import { FaRegEdit } from 'react-icons/fa';
 const EmployeeList = () => {
     const navigate = useNavigate();
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/business/' + selectedBusinessEmployee.business.id + '/employees');
+    const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/business/' + selectedBusinessEmployee?.business.id + '/employees');
 
     const dataColumns = [
         {

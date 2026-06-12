@@ -1,17 +1,19 @@
 import { Authorities } from "../helpers/types/Authorities";
 import { Navigate, Outlet } from "react-router";
 import { useAppSelector } from "../store/hooks";
+import Loading from "./Loading";
 
 type ProtectedRouteProps = {
     allowedRoles: Authorities[]
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-    const { user } = useAppSelector(state => state.userStore);
+    const { user, loading } = useAppSelector(state => state.userStore);
+
+    if (loading) return <Loading />;
 
     const hasRequiredRole = user?.authorities?.some(role => allowedRoles.includes(role));
 
-    // Redirect to home page if user is not authenticated
     return hasRequiredRole ? <Outlet /> : <Navigate to="/" />
 }
 

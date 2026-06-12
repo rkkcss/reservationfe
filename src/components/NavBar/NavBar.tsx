@@ -3,6 +3,7 @@
 import LanguageSelector from './LanguageSelector';
 import GlobalSearch from '../GlobalSearch/GlobalSearch';
 import { Header } from 'antd/es/layout/layout';
+import NotificationsDropdown from '../NotificationNavbar/NotificationsNavbarDropdown';
 
 const NavBar = () => {
     return (
@@ -16,6 +17,10 @@ const NavBar = () => {
                     <GlobalSearch />
 
                     <li className="md:block hidden p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full ml-auto mr-0">
+                        <NotificationsDropdown />
+                    </li>
+
+                    <li className="md:block hidden p-[5px] hover:text-primary hover:bg-slate-200 transition rounded-full">
                         <LanguageSelector />
                     </li>
                 </ul>

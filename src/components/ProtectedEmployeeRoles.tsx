@@ -16,7 +16,7 @@ const ProtectedEmployeeRoles = ({
 
     const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
 
-    if (!selectedBusinessEmployee || !selectedBusinessEmployee.id) return <Navigate to="/choose-business" />;
+    if (!selectedBusinessEmployee) return <Navigate to="/choose-business" />;
 
     const employeeRole = selectedBusinessEmployee.role;
     const employeePermissions = selectedBusinessEmployee.permissions;

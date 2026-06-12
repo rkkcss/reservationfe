@@ -40,6 +40,7 @@ const LeftNavbar = () => {
                     <Image preview={false} src={logo} className="!h-14 cursor-pointer" alt="logo" onClick={() => navigate('/')} />
                 </div>
                 <Menu
+                    mode="inline"
                     items={filteredSettingsMenu}
                     className="!border-none rounded-xl overflow-y-auto overflow-x-hidden text-ellipsis w-full"
                     inlineCollapsed={isLeftMenuCollapsed}
@@ -65,11 +66,11 @@ const LeftNavbar = () => {
                                 !isLeftMenuCollapsed &&
                                 <div>
                                     <p className="text-sm font-semibold">{user?.fullName}</p>
-                                    <Badge color={employeeRolesExtended[selectedBusinessEmployee?.role].color}
-                                        count={employeeRolesExtended[selectedBusinessEmployee?.role].label}
+                                    <Badge color={selectedBusinessEmployee?.role && employeeRolesExtended[selectedBusinessEmployee?.role].color}
+                                        count={selectedBusinessEmployee?.role && employeeRolesExtended[selectedBusinessEmployee?.role].label}
                                     />
                                     {
-                                        BUSINESS_EMPLOYEE_ROLE.OWNER === selectedBusinessEmployee.role &&
+                                        BUSINESS_EMPLOYEE_ROLE.OWNER === selectedBusinessEmployee?.role &&
                                         <Badge color={"cyan"}
                                             count={"Próba időszak"}
                                             className="ml-2"

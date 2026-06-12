@@ -86,7 +86,7 @@ const EmployeeActivation = () => {
                             Csatlakozz hozzánk!
                         </h1>
                         <p className="text-lg text-gray-600">
-                            <span className="font-semibold text-indigo-600">{invite?.business.name}</span> csapata vár rád
+                            <span className="font-semibold text-indigo-600">{invite?.business?.name}</span> csapata vár rád
                         </p>
                     </div>
 

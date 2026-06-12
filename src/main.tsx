@@ -13,10 +13,14 @@ import 'dayjs/locale/hu';
 import { App as AntdApp } from 'antd';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc'
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
 
 dayjs.locale('hu');
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

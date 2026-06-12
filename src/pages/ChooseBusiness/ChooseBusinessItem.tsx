@@ -3,20 +3,25 @@ import { BusinessEmployee } from '../../helpers/types/BusinessEmployee'
 import { LiaIndustrySolid } from 'react-icons/lia'
 import { Badge, Button } from 'antd'
 import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole'
+import { useNotifications } from '../../context/NotificationContext'
 
 type Props = React.LiHTMLAttributes<HTMLLIElement> & {
     logo: string
     businessName: string
     role: BusinessEmployee['role']
-    onClick?: () => void
+    onClick?: () => void,
+    businessEmployeeId?: number
 }
     & (
         | { isInvitation: true; onApprove: () => void; onDecline: () => void; onClick?: () => void }
         | { isInvitation?: false; onApprove?: never; onDecline?: never; onClick: () => void }
     )
 
-const ChooseBusinessItem = forwardRef<HTMLLIElement, Props>(({ logo, businessName, role, isInvitation = false, onClick, onApprove, onDecline, ...props }, ref) => {
+const ChooseBusinessItem = forwardRef<HTMLLIElement, Props>(({ businessEmployeeId, logo, businessName, role, isInvitation = false, onClick, onApprove, onDecline, ...props }, ref) => {
     const [logoError, setLogoError] = useState(false);
+    const { unreadCountByUser } = useNotifications();
+    const unreadCount = businessEmployeeId && unreadCountByUser.get(businessEmployeeId) || 0;
+
     return (
         <li
             ref={ref}
@@ -52,6 +57,11 @@ const ChooseBusinessItem = forwardRef<HTMLLIElement, Props>(({ logo, businessNam
                     />
                 </div>
             </div>
+            {unreadCount > 0 &&
+                <div className="ml-auto">
+                    <Badge count={unreadCount} />
+                </div>
+            }
             {
                 isInvitation &&
                 <div className="ml-auto">
