@@ -7,6 +7,10 @@ export const getBusiness = (id: number | string) => {
     return API.get(`${DEFAULT_PATH}/${id}`);
 }
 
+export const getBusinessBySlugQuery = (slug: string) => {
+    return API.get(`${DEFAULT_PATH}/by-slug/${slug}`);
+}
+
 export const getBusinessByLoggedInUser = (businessId: number) => {
     return API.get(`${DEFAULT_PATH}/${businessId}/private`);
 }

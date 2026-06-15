@@ -1,4 +1,4 @@
-import { Button, Image, Tabs } from 'antd'
+import { Button, Image, Tabs, theme, Typography } from 'antd'
 import BusinessServices from './BusinessServices'
 import BusinessRatings from './BusinessRatings'
 import placeholderImage from '../../assets/placeholder.jpg'
@@ -7,7 +7,8 @@ import { ConfigProviderBusinessProvider, useBusinessConfigProvider } from '../..
 import BusinessContact from './BusinessContact'
 
 export default function BusinessPage() {
-    const { business, selectedTheme } = useBusinessConfigProvider();
+    const { business } = useBusinessConfigProvider();
+    const { token } = theme.useToken();
 
     const tabValues = [
         {
@@ -28,12 +29,12 @@ export default function BusinessPage() {
     ]
 
     return (
-        <div className={`min-h-svh flex items-start overflow-hidden`} style={{ background: selectedTheme.backgroundColor }}>
-            <div className="text-custom-gray container mx-auto max-w-[1240px] p-5 mt-4">
+        <div className={`min-h-svh flex items-start overflow-hidden`}
+            style={{ backgroundColor: token.colorBgLayout, color: token.colorPrimary }}>
+            <p>{token.colorPrimary}</p>
+            <div className="container mx-auto max-w-[1240px] p-5 mt-4">
 
-                <div className="mb-4 bg-white rounded-lg shadow-md"
-                    style={{ background: selectedTheme.cardBgColor }}
-                >
+                <div className="mb-4 rounded-lg shadow-md">
                     <Image rootClassName="w-full" className="!h-[20vh] !object-cover "
                         preview={false}
                         fallback={placeholderImage} src={business.logo}
@@ -54,12 +55,12 @@ export default function BusinessPage() {
                         </div>
                         <div className="flex justify-between w-full">
                             <div>
-                                <p className="text-3xl mb-1" style={{ color: selectedTheme.primaryTextColor }}>{business.name}</p>
-                                <p className="text-gray-600 text-base mb-2" style={{ color: selectedTheme.secondaryTextColor }}>{business.description}</p>
+                                <Typography className="text-3xl mb-1">{business.name}</Typography>
+                                <Typography className="mb-2" >{business.description}</Typography>
                                 <div className="text-yellow-400 flex items-center">
                                     <BiStar />
-                                    <p className="mr-2 font-bold">4.5</p>
-                                    <span className="text-gray-600" style={{ color: selectedTheme.secondaryTextColor }}>(129 értékelés)</span>
+                                    <Typography className="mr-2 font-bold">4.5</Typography>
+                                    <Typography className="">(129 értékelés)</Typography>
                                 </div>
                             </div>
                             <div className="my-auto">
@@ -72,9 +73,7 @@ export default function BusinessPage() {
 
                 <div className="flex flex-col md:flex-row gap-5 w-full">
                     <BusinessContact />
-                    <div className="rounded-lg flex-1 px-3"
-                        style={{ background: selectedTheme.cardBgColor }}
-                    >
+                    <div className="rounded-lg flex-1 px-3">
                         <Tabs items={tabValues} className=" flex-grow" />
                     </div>
                 </div>

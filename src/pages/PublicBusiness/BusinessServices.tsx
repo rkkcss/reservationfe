@@ -1,4 +1,4 @@
-import { Select, Spin } from 'antd'
+import { Select, Spin, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Offering } from '../../helpers/types/Offering'
@@ -10,12 +10,10 @@ import { BusinessEmployee } from '../../helpers/types/BusinessEmployee'
 import { AxiosResponse } from 'axios'
 import Loading from '../../components/Loading'
 import BusinessService from './BusinessService'
-import { useBusinessConfigProvider } from '../../context/ConfigProviderBusinessContext'
 
 const BusinessServices = () => {
     const { businessId } = useParams();
     const [employees, setEmployees] = useState<BusinessEmployee[]>([]);
-    const { selectedTheme } = useBusinessConfigProvider();
     const {
         data,
         totalItems,
@@ -76,14 +74,13 @@ const BusinessServices = () => {
                 <div className="flex items-center justify-between mb-5">
                     <div className='flex flex-col'>
                         <label className="font-semibold text-xs"
-                            style={{ color: selectedTheme.secondaryTextColor }}
                         >Alkalmazottak</label>
                         <Select
                             value={selectedEmployee}
                             onChange={handleEmployeeFilter}
                             className="w-48"
                         >
-                            <Select.Option value="all" style={{ color: selectedTheme.primaryTextColor }}>Összes szolgáltatás</Select.Option>
+                            <Select.Option value="all">Összes szolgáltatás</Select.Option>
                             {employees.map((employee) => (
                                 <Select.Option key={employee.id} value={employee.id.toString()}>
                                     {employee.user.firstName} {employee.user.lastName}
@@ -91,9 +88,7 @@ const BusinessServices = () => {
                             ))}
                         </Select>
                     </div>
-                    <p className="text-gray-700 font-semibold text-base"
-                        style={{ color: selectedTheme.secondaryTextColor }}
-                    >
+                    <p className="font-semibold text-base">
                         {totalItems} szolgáltatás
                     </p>
                 </div>
@@ -101,7 +96,7 @@ const BusinessServices = () => {
 
                     {data?.length === 0
                         ? (
-                            <div className="w-full mt-4 text-center text-xl">Nincsenek szolgáltatások!</div>
+                            <Typography className="w-full mt-4 text-center text-xl">Nincsenek szolgáltatások!</Typography>
                         ) : (
                             <>
                                 {data?.map((offer, index) => (

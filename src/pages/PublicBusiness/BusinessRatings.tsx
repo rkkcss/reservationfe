@@ -1,6 +1,6 @@
 import { useParams } from 'react-router'
 import { usePagination } from '../../hooks/usePagination';
-import { Card, Divider, Rate } from 'antd';
+import { Card, Divider, Rate, Typography } from 'antd';
 import { BusinessRatingSummary } from '../../helpers/types/BusinessRating';
 import placeholderImage from '../../assets/placeholder.jpg'
 
@@ -13,7 +13,7 @@ const BusinessRatings = () => {
     return (
         <div>
             {data?.ratings?.length === 0 ? (
-                <div className="w-full mt-4 text-center text-xl">Nincsenek vélemények!</div>
+                <Typography className="w-full mt-4 text-center text-xl">Nincsenek vélemények!</Typography>
             ) : (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {
@@ -21,7 +21,7 @@ const BusinessRatings = () => {
                             <li key={rating.id}>
                                 <Card styles={{ body: { padding: '6px 12px' } }} >
                                     <div className="flex justify-between items-center">
-                                        <p>{rating.guest.name}</p>
+                                        <Typography>{rating.guest.name}</Typography>
                                         <img src={rating.imageUrl}
                                             onError={e => {
                                                 e.currentTarget.onerror = null;
@@ -34,7 +34,7 @@ const BusinessRatings = () => {
                                         <Rate disabled defaultValue={rating.number} />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500">{rating.description}</p>
+                                        <Typography className="text-xs text-gray-500">{rating.description}</Typography>
                                     </div>
                                 </Card>
                                 <Divider />
