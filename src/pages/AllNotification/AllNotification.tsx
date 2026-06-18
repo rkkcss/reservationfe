@@ -94,6 +94,7 @@ const AllNotification = () => {
                             fetchPrevPage={fetchPrevPage}
                             fetchPage={fetchPage}
                             totalItems={totalItems}
+                            pageSize={10}
                         />
                     </div>
                 )

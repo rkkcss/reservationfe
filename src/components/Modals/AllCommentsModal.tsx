@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BusinessRatingSummary } from "../../helpers/types/BusinessRating";
-import { useAppSelector } from "../../store/hooks";
 import { Avatar, Divider, Modal, Rate, Select, Spin } from "antd";
 import dayjs from "dayjs";
 import { usePagination } from "../../hooks/usePagination";
@@ -12,7 +11,6 @@ type AllCommentsModalProps = {
 }
 
 const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
-    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
     const [params, setParams] = useState('createdDate,desc');
     const { data,
         totalItems,
@@ -21,7 +19,7 @@ const AllCommentsModal = ({ onClose }: AllCommentsModalProps) => {
         fetchPrevPage,
         fetchPage,
         loading
-    } = usePagination<BusinessRatingSummary>("/api/business-ratings/business/" + selectedBusinessEmployee?.business.id, 5, params);
+    } = usePagination<BusinessRatingSummary>("/api/business-ratings/business", 5, params);
 
     const handleSorting = (value: string) => {
         setParams(value);

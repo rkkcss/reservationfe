@@ -14,7 +14,7 @@ const SettingsBusiness = () => {
 
     useEffect(() => {
         if (selectedBusinessEmployee) {
-            getBusinessByLoggedInUser(Number(selectedBusinessEmployee?.business.id))
+            getBusinessByLoggedInUser()
                 .then(res => {
                     setBusiness(res.data);
                 });

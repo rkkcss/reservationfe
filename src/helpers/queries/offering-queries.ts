@@ -2,15 +2,15 @@ import { AxiosResponse } from "axios";
 import { API } from "../../utils/API";
 import { Offering } from "../types/Offering";
 
-export const getOffersByBusinessId = (businessId: number | string): Promise<Offering[]> => {
-    return API.get(`/api/offerings/business/${businessId}`)
+export const getOffersByBusinessId = (): Promise<Offering[]> => {
+    return API.get(`/api/offerings/public`)
         .then(res => {
             return res.data
         })
 }
 
-export const getOfferingByLoggedInEmployee = (businessId: number): Promise<Offering[]> => {
-    return API.get(`/api/offerings/business/${businessId}/employee`)
+export const getOfferingByLoggedInEmployee = (): Promise<Offering[]> => {
+    return API.get(`/api/offerings/business/employee`)
         .then(res => {
             return res.data
         })
@@ -20,8 +20,8 @@ export const updateOffer = (offer: Offering, businessId: number) => {
     return API.patch(`/api/offerings/${offer.id}/business/${businessId}`, offer);
 }
 
-export const createOffer = (offer: Offering, businessId: number, employeeId: number) => {
-    return API.post(`/api/offerings/business/${businessId}/business-employee/${employeeId}`, offer);
+export const createOffer = (offer: Offering, employeeId: number) => {
+    return API.post(`/api/offerings/business/business-employee/${employeeId}`, offer);
 }
 
 export const deleteOffer = (offerId: number, businessId: number) => {

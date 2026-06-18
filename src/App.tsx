@@ -35,13 +35,16 @@ import PasswordResetRequest from './pages/PasswordReset/PasswordResetRequest'
 import PasswordResetFinish from './pages/PasswordReset/PasswordResetFinish'
 import AuthenticatedLayout from './layout/AuthenticatedLayout'
 import AllNotification from './pages/AllNotification/AllNotification'
+import { useTenantSlug } from './hooks/useTenantSlug'
 
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
 export const Swagger = lazy(() => import('./pages/Swagger'));
+export const CacheDebug = lazy(() => import('./pages/Admin/CacheDebug'));
 
 
 function App() {
+  const tenantSlug = useTenantSlug();
 
   useEffect(() => {
     fetchCsrfToken();
@@ -49,13 +52,20 @@ function App() {
     setupNotifications();
   }, []);
 
+  if (tenantSlug) {
+    return (
+      <Routes>
+        <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
+        <Route path="*" element={<BusinessPageWrap />} />
+      </Routes>
+    );
+  }
+
   return (
     <>
       <LoginModal />
       <Routes>
         <Route path="/employee-invite/:token" element={<EmployeeActivation />} />
-        <Route path="/appointment/:modifierToken" element={<CancelAppointment />} />
-        <Route path="/business/:businessId" element={<BusinessPageWrap />} />
         <Route element={<HomeLayout />}>
           <Route path="/register" element={<Register />} />
           <Route path="/pricing" element={<PricePage />} />
@@ -104,6 +114,7 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_ADMIN]} />}>
           <Route element={<Swagger />} path="/swagger"></Route>
+          <Route element={<CacheDebug />} path="/debug-cache"></Route>
         </Route>
       </Routes >
     </>

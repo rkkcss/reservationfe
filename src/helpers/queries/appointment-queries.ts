@@ -24,15 +24,14 @@ export const patchAppointmentQuery = (businessId: number, appointment: Appointme
 }
 //
 type GetBusinessAvailableSlotsProps = {
-    businessId: number;
     startDate: string;
     endDate: string;
     durationMinutes: number;
     employeeId: number;
 }
 
-export const getBusinessAvailableSlots = ({ businessId, startDate, endDate, durationMinutes, employeeId }: GetBusinessAvailableSlotsProps) => {
-    return API.get(`/api/appointments/businesses/${businessId}/employees/${employeeId}/available-slots`, {
+export const getBusinessAvailableSlots = ({ startDate, endDate, durationMinutes, employeeId }: GetBusinessAvailableSlotsProps) => {
+    return API.get(`/api/appointments/employees/${employeeId}/available-slots`, {
         params: {
             startDate: startDate,
             endDate: endDate,
