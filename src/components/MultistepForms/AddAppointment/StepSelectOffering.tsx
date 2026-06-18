@@ -2,7 +2,6 @@ import { Form, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { Offering } from "../../../helpers/types/Offering";
 import { getOffersByBusinessId } from "../../../helpers/queries/offering-queries";
-import { useParams } from "react-router";
 
 type StepSelectOfferingProps = {
     offer?: Offering;
@@ -11,10 +10,9 @@ type StepSelectOfferingProps = {
 
 const StepSelectOffering = ({ offer, setOffer }: StepSelectOfferingProps) => {
     const [offers, setOffers] = useState<Offering[]>([]);
-    const { businessId } = useParams();
 
     const getAllOffers = useCallback(() => {
-        getOffersByBusinessId(Number(businessId)).then((res) => {
+        getOffersByBusinessId().then((res) => {
             setOffers(res);
         });
     }, []);

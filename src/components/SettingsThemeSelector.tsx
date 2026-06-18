@@ -7,7 +7,6 @@ import defaultTheme from '../assets/default-theme.png'
 import pinkTheme from '../assets/pink-theme.png'
 import { useForm } from 'antd/es/form/Form'
 import { changeBusinessTheme } from '../helpers/queries/business-queries'
-import { useAppSelector } from '../store/hooks'
 
 type SettingsThemeSelectorProps = {
     theme: string,
@@ -16,7 +15,6 @@ type SettingsThemeSelectorProps = {
 
 const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelectorProps) => {
     const [form] = useForm();
-    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
     useEffect(() => {
         const lowerCaseTheme = theme;
@@ -25,7 +23,7 @@ const SettingsThemeSelector = ({ theme, setBusinessTheme }: SettingsThemeSelecto
 
     const handleThemeChange = ({ theme }: { theme: string }) => {
         setBusinessTheme(theme);
-        changeBusinessTheme(Number(selectedBusinessEmployee?.business.id), { theme })
+        changeBusinessTheme({ theme })
             .then(res => {
                 if (res.status === 200) {
                     notification.success({ title: "Sikeresen megváltoztattad az oldalad témáját!", placement: "bottom" })

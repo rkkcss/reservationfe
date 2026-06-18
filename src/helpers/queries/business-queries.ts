@@ -11,8 +11,8 @@ export const getBusinessBySlugQuery = (slug: string) => {
     return API.get(`${DEFAULT_PATH}/by-slug/${slug}`);
 }
 
-export const getBusinessByLoggedInUser = (businessId: number) => {
-    return API.get(`${DEFAULT_PATH}/${businessId}/private`);
+export const getBusinessByLoggedInUser = () => {
+    return API.get(`${DEFAULT_PATH}/private`);
 }
 
 export const patchBusiness = (business: Business) => {
@@ -32,6 +32,6 @@ type ChangeBusinessThemeType = {
     theme: string
 }
 
-export const changeBusinessTheme = (businessId: number, data: ChangeBusinessThemeType) => {
-    return API.post(`${DEFAULT_PATH}/${businessId}/theme`, data);
+export const changeBusinessTheme = (data: ChangeBusinessThemeType) => {
+    return API.post(`${DEFAULT_PATH}/theme`, data);
 }

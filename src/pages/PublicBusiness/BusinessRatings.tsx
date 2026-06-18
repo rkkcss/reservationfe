@@ -1,4 +1,3 @@
-import { useParams } from 'react-router'
 import { usePagination } from '../../hooks/usePagination';
 import { Card, Divider, Rate, Typography } from 'antd';
 import { BusinessRatingSummary } from '../../helpers/types/BusinessRating';
@@ -7,8 +6,7 @@ import placeholderImage from '../../assets/placeholder.jpg'
 
 
 const BusinessRatings = () => {
-    const { businessId } = useParams<{ businessId: string }>();
-    const { data } = usePagination<BusinessRatingSummary>(`/api/business-ratings/business/${businessId}`, 5);
+    const { data } = usePagination<BusinessRatingSummary>(`/api/business-ratings/business`, 5);
 
     return (
         <div>

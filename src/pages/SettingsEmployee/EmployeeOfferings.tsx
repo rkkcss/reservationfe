@@ -34,7 +34,7 @@ const EmployeeOfferings = () => {
 
     const handleEditFormOk = (updatedOffer: Offering) => {
         if (!updatedOffer.id) {
-            createOffer(updatedOffer, Number(selectedBusinessEmployee?.business?.id), Number(businessEmployee?.user?.id))
+            createOffer(updatedOffer, Number(businessEmployee?.user?.id))
                 .then((res) => {
                     if (res.status === 201) {
                         setOfferings(prev => [...prev, res.data]);

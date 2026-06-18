@@ -5,7 +5,29 @@ import { logoutUser } from "../redux/userSlice";
 import i18n from "../i18n";
 import { notificationManager } from "./notificationConfig";
 
-const serverMode = import.meta.env.VITE_API_URL;
+const getBaseUrl = (): string => {
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol; // "http:" vagy "https:"
+    const port = window.location.port; // "5173" dev-ben, "" prod-ban
+
+    // sima localhost fejlesztéshez
+    if (hostname === 'localhost') {
+        return `http://localhost:8080`;
+    }
+
+    // subdomain VAGY production domain
+    // dev:  pizzeria-bella.localhost → http://pizzeria-bella.localhost:8080
+    // prod: pizzeria-bella.booklyapp.me → https://pizzeria-bella.booklyapp.me (same port)
+    if (port === '5173') {
+        // Vite dev server → Spring Boot 8080-on van
+        return `http://${hostname}:8080`;
+    }
+
+    // production: React és Spring Boot ugyanazon a domainen fut
+    return `${protocol}//${hostname}`;
+};
+
+const serverMode = getBaseUrl();
 
 export const API = axios.create({
     baseURL: serverMode,
@@ -23,16 +45,18 @@ API.interceptors.request.use(
         }
 
         const csrfToken = getCookie("XSRF-TOKEN");
-
         if (csrfToken) {
             config.headers["X-XSRF-TOKEN"] = csrfToken;
         }
 
+        // active business header
+        const state = store.getState();
+        const activeBusinessEmployee = state.userStore?.selectedBusinessEmployee;
+        if (activeBusinessEmployee?.business?.id) {
+            config.headers["X-Business-ID"] = activeBusinessEmployee.business.id;
+        }
+
         return config;
-    },
-    (error) => {
-        console.error(error);
-        return Promise.reject(error);
     }
 );
 

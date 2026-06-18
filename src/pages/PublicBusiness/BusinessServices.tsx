@@ -5,11 +5,11 @@ import { Offering } from '../../helpers/types/Offering'
 import { usePagination } from '../../hooks/usePagination'
 import AddAppointmentSteps from '../../components/MultistepForms/AddAppointment/AddAppointmentSteps'
 import CustomPagination from '../../components/CustomPagination'
-import API from '../../utils/API'
 import { BusinessEmployee } from '../../helpers/types/BusinessEmployee'
 import { AxiosResponse } from 'axios'
 import Loading from '../../components/Loading'
 import BusinessService from './BusinessService'
+import API from '../../utils/API'
 
 const BusinessServices = () => {
     const { businessId } = useParams();
@@ -24,7 +24,7 @@ const BusinessServices = () => {
         setRequestParams,
         loading
     } = usePagination<Offering[]>(
-        `/api/offerings/public/business/${businessId}`,
+        `/api/offerings/public`,
         5
     );
 
@@ -33,7 +33,7 @@ const BusinessServices = () => {
     const [selectedEmployee, setSelectedEmployee] = useState<string>("all");
 
     useEffect(() => {
-        API.get(`/api/business-employee/public/business/${businessId}`)
+        API.get(`/api/business-employee/public`)
             .then((res: AxiosResponse<BusinessEmployee[]>) => {
                 setEmployees(res.data);
             })

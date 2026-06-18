@@ -50,13 +50,10 @@ const StepSelectAppointment = ({ businessId, employeeId, durationMinutes }: Step
 
     // 4. LEKÉRDEZÉS (QUERY):
     useEffect(() => {
-        // Biztonsági ellenőrzés: ha nincs businessId, ne fusson (pl. még nem töltött be a prop)
-        if (!businessId) return;
 
         console.log("Query futtatása erre az időszakra:", startDate, endDate);
 
         getBusinessAvailableSlots({
-            businessId,
             startDate,
             endDate,
             durationMinutes,
@@ -89,8 +86,6 @@ const StepSelectAppointment = ({ businessId, employeeId, durationMinutes }: Step
                             const newValue = current.add(diff, 'month');
                             onChange(newValue);
                             setCalendarMonth(newValue);
-                            // Ha lapozunk, a kiválasztást is érdemes lehet törölni, vagy átrakni, 
-                            // de itt most hagyjuk az eredeti logikát.
                         };
 
                         return (

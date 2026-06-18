@@ -40,6 +40,7 @@ import { useTenantSlug } from './hooks/useTenantSlug'
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
 export const Swagger = lazy(() => import('./pages/Swagger'));
+export const CacheDebug = lazy(() => import('./pages/Admin/CacheDebug'));
 
 
 function App() {
@@ -113,6 +114,7 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={[Authorities.ROLE_ADMIN]} />}>
           <Route element={<Swagger />} path="/swagger"></Route>
+          <Route element={<CacheDebug />} path="/debug-cache"></Route>
         </Route>
       </Routes >
     </>

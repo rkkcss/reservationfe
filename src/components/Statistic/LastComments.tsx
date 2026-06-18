@@ -2,7 +2,6 @@ import { Button, Rate, Spin } from "antd"
 import { Suspense, useEffect, useState } from "react"
 import { BusinessRating } from "../../helpers/types/BusinessRating"
 import { getBusinessRatingsQuery } from "../../helpers/queries/business-rating-queries";
-import { useAppSelector } from "../../store/hooks";
 import dayjs from "dayjs";
 import AllCommentsModal from "../Modals/AllCommentsModal";
 import Loading from "../Loading";
@@ -15,11 +14,10 @@ const STATIC_PARAMS = {
 const LastComments = () => {
     const [comments, setComments] = useState<BusinessRating[]>([]);
     const [allCommentsModal, setAllCommentsModal] = useState(false);
-    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getBusinessRatingsQuery(Number(selectedBusinessEmployee?.business.id), STATIC_PARAMS).then(response => {
+        getBusinessRatingsQuery(STATIC_PARAMS).then(response => {
             console.log("RES", response)
             setComments(response.data.ratings);
         }).finally(() => setLoading(false));

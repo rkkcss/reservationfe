@@ -23,10 +23,10 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
   };
 
   const getAllOffers = useCallback(() => {
-    getOfferingByLoggedInEmployee(Number(selectedBusinessEmployee?.business.id)).then((res) => {
+    getOfferingByLoggedInEmployee().then((res) => {
       setOffers(res);
     });
-  }, [selectedBusinessEmployee]);
+  }, []);
 
   const getEmployeeOptions = () => {
     if (employeeOptions.length > 0) return;
