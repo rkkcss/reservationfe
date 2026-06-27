@@ -12,7 +12,6 @@ export type GlobalSearchType = {
     employee: BusinessEmployee[];
 };
 
-// Biztonságos alapállapot, így elkerüljük az undefined hibákat
 const initialValues: GlobalSearchType = {
     guests: [],
     appointments: [],

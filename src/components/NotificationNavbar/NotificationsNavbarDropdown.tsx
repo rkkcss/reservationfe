@@ -6,7 +6,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { useState } from 'react';
 
 const NotificationsDropdown = () => {
-    const { notifications, markAsRead, currentBusinessUnreadCount } = useNotifications();
+    const { notifications, markAsRead, currentBusinessUnreadCount, totalItems } = useNotifications();
     const [open, setOpen] = useState(false);
 
     return (
@@ -21,6 +21,7 @@ const NotificationsDropdown = () => {
                     notifications={notifications}
                     onRead={markAsRead}
                     unreadCount={currentBusinessUnreadCount}
+                    totalItems={totalItems}
                 />
             )}
             trigger={['click']}

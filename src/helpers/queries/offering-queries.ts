@@ -2,8 +2,8 @@ import { AxiosResponse } from "axios";
 import { API } from "../../utils/API";
 import { Offering } from "../types/Offering";
 
-export const getOffersByBusinessId = (): Promise<Offering[]> => {
-    return API.get(`/api/offerings/public`)
+export const getOffersByBusinessAndEmployeeId = (params?: { employeeId: number, search: string }): Promise<Offering[]> => {
+    return API.get(`/api/offerings/business-employee/public`, { params: params })
         .then(res => {
             return res.data
         })
