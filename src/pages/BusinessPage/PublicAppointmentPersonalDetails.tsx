@@ -1,21 +1,20 @@
-import { Form, Input } from "antd";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { Form, Input } from 'antd'
+import { isValidPhoneNumber } from 'libphonenumber-js'
 
-const StepPersonalData: React.FC = () => {
-
+const PublicAppointmentPersonalDetails = () => {
     return (
-        <>
+        <div>
             <Form.Item
                 name="name"
-                label="Vendég neve"
-                rules={[{ required: true, message: 'Kérjük válasszon vendéget!' }]}
+                label={<p className="text-xs font-bold uppercase tracking-widest">Teljes név</p>}
+                rules={[{ required: true, message: 'Kérjük add meg a teljes nevedet!' }]}
             >
                 <Input placeholder="Vendég neve..." />
             </Form.Item>
 
             <Form.Item
                 name="email"
-                label="Email"
+                label={<p className="text-xs font-bold uppercase tracking-widest">Email</p>}
                 rules={[{ required: true, message: 'E-mail címed...' }]}
             >
                 <Input placeholder="E-mail címed..." />
@@ -23,7 +22,7 @@ const StepPersonalData: React.FC = () => {
 
             <Form.Item
                 name="phoneNumber"
-                label="Telefonszám"
+                label={<p className="text-xs font-bold uppercase tracking-widest">Telefonszám</p>}
                 rules={[
                     {
                         required: true, message: 'Telefonszám...'
@@ -40,8 +39,8 @@ const StepPersonalData: React.FC = () => {
             >
                 <Input placeholder="Telefonszámod..." />
             </Form.Item>
-        </>
-    );
+        </div>
+    )
 }
 
-export default StepPersonalData;
+export default PublicAppointmentPersonalDetails

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios"
 import { API } from "../../utils/API"
-import { Appointment } from "../types/Appointment"
+import { Appointment, CreateAppointmentByGuestProps } from "../types/Appointment"
 
 export type GetAppontmentBetweenProps = {
     startDate?: Date,
@@ -45,20 +45,8 @@ export const deleteAppointmentQuery = (appointmentId: number) => {
     return API.post(`/api/appointments/${appointmentId}`);
 }
 
-// createAppointmentByGuestQuery create appointment by guest
-
-type CreateAppointmentByGuestProps = {
-    offeringId: number,
-    date: Date | string,
-    time: string,
-    businessId: number,
-    email: string,
-    phoneNumber: string,
-    name: string
-}
-
-export const createAppointmentByGuestQuery = (businessId: number, employeeId: number, formData: CreateAppointmentByGuestProps) => {
-    return API.post(`/api/appointments/business/${businessId}/business-employee/${employeeId}`, formData);
+export const createAppointmentByGuestQuery = (employeeId: number, formData: CreateAppointmentByGuestProps) => {
+    return API.post(`/api/appointments/public/business-employee/${employeeId}`, formData);
 }
 
 export const getAppointmentByModifierToken = (modifierToken: string) => {

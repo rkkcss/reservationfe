@@ -41,3 +41,14 @@ export type Appointment = {
 export type CreateAdminAppointmentRequest = Appointment & {
     employeeId: number;
 }
+
+export type CreateAppointmentByGuestProps = {
+    offeringId: number,
+    date: Dayjs | string,
+    time: string,
+    businessId: number,
+    email: string,
+    phoneNumber: string,
+    name: string
+    employeeId: number
+}
