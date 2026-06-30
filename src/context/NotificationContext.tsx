@@ -7,7 +7,6 @@ import API from "../utils/API";
 
 
 type NotificationContextType = {
-    notifications: Notification[];
     markAsRead: (id: number) => void;
     currentBusinessUnreadCount: number,
     currentPage: number,
@@ -16,13 +15,12 @@ type NotificationContextType = {
     fetchNextPage: () => "" | Promise<void> | null
     fetchPrevPage: () => "" | Promise<void> | null
     setRequestParams: Dispatch<SetStateAction<RequestParams>>
-    setData: Dispatch<SetStateAction<Notification[]>>,
-    data: Notification[]
+    setNotifications: Dispatch<SetStateAction<Notification[]>>,
+    notifications: Notification[]
     unreadCountByUser: Map<number, number>
 };
 
 const NotificationContext = createContext<NotificationContextType>({
-    notifications: [],
     markAsRead: () => { },
     currentBusinessUnreadCount: 0,
     currentPage: 1,
@@ -31,8 +29,8 @@ const NotificationContext = createContext<NotificationContextType>({
     fetchNextPage: () => null,
     fetchPrevPage: () => null,
     setRequestParams: () => { },
-    setData: () => { },
-    data: [],
+    setNotifications: () => { },
+    notifications: [],
     unreadCountByUser: new Map()
 });
 
@@ -132,7 +130,6 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <NotificationContext.Provider value={{
-            notifications,
             markAsRead,
             currentBusinessUnreadCount,
             currentPage,
@@ -141,8 +138,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
             fetchNextPage,
             fetchPrevPage,
             setRequestParams,
-            setData: setNotifications,
-            data: notifications,
+            setNotifications,
+            notifications,
             unreadCountByUser
         }}>
             {children}
