@@ -15,7 +15,7 @@ dayjs.extend(isYesterday);
 const AllNotification = () => {
     const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
     const {
-        data: notifications,
+        notifications,
         currentBusinessUnreadCount,
         currentPage,
         fetchPage,

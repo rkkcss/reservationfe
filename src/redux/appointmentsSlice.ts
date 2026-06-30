@@ -198,5 +198,4 @@ const appointmentsSlice = createSlice({
     }
 });
 
-export const asd = appointmentsSlice.actions;
 export default appointmentsSlice.reducer;

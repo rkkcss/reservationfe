@@ -25,13 +25,9 @@ const themes: Record<string, CustomTheme> = {
         // Ez lesz a teljes sötét mód
         algorithm: theme.darkAlgorithm,
         token: {
-            wireframe: false,
             "colorPrimary": "#4f4f4f",
             "colorInfo": "#4f4f4f",
-            "colorPrimaryBg": "#8b8b8b",
-            // Sötét módban érdemes megadni a komponensek alap hátterét is token szinten:
-            colorBgContainer: "#141414",
-            colorBgLayout: "#1f1f1f",
+
         },
     },
 };
@@ -59,7 +55,7 @@ export const ConfigProviderBusinessProvider = ({ children }: { children: ReactNo
 
     const normalizedTheme = (business.theme || 'pink').toLowerCase();
     const selectedTheme = themes[normalizedTheme] || themes['pink'];
-
+    console.log("selectedTheme.token", selectedTheme.token)
     return (
         <ConfigProviderBusinessContext.Provider value={{ business, selectedTheme }}>
             <ConfigProvider
