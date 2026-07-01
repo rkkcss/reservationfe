@@ -42,7 +42,7 @@ const EmployeeOfferings = () => {
                 });
             return
         }
-        updateOffer(updatedOffer, Number(selectedBusinessEmployee?.business?.id))
+        updateOffer(updatedOffer)
             .then((res) => {
                 if (res.status === 200) {
                     setOfferings(prev =>
