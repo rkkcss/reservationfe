@@ -42,7 +42,7 @@ const Home = () => {
                             Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                            <Button type="primary" size="large" iconPlacement="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
                                 className="h-8 md:h-10 text-sm"
                             >
                                 Partner regisztráció
@@ -79,7 +79,7 @@ const Home = () => {
                             Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget. Professzionális megoldás szépségipari és wellness vállalkozásoknak.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPosition="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                            <Button type="primary" size="large" iconPlacement="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
                                 className="h-8 md:h-10 text-sm"
                             >
                                 Partner regisztráció

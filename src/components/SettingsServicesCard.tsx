@@ -1,8 +1,8 @@
 import { BASIC_ENTITY_STATUSES } from '../helpers/types/BasicEntityStatus';
-import { CiEdit } from 'react-icons/ci';
 import { Offering } from '../helpers/types/Offering';
-import { Button, Popconfirm, Tag } from 'antd';
+import { Button, Divider, Popconfirm, Tag } from 'antd';
 import { TbTrash } from 'react-icons/tb';
+import { MdDeleteForever } from 'react-icons/md';
 
 type SettingsServicesCardProps = {
     offer: Offering;
@@ -24,44 +24,58 @@ const SettingsServicesCard = ({ offer, handleEditOffer, handleDeleteOffer, edita
     }
 
     return (
-        <div key={offer.id} className="relative bg-white outline outline-1 outline-gray-200/50 rounded-lg p-4 group flex flex-col">
-            {
-                offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
-                <div className="w-full h-full absolute bg-gray-100/50 rounded-lg top-0 left-0 flex items-center justify-center">
-                </div>
-            }
-            <div className="flex mb-3 justify-between">
-                <p className="font-bold text-base flex items-center gap-1">
+        <div key={offer.id} className="relative bg-white outline outline-1 outline-gray-300/50 rounded-lg p-4 group flex flex-col">
+            <Tag
+                color={offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? "green" : "gray"}
+                className="w-fit mb-5"
+            >
+                {offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? "Aktív" : "Szünetel"}
+            </Tag>
+            <div>
+                <p className="text-lg font-semibold mb-1">
                     {offer.title}
                 </p>
-                {
-                    editable &&
-
-                    <div className="flex gap-2 group-hover:opacity-100 opacity-0">
-                        <Button size="small" shape="circle" type="text" icon={<CiEdit size={18} />} onClick={() => handleEdit()}></Button>
-                        <Popconfirm
-                            title="Biztosan törölni szeretnéd?"
-                            onConfirm={() => handleDelete()}
-                            okText="Igen"
-                            cancelText="Nem"
-                        >
-                            <Button size="small" shape="circle" type="primary" danger icon={<TbTrash />}></Button>
-                        </Popconfirm>
-                    </div>
-                }
-                {
-                    offer.status === BASIC_ENTITY_STATUSES.INACTIVE &&
-                    <div className="block absolute top-2 right-1 gap-2 group-hover:hidden">
-                        <Tag color="default">Inaktív</Tag>
-                    </div>
-                }
+                <p className="text-xs font-semibold text-gray-600">
+                    {offer.description}
+                </p>
             </div>
-            <div>
-                <p className="text-sm">{offer.description}</p>
+            <Divider />
+            <div className="flex justify-between">
+                <div>
+                    <p className="text-gray-600">ÁR</p>
+                    <p className="text-lg font-semibold">{offer.price} Ft</p>
+                </div>
+                <div>
+                    <p className="text-gray-600">IDŐTARTAM</p>
+                    <p className="text-base">
+                        {offer.durationMinutes} perc
+                    </p>
+                </div>
             </div>
-            <div className="mt-auto">
-                <p className="text-base font-bold mt-2">{offer.price} Ft</p>
-            </div>
+            {
+                editable &&
+                <div className="flex gap-3 mt-auto">
+                    <Button className="flex-1"
+                        onClick={handleEdit}
+                    >Szerkesztés</Button>
+                    <Popconfirm
+                        title="Szolgáltatás törlése"
+                        description="Biztosan szeretnéd törölni ezt a szolgáltatást? A művelet nem visszavonható!"
+                        onConfirm={handleDelete}
+                        okText="Igen"
+                        okButtonProps={{ danger: true }}
+                        icon={<MdDeleteForever className="text-red-500 mr-1" size={20} />}
+                        cancelText="Mégsem"
+                        cancelButtonProps={{ type: 'default' }}
+                    >
+                        <Button
+                            danger
+                            type="primary"
+                            icon={<TbTrash />}
+                        />
+                    </Popconfirm>
+                </div>
+            }
         </div>
     )
 }

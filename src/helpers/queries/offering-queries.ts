@@ -16,16 +16,16 @@ export const getOfferingByLoggedInEmployee = (): Promise<Offering[]> => {
         })
 }
 
-export const updateOffer = (offer: Offering, businessId: number) => {
-    return API.patch(`/api/offerings/${offer.id}/business/${businessId}`, offer);
+export const updateOffer = (offer: Offering) => {
+    return API.patch(`/api/offerings/${offer.id}`, offer);
 }
 
 export const createOffer = (offer: Offering, employeeId: number) => {
     return API.post(`/api/offerings/business/business-employee/${employeeId}`, offer);
 }
 
-export const deleteOffer = (offerId: number, businessId: number) => {
-    return API.patch(`/api/offerings/${offerId}/business/${businessId}`);
+export const deleteOffer = (offerId: number) => {
+    return API.delete(`/api/offerings/${offerId}`);
 }
 
 /**

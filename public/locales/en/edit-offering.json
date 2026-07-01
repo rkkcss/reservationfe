@@ -9,5 +9,6 @@
     "cancel": "Cancel",
     "minutes": "minutes",
     "requiredField": "Required Field",
-    "status": "Status"
+    "status": "Status",
+    "color": "Service color"
 }

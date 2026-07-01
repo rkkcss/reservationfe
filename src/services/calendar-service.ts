@@ -4,6 +4,7 @@ import { EventImpl } from '@fullcalendar/core/internal';
 import dayjs from 'dayjs';
 import { EventInput } from '@fullcalendar/core';
 import { Appointment } from '../helpers/types/Appointment';
+import { readableColor } from 'polished';
 
 const statusColors: Record<string, string> = {
     PENDING: '#6c757d',
@@ -25,15 +26,16 @@ export const appointmentToEvent = (app: Appointment): EventInput => {
         ? Object.values(app.status[0])[0]
         : app.status;
     const colorKey = String(status) as keyof typeof statusColors;
+    console.log(app.offering.color)
     return {
         id: app.id?.toString(),
         title: app.guest?.name || 'Nincs megadva',
         start: dayjs(app.startDate).toISOString(),
         end: dayjs(app.endDate).toISOString(),
-        backgroundColor: "#eeeeee",
+        backgroundColor: app.offering.color,
         borderColor: statusColors[colorKey] || statusColors['DEFAULT'],
         className: eventClassNames[colorKey] || eventClassNames['DEFAULT'],
-        textColor: 'black',
+        textColor: readableColor(app.offering.color || ""),
         extendedProps: {
             status,
             guest: app.guest,

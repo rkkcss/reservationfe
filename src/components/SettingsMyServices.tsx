@@ -5,7 +5,6 @@ import EditOffering from '../components/Modals/EditOffering'
 import { FiPlus } from 'react-icons/fi'
 import { Offering } from '../helpers/types/Offering'
 import { createOffer, deleteOffer, updateOffer } from '../helpers/queries/offering-queries'
-import { PiPlusBold } from 'react-icons/pi'
 import { UserStore } from '../store/store'
 import { useSelector } from 'react-redux'
 import { BUSINESS_PERMISSIONS } from '../helpers/types/BusinessPermission'
@@ -31,7 +30,7 @@ const SettingsMyServices = () => {
 
     const handleOnOkOffer = (values: Offering) => {
         if (values?.id) {
-            updateOffer(values, Number(selectedBusinessEmployee?.business?.id))?.then(res => {
+            updateOffer(values)?.then(res => {
                 if (res.status !== 200) return;
                 setData(prev => {
                     return prev.map(item => item.id === values.id ? values : item)
@@ -47,7 +46,7 @@ const SettingsMyServices = () => {
     }
 
     const handleDeleteOffer = (offerId: number) => {
-        deleteOffer(offerId, Number(selectedBusinessEmployee?.business?.id)).then(res => {
+        deleteOffer(offerId).then(res => {
             if (res.status !== 204) return;
 
             setData(prev => prev.filter(item => item.id !== offerId))
@@ -90,6 +89,9 @@ const SettingsMyServices = () => {
                     </Button>
                 }
             </div>
+            <div className="flex justify-end text-lg my-2">
+                {totalItems} találat
+            </div>
             <Spin spinning={loading}>
                 {
                     !data || data.length === 0 ?
@@ -109,13 +111,6 @@ const SettingsMyServices = () => {
                                             editable={userHasPermission}
                                         />
                                     ))
-                                }
-                                {
-                                    data.length < 20 && userHasPermission &&
-                                    <div onClick={() => setEditOfferingModal(true)} className="rounded-lg p-4 group flex hover:opacity-100 opacity-0 cursor-pointer bg-slate-50 justify-center items-center">
-                                        <PiPlusBold size={30} />
-                                        <span className="ml-2">Új szolgáltatás hozzáadása</span>
-                                    </div>
                                 }
                             </div>
                             <Pagination total={totalItems} className="flex mt-4 justify-end" current={currentPage + 1} itemRender={itemRender} pageSize={20} />

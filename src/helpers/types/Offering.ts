@@ -9,4 +9,5 @@ export type Offering = {
     isActive?: boolean;
     status: BasicEntityStatus;
     businessEmployee: BusinessEmployee;
+    color?: string
 }

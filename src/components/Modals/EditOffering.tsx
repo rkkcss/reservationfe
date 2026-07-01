@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Modal, Switch } from "antd"
+import { Button, ColorPicker, Form, Input, InputNumber, Modal, Switch } from "antd"
 import { Offering } from "../../helpers/types/Offering"
 import { useEffect } from "react"
 import TextArea from "antd/es/input/TextArea"
@@ -36,7 +36,9 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
 
     useEffect(() => {
         if (offer) {
-            form.setFieldsValue({ ...offer, status: offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? true : false });
+            form.setFieldsValue({ 
+                ...offer, 
+                status: offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? true : false });
         }
     }, [offer]);
 
@@ -101,6 +103,15 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                     valuePropName="checked"
                 >
                     <Switch />
+                </Form.Item>
+                <Form.Item 
+                    name="color"
+                    label={t("color")}
+                    getValueFromEvent={(color) => color.toHexString()}
+                >
+                    <ColorPicker 
+                        showText
+                    />
                 </Form.Item>
                 <div className="flex justify-between mb-0">
                     <Button type="primary" htmlType="submit" className="mt-3">

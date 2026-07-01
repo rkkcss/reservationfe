@@ -9,5 +9,6 @@
     "cancel": "Mégse",
     "minutes": "perc",
     "requiredField": "Kötelező mező",
-    "status": "Státusz"
+    "status": "Státusz",
+    "color": "Szolgáltatás színe"
 }
