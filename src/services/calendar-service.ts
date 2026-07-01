@@ -32,10 +32,10 @@ export const appointmentToEvent = (app: Appointment): EventInput => {
         title: app.guest?.name || 'Nincs megadva',
         start: dayjs(app.startDate).toISOString(),
         end: dayjs(app.endDate).toISOString(),
-        backgroundColor: app.offering.color,
+        backgroundColor: app?.offering?.color || "#ffffff",
         borderColor: statusColors[colorKey] || statusColors['DEFAULT'],
         className: eventClassNames[colorKey] || eventClassNames['DEFAULT'],
-        textColor: readableColor(app.offering.color || ""),
+        textColor: app?.offering?.color ? readableColor(app.offering.color) : "#000000",
         extendedProps: {
             status,
             guest: app.guest,
