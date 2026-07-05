@@ -1,0 +1,12 @@
+{
+    "appointment-not-exists": "Az időpont nem létezik vagy már le lett mondva!",
+    "try-again": "Újra próbálkozás",
+    "back-to-home": "Vissza a fő oldalra",
+    "modify-or-cancel": "Időpont lemondása",
+    "sure-want-to-cancel": "Biztosan le akarod mondani az időpontodat?",
+    "minute": "perc",
+    "cancel-appointment": "Időpont lemondása",
+    "yes": "Igen",
+    "no": "Nem",
+    "successfully-cancelled": "Sikeresen lemondtad az időpontodat"
+}

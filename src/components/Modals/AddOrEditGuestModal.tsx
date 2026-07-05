@@ -14,9 +14,7 @@ type AddOrEditGuestModalProps = {
 
 const AddOrEditGuestModal = ({ open, onClose, guest, onOk }: AddOrEditGuestModalProps) => {
     const onFinish = (values: Guest) => {
-        console.log(values)
         onOk(values);
-        onClose();
     };
 
     return (

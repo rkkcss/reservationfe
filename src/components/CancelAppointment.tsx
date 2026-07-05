@@ -10,8 +10,10 @@ import { Popconfirm, Skeleton, Spin } from 'antd/lib';
 import { MdDeleteForever } from 'react-icons/md';
 import { RiServiceLine } from 'react-icons/ri';
 import { notificationManager } from '../utils/notificationConfig';
+import { useTranslation } from 'react-i18next';
 
 const CancelAppointment = () => {
+    const { t } = useTranslation("cancel-appointment");
     const { modifierToken } = useParams();
     const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ const CancelAppointment = () => {
                 setError(null);
             })
             .catch(err => {
-                setError(err?.title || 'Hiba történt az időpont lekérésekor');
+                setError(err?.message || 'Hiba történt az időpont lekérésekor');
                 setAppointment(null);
             })
             .finally(() => setLoading(false));
@@ -67,8 +69,8 @@ const CancelAppointment = () => {
         return (
             <Result
                 status="404"
-                title={error}
-                extra={<Button onClick={() => window.location.reload()}>Újra próbálkozás</Button>}
+                title={t(error)}
+                extra={<Button onClick={() => window.location.reload()}>{t("try-again")}</Button>}
             />
         );
     }
@@ -77,8 +79,8 @@ const CancelAppointment = () => {
         return (
             <Result
                 status="success"
-                title="Az időpont sikeresen lemondva"
-                extra={<Button type="primary" onClick={() => navigate('/')}>Vissza a főoldalra</Button>}
+                title={t("successfully-cancelled")}
+                extra={<Button type="primary" onClick={() => navigate('/')}>{t("back-to-home")}</Button>}
             />
         );
     }
@@ -87,7 +89,7 @@ const CancelAppointment = () => {
         return (
             <Result
                 status="info"
-                title="Nincs elérhető időpont a megadott token alapján"
+                title={t("appointment-not-exists")}
             />
         );
     }
@@ -95,7 +97,7 @@ const CancelAppointment = () => {
     return (
         <Result
             status="warning"
-            title="Időpont módosítása vagy lemondása."
+            title={t("modify-or-cancel")}
             extra={
                 <>
                     <div className="mx-auto max-w-screen-sm text-base  mt-8">
@@ -112,21 +114,21 @@ const CancelAppointment = () => {
                         </div>
                         <div className="flex items-center gap-2 mb-2">
                             <RiServiceLine size={20} strokeWidth={0} />
-                            <p>{appointment.offering?.title}</p> - <p>{appointment.offering?.durationMinutes} perc</p>
+                            <p>{appointment.offering?.title}</p> - <p>{appointment.offering?.durationMinutes} {t("minute")}</p>
                         </div>
                     </div>
                     <div className="flex gap-3 justify-center mt-5">
                         <Popconfirm
-                            title="Biztosan törölni szeretné az időpontot?"
+                            title={t("sure-want-to-cancel")}
                             onConfirm={handleCancelAppointment}
-                            okText="Igen"
-                            cancelText="Nem"
+                            okText={t("yes")}
+                            cancelText={t("no")}
                             okButtonProps={{ danger: true, loading: cancelLoading }}
                             cancelButtonProps={{ type: 'default', disabled: cancelLoading }}
                             icon={<MdDeleteForever className="text-red-500 mr-1" size={20} />}
                         >
                             <Button type="default" danger loading={cancelLoading}>
-                                Lemondom
+                                {t("cancel-appointment")}
                             </Button>
                         </Popconfirm>
                         <Button type="primary" disabled>

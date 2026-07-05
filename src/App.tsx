@@ -14,7 +14,6 @@ import SettingsBusiness from './components/SettingsBusiness'
 import SettingsGuests from './components/SettingsGuests/SettingsGuests'
 import CancelAppointment from './components/CancelAppointment'
 import DashboardLayout from './pages/Dashboard'
-import CalendarLayout from './layout/CalendarLayout'
 import Register from './pages/Register'
 import RegisterActivation from './pages/Activations/RegisterActivation'
 import { lazy, useEffect } from 'react'
@@ -36,6 +35,7 @@ import PasswordResetFinish from './pages/PasswordReset/PasswordResetFinish'
 import AuthenticatedLayout from './layout/AuthenticatedLayout'
 import AllNotification from './pages/AllNotification/AllNotification'
 import { useTenantSlug } from './hooks/useTenantSlug'
+import CalendarPage from './pages/Calendar/CalendarPage'
 
 export const AboutPage = lazy(() => import('./pages/AboutPage'));
 export const PricePage = lazy(() => import('./pages/PricePage'));
@@ -99,7 +99,7 @@ function App() {
                 <Route element={<ProtectedEmployeeRoles permissions={[BUSINESS_PERMISSIONS.VIEW_OWN_STATISTICS, BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS]} />}>
                   <Route path="dashboard" element={<DashboardLayout />} />
                 </Route>
-                <Route path="calendar" element={<CalendarLayout />} />
+                <Route path="calendar" element={<CalendarPage />} />
                 <Route path="guests" element={<SettingsGuests />} />
                 <Route path="notifications" element={<AllNotification />} />
               </Route>

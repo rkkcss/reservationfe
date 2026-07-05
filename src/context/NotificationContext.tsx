@@ -114,6 +114,11 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
     const markAsRead = async (id: number) => {
         if (!selectedBusinessEmployee) return;
+        
+        //search notification, if its already read -> return
+        const targetNotification = notifications.find(n => n.id === id);
+        if (!targetNotification || targetNotification?.read) return;
+
         putNotificationRead(id, selectedBusinessEmployee.id);
         setNotifications(prev =>
             prev.map(n => n.id === id ? { ...n, read: true } : n)
@@ -123,7 +128,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
             const map = new Map(prev ?? []);
             const beId = selectedBusinessEmployee.id;
             if (!beId) return map;
-            map.set(beId, (map.get(beId) ?? 0) - 1);
+            const current = map.get(beId) ?? 0;
+            map.set(beId, Math.max(0, current - 1));
             return map;
         });
     };

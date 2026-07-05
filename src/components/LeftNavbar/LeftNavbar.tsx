@@ -1,5 +1,5 @@
 import { Badge, Button, Divider, Image, Menu, Popover } from 'antd'
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import logo from '../../assets/logo.png';
 import UserAvatar from '../UserAvatar';
@@ -12,6 +12,7 @@ import { LiaIndustrySolid } from 'react-icons/lia';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { TbSquareToggle } from 'react-icons/tb';
 import { toggleLeftMenu } from '../../redux/generalSlice';
+import LeftNavbarCalendar from './LeftNavbarCalendar';
 
 const LeftNavbar = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const LeftNavbar = () => {
     const { user, selectedBusinessEmployee } = useAppSelector(state => state.userStore);
     const { isLeftMenuCollapsed } = useAppSelector(state => state.generalStore);
     const [popoverOpen, setPopoverOpen] = useState(false);
+    const {pathname} = useLocation()
 
     const handleAccountChangeBusiness = (navigate: (path: string, options?: { replace: boolean }) => void) => {
         dispatch(setActiveBusinessEmployeeDefault());
@@ -45,6 +47,13 @@ const LeftNavbar = () => {
                     className="!border-none rounded-xl overflow-y-auto overflow-x-hidden text-ellipsis w-full"
                     inlineCollapsed={isLeftMenuCollapsed}
                 />
+                
+                {
+                    (!isLeftMenuCollapsed && pathname.includes("calendar"))&&
+                    <div className="mt-auto">
+                        <LeftNavbarCalendar />
+                    </div>
+                }
                 <div className={`${!isLeftMenuCollapsed ? 'px-4' : 'px-2'} block mt-auto mb-0 pb-4`}>
                     <Divider />
                     <Popover

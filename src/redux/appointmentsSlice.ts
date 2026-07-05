@@ -44,6 +44,7 @@ export const fetchPendingAppointments = createAsyncThunk<
     async (_, thunkAPI) => {
 
         const state = thunkAPI.getState();
+        //TODO:remove businessID
         const businessId = state.userStore.selectedBusinessEmployee?.business.id
         //need better handling
         if (!businessId) return [];

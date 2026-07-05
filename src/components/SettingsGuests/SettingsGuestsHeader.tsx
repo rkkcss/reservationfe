@@ -11,13 +11,13 @@ type SettingsGuestsHeaderProps = {
     setQueryParams: React.Dispatch<React.SetStateAction<RequestParams>>;
 }
 const SettingsGuestsHeader = ({ setQueryParams }: SettingsGuestsHeaderProps) => {
-    const { selectedBusinessEmployee, user } = useAppSelector(state => state.userStore);
+    const { user } = useAppSelector(state => state.userStore);
     const [employees, setEmployees] = useState<Array<BusinessEmployee>>([]);
     const [localFilter, setLocalFilter] = useState<string>("");
     const debouncedSearchTerm = useDebounce(localFilter, 500);
 
     useEffect(() => {
-        getEmployeesByBusinessId(Number(selectedBusinessEmployee?.business.id)).then(res => {
+        getEmployeesByBusinessId().then(res => {
             if (res.status !== 200) {
                 console.error("Failed to fetch employees");
                 return;

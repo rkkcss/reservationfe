@@ -40,7 +40,7 @@ const SettingsGuests = () => {
 
     const handleGuestsChange = (guest: Guest) => {
         if (!guest.id) {
-            createQuest(Number(selectedBusinessEmployee?.business.id), guest).then(res => {
+            createQuest(guest).then(res => {
                 if (res.status !== 201) {
                     console.error("Failed to create guest");
                     return;

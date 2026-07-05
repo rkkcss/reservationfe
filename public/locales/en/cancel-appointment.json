@@ -1,0 +1,12 @@
+{
+    "appointment-not-exists": "Appointment not exists or already cancelled!",
+    "try-again": "Try again",
+    "back-to-home": "Back to home page",
+    "modify-or-cancel": "Modify or cancel your appointment.",
+    "sure-want-to-cancel": "Are you sure you cancel your appointment?",
+    "minute": "minute",
+    "cancel-appointment": "Cancel my appointment",
+    "yes": "Yes",
+    "no": "No",
+    "successfully-cancelled": "Successfully cancelled your appointment"
+}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Form } from 'antd';
 import { useAppSelector } from '../../../store/hooks';
 import { Guest } from '../../../helpers/types/Guest';
@@ -8,6 +8,7 @@ import { getAllGuestsBySearch } from '../../../helpers/queries/guest-queries';
 import { getOfferingByLoggedInEmployee } from '../../../helpers/queries/offering-queries';
 import { getEmployeesByBusinessId } from '../../../helpers/queries/business-employee';
 import { CreateAdminAppointmentRequest, Appointment } from '../../../helpers/types/Appointment';
+import { useDebounce } from '../../../hooks/useDebounce';
 
 export const useAppointmentForm = (appointment: Appointment | CreateAdminAppointmentRequest | undefined, open: boolean, onClose: () => void, onOk?: (values: CreateAdminAppointmentRequest) => void) => {
   const [form] = Form.useForm();
@@ -16,11 +17,36 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
   const [employeeOptions, setEmployeeOptions] = useState<BusinessEmployee[]>([]);
   const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
-  const searchInGuests = (value: string) => {
-    getAllGuestsBySearch(Number(selectedBusinessEmployee?.business.id), value).then((res) => {
-      setSearchedGuests(res.data);
-    });
-  };
+  const [guestSearchTerm, setGuestSearchTerm] = useState("");
+  const [isSearchingGuests, setIsSearchingGuests] = useState(false);
+  const debouncedGuestSearchTerm = useDebounce(guestSearchTerm, 350);
+  const guestSearchRequestIdRef = useRef(0);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const businessId = selectedBusinessEmployee?.business.id;
+    if (!businessId) return;
+
+    const requestId = ++guestSearchRequestIdRef.current;
+    setIsSearchingGuests(true);
+
+    getAllGuestsBySearch(Number(businessId), debouncedGuestSearchTerm)
+      .then((res) => {
+        if (requestId === guestSearchRequestIdRef.current) {
+          setSearchedGuests(res.data);
+        }
+      })
+      .finally(() => {
+        if (requestId === guestSearchRequestIdRef.current) {
+          setIsSearchingGuests(false);
+        }
+      });
+  }, [debouncedGuestSearchTerm, open, selectedBusinessEmployee]);
+
+  const searchInGuests = useCallback((value: string) => {
+    setGuestSearchTerm(value);
+  }, []);
 
   const getAllOffers = useCallback(() => {
     getOfferingByLoggedInEmployee().then((res) => {
@@ -30,7 +56,7 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
 
   const getEmployeeOptions = () => {
     if (employeeOptions.length > 0) return;
-    getEmployeesByBusinessId(Number(selectedBusinessEmployee?.business.id)).then((res) => {
+    getEmployeesByBusinessId().then((res) => {
       setEmployeeOptions(res.data);
     });
   };
@@ -88,6 +114,7 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
     offers,
     employeeOptions,
     searchInGuests,
+    isSearchingGuests,
     getEmployeeOptions,
     handleOnFinish,
     mergeEntity,

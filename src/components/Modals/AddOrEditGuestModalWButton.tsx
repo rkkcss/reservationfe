@@ -4,7 +4,6 @@ import AddOrEditGuestModal from "./AddOrEditGuestModal";
 import { Guest } from "../../helpers/types/Guest";
 import { useState } from "react";
 import { createQuest } from "../../helpers/queries/guest-queries";
-import { useAppSelector } from "../../store/hooks";
 
 type AddOrEditGuestModalWButtonProps = {
     afterSubmit: (guest: Guest) => void;
@@ -12,14 +11,16 @@ type AddOrEditGuestModalWButtonProps = {
 
 const AddOrEditGuestModalWButton = ({ afterSubmit }: AddOrEditGuestModalWButtonProps) => {
     const [addGuestModal, setAddGuestModal] = useState(false);
-    const { selectedBusinessEmployee } = useAppSelector(state => state.userStore);
 
     const handleGuestSubmit = (guest: Guest) => {
         if (guest.id) notification.success({ message: "Itt nem kéne hogy legyen ID-ja a vendégnek!" });
 
-        createQuest(Number(selectedBusinessEmployee?.business.id), guest)
+        createQuest(guest)
             .then((res) => {
-                afterSubmit(res.data);
+                if (res.status === 201) {
+                    afterSubmit(res.data);
+                    setAddGuestModal(false);    
+                }
             });
     }
 

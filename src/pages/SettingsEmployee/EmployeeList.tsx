@@ -2,15 +2,12 @@ import { Button, Table, Tag } from 'antd'
 import { BusinessEmployee } from '../../helpers/types/BusinessEmployee';
 import { useNavigate } from 'react-router';
 import { usePagination } from '../../hooks/usePagination';
-import { useSelector } from 'react-redux';
-import { UserStore } from '../../store/store';
 import { employeeRolesExtended } from '../../helpers/types/BusinessEmployeeRole';
 import { FaRegEdit } from 'react-icons/fa';
 
 const EmployeeList = () => {
     const navigate = useNavigate();
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/business/' + selectedBusinessEmployee?.business.id + '/employees');
+    const { data } = usePagination<BusinessEmployee[]>('/api/business-employee/employees');
 
     const dataColumns = [
         {

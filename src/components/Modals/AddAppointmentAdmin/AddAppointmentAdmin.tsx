@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Popconfirm, Select, Tooltip } from 'antd'
+import { Button, Form, Modal, Popconfirm, Select, Spin, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { Appointment, CreateAdminAppointmentRequest } from '../../../helpers/types/Appointment'
 import { Guest } from '../../../helpers/types/Guest'
@@ -34,7 +34,8 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
         getEmployeeOptions,
         handleOnFinish,
         mergeEntity,
-        setSearchedGuests
+        setSearchedGuests,
+        isSearchingGuests
     } = useAppointmentForm(appointment, open, onClose, onOk);
 
     const handleDelete = () => {
@@ -78,7 +79,9 @@ const AddAppointmentAdmin = ({ open, onClose, appointment, onOk, deleteAppointme
                         <Form.Item label={t("guest")} name="guestId" className="flex-1 w-full">
                             <Select
                                 size="small"
-                                showSearch={{ onSearch: searchInGuests }}
+                                showSearch={{ onSearch: searchInGuests, filterOption: false }}
+                                notFoundContent={isSearchingGuests ? <Spin size="small" /> : null}
+                                loading={isSearchingGuests}
                                 options={searchedGuests.map(g => ({ label: g.name, value: g.id }))}
                                 labelRender={(e) => (
                                     <div className="flex items-center gap-1">

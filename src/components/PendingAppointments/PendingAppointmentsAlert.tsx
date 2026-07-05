@@ -25,7 +25,8 @@ const PendingAppointmentsAlert = ({ dataLength, onViewClick }: PendingAppointmen
     return (
         <Alert
             type={dataLength > 0 ? "warning" : "info"}
-            message={
+            className="mb-4"
+            title={
                 <div className="flex justify-between items-center">
                     {dataLength > 0 ?
                         <p>

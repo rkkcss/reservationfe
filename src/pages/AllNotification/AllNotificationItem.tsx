@@ -2,17 +2,30 @@ import { Notification } from '../../helpers/types/Notification';
 import dayjs from 'dayjs';
 import { NotificationRenderer } from './NotificationRenderer';
 import { useNotifications } from '../../context/NotificationContext';
+import { useNavigate } from 'react-router';
 
 type Props = {
     notification: Notification;
+    closeDropDown?: () => void;
 };
 
-const AllNotificationItem = ({ notification }: Props) => {
+const AllNotificationItem = ({ notification, closeDropDown }: Props) => {
     const isUnread = !notification.read;
     const { markAsRead } = useNotifications();
+    const navigate = useNavigate();
+
+    const handleOnClick = () => {
+        if (notification && 'appointmentId' in notification.data) {
+            const { appointmentId, date } = notification.data;
+            const dateToNavigate = dayjs(date).format("YYYY-MM-DD");
+            navigate(`/calendar?view=timeGridDay&date=${dateToNavigate}&employee=all&appointmentId=${appointmentId}`);
+        }
+        markAsRead(notification.id);
+        closeDropDown?.();
+    }
     return (
         <div
-            onClick={() => markAsRead(notification.id)}
+            onClick={() => handleOnClick()}
             className="relative flex items-center justify-between p-4 rounded-lg transition-all hover:shadow-md cursor-pointer"
         >
             {isUnread && (

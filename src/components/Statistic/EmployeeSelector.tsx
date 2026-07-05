@@ -16,7 +16,7 @@ const EmployeeSelector = () => {
     const { hasPermission } = useSelectedEmployee();
 
     useEffect(() => {
-        getEmployeesByBusinessId(Number(selectedBusinessEmployee?.business.id)).then(res => {
+        getEmployeesByBusinessId().then(res => {
             if (hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_STATISTICS)) {
                 return setEmployees(res.data);
             }

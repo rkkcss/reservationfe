@@ -42,7 +42,7 @@ const NotificationList = ({ notifications, unreadCount, closeDropdown, totalItem
 
             <div className="max-h-96 overflow-y-auto divide-y divide-gray-50">
                 {notifications.map((notification) => (
-                    <AllNotificationItem key={notification.id} notification={notification} />
+                    <AllNotificationItem key={notification.id} notification={notification} closeDropDown={closeDropdown} />
                 ))}
                 {
                     totalItems > 10 &&
