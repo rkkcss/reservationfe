@@ -11,8 +11,7 @@ export const EmployeeFormSelector = ({ options, loadOptions }: EmployeeFormSelec
         <Form.Item label="Munkatárs" name="employeeId">
             <Select
                 onOpenChange={(open) => open && loadOptions()}
-                showSearch
-                optionFilterProp="label"
+                showSearch={{ optionFilterProp: "label" }}
                 placeholder="Válassz munkatársat..."
                 allowClear
                 optionLabelProp="label"

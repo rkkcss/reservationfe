@@ -3,7 +3,6 @@ import { BusinessEmployee } from "../types/BusinessEmployee";
 
 export const getEmployeesByBusinessId = () => {
     return API.get<BusinessEmployee[]>(`/api/business-employee/employees`);
-
 };
 
 export const getCurrentBusinessEmployeeOptions = () => {

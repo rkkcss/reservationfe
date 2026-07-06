@@ -55,7 +55,7 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
   }, []);
 
   const getEmployeeOptions = () => {
-    if (employeeOptions.length > 0) return;
+    if (employeeOptions.length > 1) return;
     getEmployeesByBusinessId().then((res) => {
       setEmployeeOptions(res.data);
     });
@@ -82,8 +82,6 @@ export const useAppointmentForm = (appointment: Appointment | CreateAdminAppoint
       form.resetFields();
     }
   }, [open, getAllOffers, form, appointment]);
-
-  // useAppointmentForm.ts javítása
 
   useEffect(() => {
     mergeEntity(appointment?.guest, setSearchedGuests, 'guestId');
