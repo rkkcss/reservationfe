@@ -1,30 +1,38 @@
-import { Alert, Button, Form, Input, InputNumber, Select, Tooltip } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
-import { patchBusiness } from '../helpers/queries/business-queries'
-import { Business } from '../helpers/types/Business'
-import { useForm, useWatch } from 'antd/es/form/Form'
-import { MdInfoOutline } from 'react-icons/md'
-import { useEffect } from 'react'
+import { Alert, Button, Form, Input, InputNumber, Select, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { patchBusiness } from "../helpers/queries/business-queries";
+import { Business } from "../helpers/types/Business";
+import { useForm, useWatch } from "antd/es/form/Form";
+import { MdInfoOutline } from "react-icons/md";
+import { useEffect } from "react";
 
 type SettingsBusinessDataProps = {
-    business: Business
-}
+    business: Business;
+};
 
 const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
-    const [form] = useForm()
-    const appointmentApprovalRequired = useWatch('appointmentApprovalRequired', form)
+    const [form] = useForm();
+    const appointmentApprovalRequired = useWatch(
+        "appointmentApprovalRequired",
+        form,
+    );
 
     useEffect(() => {
-        form.setFieldsValue(business)
-    }, [business, form])
+        form.setFieldsValue(business);
+    }, [business, form]);
 
     const handleSubmit = (values: Business) => {
         patchBusiness(values);
-    }
+    };
 
     return (
         <div className="">
-            <Form layout="vertical" form={form} onFinish={handleSubmit} onFinishFailed={(v) => console.log(v)}>
+            <Form
+                layout="vertical"
+                form={form}
+                onFinish={handleSubmit}
+                onFinishFailed={(v) => console.log(v)}
+            >
                 <Form.Item hidden name="id">
                     <Input hidden />
                 </Form.Item>
@@ -32,18 +40,32 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
                     <Input placeholder="Név..." />
                 </Form.Item>
                 <Form.Item label="Üzlet címe" name="address">
-                    <Input placeholder="Cím..." count={{
-                        show: true,
-                        max: 255
-                    }} />
+                    <Input
+                        placeholder="Cím..."
+                        count={{
+                            show: true,
+                            max: 255,
+                        }}
+                    />
                 </Form.Item>
-                <Form.Item label="Leírás" name="description" rules={[{ max: 500 }]}>
-                    <TextArea placeholder="Leírás..." count={{
-                        show: true,
-                        max: 500
-                    }} />
+                <Form.Item
+                    label="Leírás"
+                    name="description"
+                    rules={[{ max: 500 }]}
+                >
+                    <TextArea
+                        placeholder="Leírás..."
+                        count={{
+                            show: true,
+                            max: 500,
+                        }}
+                    />
                 </Form.Item>
-                <Form.Item label="Telefonszám" name="phoneNumber" rules={[{ max: 15 }]}>
+                <Form.Item
+                    label="Telefonszám"
+                    name="phoneNumber"
+                    rules={[{ max: 15 }]}
+                >
                     <Input placeholder="Telefonszám..." />
                 </Form.Item>
                 <Form.Item
@@ -60,16 +82,31 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
                     <Select
                         options={[
                             { label: "Igen", value: false },
-                            { label: "Nem", value: true }
+                            { label: "Nem", value: true },
                         ]}
                     />
                 </Form.Item>
-                {appointmentApprovalRequired === true &&
-                    <Alert showIcon type="info" message="A rendszer most minden a jövőben lefoglalt időpontot el fog fogadni és nem neked kell." className="mb-4" />}
-                {appointmentApprovalRequired === false &&
-                    <Alert showIcon type="info" message="A bejövő idöpontokat neked kell majd elfogadnod!" className="mb-4" />}
+                {appointmentApprovalRequired === true && (
+                    <Alert
+                        showIcon
+                        type="info"
+                        title="A rendszer most minden a jövőben lefoglalt időpontot el fog fogadni és nem neked kell."
+                        className="mb-4"
+                    />
+                )}
+                {appointmentApprovalRequired === false && (
+                    <Alert
+                        showIcon
+                        type="info"
+                        title="A bejövő idöpontokat neked kell majd elfogadnod!"
+                        className="mb-4"
+                    />
+                )}
 
-                <Form.Item name="maxWeeksInAdvance" label="Add meg hány hétre előre tudjanak foglalni a vendégek">
+                <Form.Item
+                    name="maxWeeksInAdvance"
+                    label="Add meg hány hétre előre tudjanak foglalni a vendégek"
+                >
                     <InputNumber
                         min={0}
                         max={52}
@@ -79,10 +116,12 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
                     />
                 </Form.Item>
 
-                <Button htmlType="submit" type="primary">Mentés</Button>
+                <Button htmlType="submit" type="primary">
+                    Mentés
+                </Button>
             </Form>
         </div>
-    )
-}
+    );
+};
 
-export default SettingsBusinessData
+export default SettingsBusinessData;

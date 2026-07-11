@@ -7,7 +7,6 @@ import { BusinessEmployee } from "../helpers/types/BusinessEmployee";
 import { notificationManager } from "../utils/notificationConfig";
 import { User } from "../helpers/types/User";
 
-
 export type LoginForm = {
     username: string;
     password: string;
@@ -37,7 +36,7 @@ export const getAccountInfo = createAsyncThunk<User>(
     async () => {
         const response = await API.get<User>("/api/account");
         return response.data;
-    }
+    },
 );
 
 export const getAccountBusinessOptions = createAsyncThunk(
@@ -45,42 +44,52 @@ export const getAccountBusinessOptions = createAsyncThunk(
     async () => {
         const response = await API.get("/api/business-employee/current");
         return response.data;
-    }
+    },
 );
 
 export const loginUser = createAsyncThunk<
     { status: number; message: string },
     LoginForm
->(
-    'loginUser',
-    async (user, { dispatch, rejectWithValue }) => {
-        try {
-            const res = await APILogin.post('/api/authentication', user);
+>("loginUser", async (user, { dispatch, rejectWithValue }) => {
+    try {
+        const res = await APILogin.post("/api/authentication", user);
 
-            if (res.status === 200) {
-                await dispatch(getAccountInfo()).unwrap();
-                return { status: res.status, message: i18next.t("login-modal:loggedInSuccessfully") };
-            }
-
-            return { status: res.status, message: "Unexpected status code!" };
-        } catch (error: unknown) {
-            const err = error as AxiosError;
-            const status = err.response?.status ?? 0;
-
-            if (status === 401) {
-                // rejectWithValue használata, ha hiba történt
-                return rejectWithValue({ status, message: i18next.t("login-modal:wrongCredentials") });
-            }
-
-            return rejectWithValue({ status, message: i18next.t("login-modal:somethingWentWrong") });
+        if (res.status === 200) {
+            await dispatch(getAccountInfo()).unwrap();
+            return {
+                status: res.status,
+                message: i18next.t("login-modal:loggedInSuccessfully"),
+            };
         }
+
+        return { status: res.status, message: "Unexpected status code!" };
+    } catch (error: unknown) {
+        const err = error as AxiosError;
+        const status = err.response?.status ?? 0;
+
+        if (status === 401) {
+            // rejectWithValue használata, ha hiba történt
+            return rejectWithValue({
+                status,
+                message: i18next.t("login-modal:wrongCredentials"),
+            });
+        }
+
+        return rejectWithValue({
+            status,
+            message: i18next.t("login-modal:somethingWentWrong"),
+        });
     }
-);
+});
 
 export const logoutUser = createAsyncThunk("logoutUser", async () => {
-    await API.post("/api/logout", {}, {
-        showSuccessNotification: false
-    });
+    await API.post(
+        "/api/logout",
+        {},
+        {
+            showSuccessNotification: false,
+        },
+    );
     await API.get("/api/csrf-token");
 });
 
@@ -89,13 +98,8 @@ export const updateUserApi = createAsyncThunk<User, User>(
     async (user: User) => {
         await API.post("/api/account", user);
         return user;
-    }
+    },
 );
-
-export const updateUserImg = createAsyncThunk("updateUserImg", async (imageUrl: string, { dispatch }) => {
-    await API.post("/api/account/change-image", { imageUrl: imageUrl });
-    dispatch(setImageUrl(imageUrl));
-});
 
 const loginSlice = createSlice({
     name: "store",
@@ -110,7 +114,10 @@ const loginSlice = createSlice({
         toggleTheme(state, action: PayloadAction<string>) {
             state.theme = action.payload;
         },
-        setActiveBusinessEmployee(state, action: PayloadAction<BusinessEmployee>) {
+        setActiveBusinessEmployee(
+            state,
+            action: PayloadAction<BusinessEmployee>,
+        ) {
             state.selectedBusinessEmployee = action.payload;
         },
         setActiveBusinessEmployeeDefault(state) {
@@ -118,20 +125,29 @@ const loginSlice = createSlice({
         },
         setImageUrl(state, action) {
             if (state.user) {
-                state.user = ({ ...state.user, imageUrl: action.payload })
+                state.user = {
+                    ...state.user,
+                    ...action.payload,
+                };
             }
         },
         updateName(state, action) {
             if (state.user) {
-                state.user = ({ ...state.user, firstName: action.payload.firstName, lastName: action.payload.lastName });
+                state.user = {
+                    ...state.user,
+                    firstName: action.payload.firstName,
+                    lastName: action.payload.lastName,
+                };
             }
-
         },
         increaseOnBoardingV(state) {
             if (state.user) {
-                state.user = ({ ...state.user, onboardingVersion: state.user.onboardingVersion + 1 });
+                state.user = {
+                    ...state.user,
+                    onboardingVersion: state.user.onboardingVersion + 1,
+                };
             }
-        }
+        },
     },
     extraReducers(builder) {
         builder
@@ -180,6 +196,15 @@ const loginSlice = createSlice({
     },
 });
 
-export const { loadingTrue, loadingFalse, toggleTheme, setImageUrl, updateName, setActiveBusinessEmployee, setActiveBusinessEmployeeDefault, increaseOnBoardingV } = loginSlice.actions;
+export const {
+    loadingTrue,
+    loadingFalse,
+    toggleTheme,
+    setImageUrl,
+    updateName,
+    setActiveBusinessEmployee,
+    setActiveBusinessEmployeeDefault,
+    increaseOnBoardingV,
+} = loginSlice.actions;
 
 export default loginSlice.reducer;

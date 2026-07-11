@@ -1,9 +1,21 @@
 export function useTenantSlug() {
-    const hostname = window.location.hostname; // "pizzeria-bella.localhost"
-    const parts = hostname.split('.');
+    if (typeof window === "undefined") return null;
 
-    if (parts.length >= 2 && parts[0] !== 'localhost') {
-        return parts[0]; // "pizzeria-bella"
+    const hostname = window.location.hostname;
+
+    if (hostname.endsWith(".localhost")) {
+        const tenant = hostname.replace(".localhost", "");
+        return tenant || null;
     }
-    return null; // sima localhost, nincs tenant
+
+    const baseDomain = "valami.hu";
+
+    if (hostname.endsWith(`.${baseDomain}`)) {
+        const tenant = hostname
+            .replace(`.${baseDomain}`, "")
+            .replace(/^www\./, "");
+        return tenant || null;
+    }
+
+    return null;
 }

@@ -7,6 +7,7 @@ export type User = {
     firstName: string;
     lastName: string;
     imageUrl?: string | "";
+    imagePublicId: string | "";
     activated: boolean;
     langKey: string;
     createdDate: Date;
