@@ -1,11 +1,10 @@
-
 import { Button, Card, Carousel } from "antd";
 import { TbPresentationAnalytics } from "react-icons/tb";
-import banner1 from "../assets/banner1.jpg"
-import banner2 from "../assets/banner2.webp"
-import m1 from "../assets/m-1.webp"
-import m2 from "../assets/m-2.webp"
-import m3 from "../assets/m-3.webp"
+import banner1 from "../assets/banner1.jpg";
+import banner2 from "../assets/banner2.webp";
+import m1 from "../assets/m-1.webp";
+import m2 from "../assets/m-2.webp";
+import m3 from "../assets/m-3.webp";
 import { FaArrowRight, FaCheckCircle } from "react-icons/fa";
 import { IoCalendarOutline } from "react-icons/io5";
 import { MdOutlineCampaign, MdOutlineGroups } from "react-icons/md";
@@ -15,18 +14,26 @@ import { notificationManager } from "../utils/notificationConfig";
 
 const Home = () => {
     const navigate = useNavigate();
-    const { user } = useAppSelector(state => state.userStore);
+    const { user } = useAppSelector((state) => state.userStore);
 
     const handleNavigateRegister = () => {
         if (user) {
-            notificationManager.show("info", "already-logged-in", { title: "Be vagy jelentkezve", description: "Kijelentkezés után tudsz regisztrálni újra." });
+            notificationManager.info("already-logged-in", {
+                title: "Be vagy jelentkezve",
+                description: "Kijelentkezés után tudsz regisztrálni újra.",
+            });
             return;
-        };
+        }
         navigate("/register");
-    }
+    };
     return (
         <>
-            <Carousel effect="fade" autoplay autoplaySpeed={8000} className="h-[80vh] md:h-full mb-9" >
+            <Carousel
+                effect="fade"
+                autoplay
+                autoplaySpeed={8000}
+                className="h-[80vh] md:h-full mb-9"
+            >
                 <div className="relative overflow-hidden rounded-lg">
                     <img
                         src={banner1}
@@ -36,13 +43,22 @@ const Home = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10"></div>
                     <div className="absolute inset-0 p-6 flex flex-col justify-center z-20 text-white">
                         <h1 className="text-2xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
-                            Növeld bevételeidet a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">foglalási rendszerünkkel!</span>
+                            Növeld bevételeidet a{" "}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">
+                                foglalási rendszerünkkel!
+                            </span>
                         </h1>
                         <p className="text-sm md:text-lg max-w-2xl mb-10 text-gray-100">
-                            Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget.
+                            Automatizáld az időpontfoglalást, csökkentsd az
+                            adminisztrációt és szerezz több visszatérő vendéget.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPlacement="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                            <Button
+                                type="primary"
+                                size="large"
+                                iconPlacement="end"
+                                icon={<FaArrowRight />}
+                                onClick={handleNavigateRegister}
                                 className="h-8 md:h-10 text-sm"
                             >
                                 Partner regisztráció
@@ -50,15 +66,24 @@ const Home = () => {
                         </div>
                         <div className="flex flex-col md:flex-row gap-6 mt-5">
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>30 napos ingyenes próba</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>Nincs hűségidő</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>Azonnali beállítás</p>
                             </div>
                         </div>
@@ -73,13 +98,24 @@ const Home = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10"></div>
                     <div className="absolute inset-0 p-6 flex flex-col justify-center z-20 text-white">
                         <h1 className="text-2xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl drop-shadow-md">
-                            Növeld bevételeidet a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">foglalási rendszerünkkel!</span>
+                            Növeld bevételeidet a{" "}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 font-extrabold">
+                                foglalási rendszerünkkel!
+                            </span>
                         </h1>
                         <p className="text-sm md:text-lg max-w-2xl mb-10 text-gray-100">
-                            Automatizáld az időpontfoglalást, csökkentsd az adminisztrációt és szerezz több visszatérő vendéget. Professzionális megoldás szépségipari és wellness vállalkozásoknak.
+                            Automatizáld az időpontfoglalást, csökkentsd az
+                            adminisztrációt és szerezz több visszatérő vendéget.
+                            Professzionális megoldás szépségipari és wellness
+                            vállalkozásoknak.
                         </p>
                         <div className="flex gap-4">
-                            <Button type="primary" size="large" iconPlacement="end" icon={<FaArrowRight />} onClick={handleNavigateRegister}
+                            <Button
+                                type="primary"
+                                size="large"
+                                iconPlacement="end"
+                                icon={<FaArrowRight />}
+                                onClick={handleNavigateRegister}
                                 className="h-8 md:h-10 text-sm"
                             >
                                 Partner regisztráció
@@ -87,15 +123,24 @@ const Home = () => {
                         </div>
                         <div className="flex flex-col md:flex-row gap-6 mt-5">
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>30 napos ingyenes próba</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>Nincs hűségidő</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <FaCheckCircle size={18} className="text-green-500" />
+                                <FaCheckCircle
+                                    size={18}
+                                    className="text-green-500"
+                                />
                                 <p>Azonnali beállítás</p>
                             </div>
                         </div>
@@ -104,11 +149,15 @@ const Home = () => {
             </Carousel>
 
             <div className="w-full px-4 sm:px-6 lg:px-8 py-20 bg-white rounded-3xl my-8 shadow-sm border border-gray-100 mx-auto">
-
                 <div className="flex items-center justify-between mb-12">
                     <div>
-                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Kinek ajánljuk?</h2>
-                        <p className="text-slate-600 dark:text-text-secondary">Rendszerünk rugalmasan alkalmazkodik minden szolgáltatói igényhez.</p>
+                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+                            Kinek ajánljuk?
+                        </h2>
+                        <p className="text-slate-600 dark:text-text-secondary">
+                            Rendszerünk rugalmasan alkalmazkodik minden
+                            szolgáltatói igényhez.
+                        </p>
                     </div>
                     {/* <Link to={"#"} className="flex items-center gap-2">
                         További iparágak <span>
@@ -117,29 +166,42 @@ const Home = () => {
                     </Link> */}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <Card className="shdow-lg bg-gray-50 border border-gray-100 group" bordered={false}
+                    <Card
+                        className="shdow-lg bg-gray-50 border border-gray-100 group"
+                        bordered={false}
                         cover={
                             <div className="relative overflow-hidden">
-                                <img src={m1} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300" />
+                                <img
+                                    src={m1}
+                                    alt="Relaxing spa massage environment with stones"
+                                    className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300"
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                 <div className="absolute bottom-4 left-4 text-white">
-                                    <h3 className="text-xl font-bold">Fodrászok és Borbélyok</h3>
+                                    <h3 className="text-xl font-bold">
+                                        Fodrászok és Borbélyok
+                                    </h3>
                                 </div>
                             </div>
                         }
                     >
-
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Gyors, 1 perces foglalások
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Ismétlődő vendégek kezelése
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Beosztás kezelés több székre
                             </li>
                         </ul>
@@ -147,29 +209,42 @@ const Home = () => {
                             Részletek fodrászoknak
                         </Button>
                     </Card>
-                    <Card className="shadow-lg bg-gray-50 border border-gray-100 group" bordered={false}
+                    <Card
+                        className="shadow-lg bg-gray-50 border border-gray-100 group"
+                        bordered={false}
                         cover={
                             <div className="relative overflow-hidden">
-                                <img src={m2} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300" />
+                                <img
+                                    src={m2}
+                                    alt="Relaxing spa massage environment with stones"
+                                    className="h-48 w-full object-cover object-bottom group-hover:scale-105 z-0 transition-all duration-300"
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                 <div className="absolute bottom-4 left-4 text-white">
-                                    <h3 className="text-xl font-bold">Műkörmösök és Kozmetikusok</h3>
+                                    <h3 className="text-xl font-bold">
+                                        Műkörmösök és Kozmetikusok
+                                    </h3>
                                 </div>
                             </div>
-
                         }
                     >
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Galéria a munkáid bemutatására
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Előlegfizetés kezelése
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 SMS emlékeztetők a "no-show" ellen
                             </li>
                         </ul>
@@ -182,25 +257,37 @@ const Home = () => {
                         bordered={false}
                         cover={
                             <div className="relative">
-                                <img src={m3} alt="Relaxing spa massage environment with stones" className="h-48 w-full object-cover object-bottom" />
+                                <img
+                                    src={m3}
+                                    alt="Relaxing spa massage environment with stones"
+                                    className="h-48 w-full object-cover object-bottom"
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                 <div className="absolute bottom-4 left-4 text-white">
-                                    <h3 className="text-xl font-bold">Masszőrök és Terapeuták</h3>
+                                    <h3 className="text-xl font-bold">
+                                        Masszőrök és Terapeuták
+                                    </h3>
                                 </div>
                             </div>
                         }
                     >
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Szünetek automatikus beiktatása
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Digitális kórtörténet és jegyzetek
                             </li>
                             <li className="flex items-start gap-3 text-slate-600 dark:text-text-secondary text-sm">
-                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]"><FaCheckCircle size={18} /></span>
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[20px]">
+                                    <FaCheckCircle size={18} />
+                                </span>
                                 Bérletek és ajándékutalványok
                             </li>
                         </ul>
@@ -208,15 +295,17 @@ const Home = () => {
                             Részletek masszőröknek
                         </Button>
                     </Card>
-
-                </div >
+                </div>
             </div>
 
             <section className="w-full px-4 sm:px-6 lg:px-8 py-20 bg-white rounded-3xl my-8 shadow-sm border border-gray-100 mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-4">Minden eszköz a növekedéshez</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-4">
+                        Minden eszköz a növekedéshez
+                    </h2>
                     <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                        Rendszerünket úgy terveztük, hogy levegye a válladról a szervezés terhét, így te a szakmádra koncentrálhatsz.
+                        Rendszerünket úgy terveztük, hogy levegye a válladról a
+                        szervezés terhét, így te a szakmádra koncentrálhatsz.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -226,9 +315,13 @@ const Home = () => {
                                 <IoCalendarOutline />
                             </span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-3">Naptár kezelés</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3">
+                            Naptár kezelés
+                        </h3>
                         <p className="text-slate-600 leading-relaxed">
-                            Átlátható digitális naptár, amely szinkronizálható a Google Naptárral. Kezeld a beosztásokat és szüneteket egyszerűen.
+                            Átlátható digitális naptár, amely szinkronizálható a
+                            Google Naptárral. Kezeld a beosztásokat és
+                            szüneteket egyszerűen.
                         </p>
                     </div>
                     <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-lg group">
@@ -237,9 +330,13 @@ const Home = () => {
                                 <TbPresentationAnalytics />
                             </span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-3">Részletes statisztikák</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3">
+                            Részletes statisztikák
+                        </h3>
                         <p className="text-slate-600 leading-relaxed">
-                            Kövesd nyomon bevételeidet, a legnépszerűbb szolgáltatásokat és a vendégek visszatérési arányát valós idejű adatokkal.
+                            Kövesd nyomon bevételeidet, a legnépszerűbb
+                            szolgáltatásokat és a vendégek visszatérési arányát
+                            valós idejű adatokkal.
                         </p>
                     </div>
                     <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-lg group">
@@ -248,9 +345,13 @@ const Home = () => {
                                 <MdOutlineGroups />
                             </span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-3">Ügyfélkezelés (CRM)</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3">
+                            Ügyfélkezelés (CRM)
+                        </h3>
                         <p className="text-slate-600 leading-relaxed">
-                            Építs saját ügyféladatbázist. Jegyzetelj preferenciákat, előzményeket és küldj automatikus emlékeztetőket.
+                            Építs saját ügyféladatbázist. Jegyzetelj
+                            preferenciákat, előzményeket és küldj automatikus
+                            emlékeztetőket.
                         </p>
                     </div>
                     <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-lg group">
@@ -259,9 +360,13 @@ const Home = () => {
                                 <MdOutlineCampaign />
                             </span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-3">Online marketing</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3">
+                            Online marketing
+                        </h3>
                         <p className="text-slate-600 leading-relaxed">
-                            Jelenj meg kiemelten a keresőben, gyűjts valós értékeléseket és indíts hírlevél kampányokat vendégeidnek.
+                            Jelenj meg kiemelten a keresőben, gyűjts valós
+                            értékeléseket és indíts hírlevél kampányokat
+                            vendégeidnek.
                         </p>
                     </div>
                 </div>
@@ -269,9 +374,13 @@ const Home = () => {
 
             <div className="mx-auto bg-gradient-to-r bg-primary rounded-2xl overflow-hidden shadow-2xl relative w-full">
                 <div className="relative z-10 px-6 py-12 md:px-12 md:py-20 text-center flex flex-col items-center justify-center gap-6">
-                    <h2 className="text-3xl md:text-5xl font-black text-white mb-2">Készen állsz a növekedésre?</h2>
+                    <h2 className="text-3xl md:text-5xl font-black text-white mb-2">
+                        Készen állsz a növekedésre?
+                    </h2>
                     <p className="text-blue-100 text-lg md:text-xl max-w-2xl text-center leading-relaxed">
-                        Csatlakozz te is a több ezer elégedett szolgáltatóhoz, és próbáld ki a FoglaljMost rendszerét 30 napig teljesen ingyen!
+                        Csatlakozz te is a több ezer elégedett szolgáltatóhoz,
+                        és próbáld ki a FoglaljMost rendszerét 30 napig teljesen
+                        ingyen!
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
                         <button className="px-8 py-4 bg-white text-primary font-bold rounded-xl shadow-lg hover:bg-gray-100 transition-colors text-lg w-full sm:w-auto">
@@ -281,11 +390,13 @@ const Home = () => {
                             Kapcsolatfelvétel
                         </button>
                     </div>
-                    <p className="text-blue-200 text-sm mt-2 opacity-80">Bankkártya nem szükséges a regisztrációhoz.</p>
+                    <p className="text-blue-200 text-sm mt-2 opacity-80">
+                        Bankkártya nem szükséges a regisztrációhoz.
+                    </p>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Home;
