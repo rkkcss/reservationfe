@@ -1,82 +1,86 @@
 // utils/notificationConfig.ts
-import { notification } from 'antd';
-import { ArgsProps } from 'antd/es/notification';
+import { notification } from "antd";
+import { ArgsProps } from "antd/es/notification";
+import type { ReactNode } from "react";
 
-// global config - call it once in App.tsx
+// Globális konfiguráció - egyszer hívd meg, pl. App.tsx-ben: setupNotifications()
+export const setupNotifications = () => {
+    notification.config({
+        placement: "top", // 'bottom' esetén a 'bottom' offset propot kellene használni, nem 'top'-ot
+        bottom: 80,
+        duration: 4,
+        maxCount: 1,
+        rtl: false,
+    });
+};
 
-notification.config({
-    placement: 'bottom',
-    top: 80,
-    duration: 4,
-    maxCount: 1,
-    rtl: false,
-});
-type NotificationConfig = Omit<ArgsProps, 'key' | 'type'> & { title: React.ReactNode };
-// Notification manager - manage multiple notifications
+type NotificationConfig = Omit<ArgsProps, "key" | "type" | "message"> & {
+    title: ReactNode;
+};
+
+// Notification manager - egyszerre csak egy notification él (maxCount: 1 logikának megfelelően)
 class NotificationManager {
     private currentKey: string | null = null;
-    private timeout: number | null = null; // number a setTimeout returning value
 
-    show(type: 'error' | 'warning' | 'success' | 'info', key: string, config: NotificationConfig) {
-        // if key is the same as current key, do nothing
+    private show(
+        type: "error" | "warning" | "success" | "info",
+        key: string,
+        config: NotificationConfig,
+    ) {
+        // ha ugyanaz a kulcs, mint az aktuális, ne csináljunk semmit
         if (this.currentKey === key) {
             return;
         }
 
-        // destroy previous notification
+        // előző notification eltávolítása
         if (this.currentKey) {
             notification.destroy(this.currentKey);
         }
 
         this.currentKey = key;
 
-        const originalOnClose = config.onClose;
+        const { title, onClose, ...rest } = config;
 
         notification[type]({
-            ...config,
+            ...rest,
+            message: title,
             key,
             onClose: () => {
                 if (this.currentKey === key) {
                     this.currentKey = null;
                 }
-                originalOnClose?.();
-            }
-        } as Parameters<typeof notification[typeof type]>[0]);
-        // Ensure notification is destroyed after duration
-        this.timeout = window.setTimeout(() => {
-            notification.destroy(key);
-            this.currentKey = null;
-        }, (config.duration || 4) * 1000);
-        // Auto cleanup
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
+                onClose?.();
+            },
+        });
 
-        this.timeout = window.setTimeout(() => { // window.setTimeout
-            this.currentKey = null;
-        }, (config.duration || 4) * 1000);
+        // Nincs szükség saját setTimeout-ra: az antd a 'duration' alapján
+        // magától eltünteti a notificationt, és ekkor lefut az onClose,
+        // ami már gondoskodik a currentKey nullázásáról.
     }
 
     error(key: string, config: NotificationConfig) {
-        this.show('error', key, config);
+        this.show("error", key, config);
     }
 
     warning(key: string, config: NotificationConfig) {
-        this.show('warning', key, config);
+        this.show("warning", key, config);
     }
 
     success(key: string, config: NotificationConfig) {
-        this.show('success', key, config);
+        this.show("success", key, config);
+    }
+
+    info(key: string, config: NotificationConfig) {
+        this.show("info", key, config);
+    }
+
+    // opcionális: kézi bezárás lehetősége kívülről
+    destroyCurrent() {
+        if (this.currentKey) {
+            notification.destroy(this.currentKey);
+            this.currentKey = null;
+        }
     }
 }
 
 export const notificationManager = new NotificationManager();
-export const setupNotifications = () => {
-    notification.config({
-        placement: 'bottom',
-        top: 80,
-        duration: 4,
-        maxCount: 1,
-        rtl: false,
-    });
-};

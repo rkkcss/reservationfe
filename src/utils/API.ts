@@ -11,14 +11,14 @@ const getBaseUrl = (): string => {
     const port = window.location.port; // "5173" dev-ben, "" prod-ban
 
     // sima localhost fejlesztéshez
-    if (hostname === 'localhost') {
+    if (hostname === "localhost") {
         return `http://localhost:8080`;
     }
 
     // subdomain VAGY production domain
     // dev:  pizzeria-bella.localhost → http://pizzeria-bella.localhost:8080
     // prod: pizzeria-bella.booklyapp.me → https://pizzeria-bella.booklyapp.me (same port)
-    if (port === '5173') {
+    if (port === "5173") {
         // Vite dev server → Spring Boot 8080-on van
         return `http://${hostname}:8080`;
     }
@@ -33,32 +33,34 @@ export const API = axios.create({
     baseURL: serverMode,
 });
 
+// ===== I18N NAMESPACE =====
+const NS = "server-response";
+const t = (key: string) => i18n.t(`${NS}:${key}`);
+
 // ===== REQUEST INTERCEPTOR =====
-API.interceptors.request.use(
-    async (config) => {
-        config.withCredentials = true;
-        config.headers["Accept"] = "application/json";
+API.interceptors.request.use(async (config) => {
+    config.withCredentials = true;
+    config.headers["Accept"] = "application/json";
 
-        const isFormData = config.data instanceof FormData;
-        if (!isFormData) {
-            config.headers["Content-Type"] = "application/json";
-        }
-
-        const csrfToken = getCookie("XSRF-TOKEN");
-        if (csrfToken) {
-            config.headers["X-XSRF-TOKEN"] = csrfToken;
-        }
-
-        // active business header
-        const state = store.getState();
-        const activeBusinessEmployee = state.userStore?.selectedBusinessEmployee;
-        if (activeBusinessEmployee?.business?.id) {
-            config.headers["X-Business-ID"] = activeBusinessEmployee.business.id;
-        }
-
-        return config;
+    const isFormData = config.data instanceof FormData;
+    if (!isFormData) {
+        config.headers["Content-Type"] = "application/json";
     }
-);
+
+    const csrfToken = getCookie("XSRF-TOKEN");
+    if (csrfToken) {
+        config.headers["X-XSRF-TOKEN"] = csrfToken;
+    }
+
+    // active business header
+    const state = store.getState();
+    const activeBusinessEmployee = state.userStore?.selectedBusinessEmployee;
+    if (activeBusinessEmployee?.business?.id) {
+        config.headers["X-Business-ID"] = activeBusinessEmployee.business.id;
+    }
+
+    return config;
+});
 
 function getCookie(name: string) {
     const value = `; ${document.cookie}`;
@@ -79,21 +81,28 @@ API.interceptors.response.use(
         const config = response.config;
         const method = config.method?.toUpperCase();
 
-        if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method || '')) {
+        if (config.customSuccessNotification) {
+            return response;
+        }
+
+        if (["POST", "PUT", "PATCH", "DELETE"].includes(method || "")) {
             if (config.showSuccessNotification !== false) {
                 const defaultMessages: Record<string, string> = {
-                    'POST': i18n.t('server-response:success.created'),
-                    'PUT': i18n.t('server-response:success.updated'),
-                    'PATCH': i18n.t('server-response:success.updated'),
-                    'DELETE': i18n.t('server-response:success.deleted')
+                    POST: t("success.created"),
+                    PUT: t("success.updated"),
+                    PATCH: t("success.updated"),
+                    DELETE: t("success.deleted"),
                 };
 
-                // Custom success message or default
-                const message = config.successMessage || (method ? defaultMessages[method] : undefined) || i18n.t('success.default');
+                // Egyedi vagy alapértelmezett üzenet
+                const message =
+                    config.successMessage ||
+                    (method ? defaultMessages[method] : undefined) ||
+                    t("success.default");
 
                 notificationManager.success(`success-${method}-${Date.now()}`, {
                     title: message,
-                    duration: 3
+                    duration: 3,
                 });
             }
         }
@@ -102,15 +111,27 @@ API.interceptors.response.use(
     },
     async (error) => {
         console.error("Hiba történt:", error);
-        const status = error.response?.status;
-        const messageKey = error.response?.data?.message;
+        if (!error.response) {
+            notificationManager.error("network-error", {
+                title: t("error.network"),
+                description: t("error.network.description"),
+                duration: 4,
+            });
+
+            return Promise.reject(error);
+        }
+
+        const status = error.response.status;
+        const messageKey = error.response.data?.message;
+        const resolveMessage = (fallbackKey: string) =>
+            messageKey ? t(messageKey) : t(fallbackKey);
 
         // 401 - Unauthorized
         if (status === 401) {
-            notificationManager.warning('unauthorized', {
-                title: i18n.t('session.expired'),
-                description: i18n.t('session.expired.description'),
-                duration: 3
+            notificationManager.warning("unauthorized", {
+                title: t("session.expired"),
+                description: t("session.expired.description"),
+                duration: 3,
             });
 
             if (!logoutTimer) {
@@ -120,73 +141,55 @@ API.interceptors.response.use(
                 }, 2000);
             }
 
-            return Promise.reject(error.response?.data || error);
+            return Promise.reject(error.response.data || error);
         }
 
         // 403 - Forbidden
         if (status === 403) {
-            notificationManager.error('forbidden', {
-                title: messageKey ? i18n.t(messageKey) : i18n.t('error.forbidden'),
-                description: i18n.t('error.forbidden.description'),
-                duration: 4
+            notificationManager.error("forbidden", {
+                title: resolveMessage("error.forbidden"),
+                description: t("error.forbidden.description"),
+                duration: 4,
             });
 
-            return Promise.reject(error.response?.data || error);
+            return Promise.reject(error.response.data || error);
         }
 
         // 404 - Not Found
         if (status === 404) {
             if (error.config?.showNotFoundNotification) {
-                notificationManager.error('not-found', {
-                    title: messageKey ? i18n.t(messageKey) : i18n.t('error.not.found'),
-                    duration: 3
+                notificationManager.error("not-found", {
+                    title: resolveMessage("error.not.found"),
+                    duration: 3,
                 });
             }
 
-            return Promise.reject(error.response?.data || error);
+            return Promise.reject(error.response.data || error);
         }
 
         // 500+ - Server Error
         if (status >= 500) {
-            notificationManager.error('server-error', {
-                title: i18n.t('error.server'),
-                description: messageKey ? i18n.t(messageKey) : i18n.t('error.server.description'),
-                duration: 4
+            notificationManager.error("server-error", {
+                title: t("error.server"),
+                description: resolveMessage("error.server.description"),
+                duration: 4,
             });
 
-            return Promise.reject(error.response?.data || error);
+            return Promise.reject(error.response.data || error);
         }
 
-        // Network Error
-        if (!error.response) {
-            notificationManager.error('network-error', {
-                title: i18n.t('error.network'),
-                description: i18n.t('error.network.description'),
-                duration: 4
-            });
+        // any other issue
+        notificationManager.error(`error-${status}`, {
+            title: resolveMessage("error.unknown"),
+            duration: 4,
+        });
 
-            return Promise.reject(error);
-        }
-
-        // Any another error
-        if (messageKey) {
-            notificationManager.error(`error-${status}`, {
-                title: i18n.t(`server-response:${messageKey}`),
-                duration: 4
-            });
-        } else {
-            notificationManager.error('unknown-error', {
-                title: i18n.t('error.unknown'),
-                duration: 4
-            });
-        }
-
-        return Promise.reject(error.response?.data || error);
-    }
+        return Promise.reject(error.response.data || error);
+    },
 );
 
 // ===== TYPESCRIPT AUGMENTATION =====
-declare module 'axios' {
+declare module "axios" {
     export interface AxiosRequestConfig {
         showSuccessNotification?: boolean;
         successMessage?: string;
