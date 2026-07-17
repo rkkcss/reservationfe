@@ -6,8 +6,12 @@ import dayjs from "dayjs";
 import type { DatesSetArg } from "@fullcalendar/core";
 import type FullCalendar from "@fullcalendar/react";
 
-export const VALID_VIEWS = ["dayGridMonth", "timeGridWeek", "timeGridDay"] as const;
-export type CalendarView = typeof VALID_VIEWS[number];
+export const VALID_VIEWS = [
+    "dayGridMonth",
+    "timeGridWeek",
+    "timeGridDay",
+] as const;
+export type CalendarView = (typeof VALID_VIEWS)[number];
 
 export const DEFAULT_VIEW: CalendarView = "timeGridWeek";
 export const DEFAULT_EMPLOYEE = "all";
@@ -17,7 +21,7 @@ const isValidView = (v: string | null): v is CalendarView =>
 
 export function useCalendarUrlSync(
     calendarRef: RefObject<FullCalendar>,
-    onExternalChange: (arg: DatesSetArg, employeeName: string) => void
+    onExternalChange: (arg: DatesSetArg, employeeName: string) => void,
 ) {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -27,24 +31,24 @@ export function useCalendarUrlSync(
         ? (searchParams.get("view") as CalendarView)
         : DEFAULT_VIEW;
     const urlDate = searchParams.get("date") ?? dayjs().format("YYYY-MM-DD");
-    const urlEmployee = searchParams.get("employee") ?? DEFAULT_EMPLOYEE;
+    const urlEmployee = searchParams.get("employeeId") ?? DEFAULT_EMPLOYEE;
 
     const syncUrlFromCalendar = useCallback(
-        (arg: DatesSetArg, employeeName: string) => {
+        (arg: DatesSetArg, employeeId: string) => {
             const view = arg.view.type as CalendarView;
             const date = dayjs(arg.view.currentStart).format("YYYY-MM-DD");
 
             const next = new URLSearchParams(searchParams);
             next.set("view", view);
             next.set("date", date);
-            next.set("employee", employeeName);
+            next.set("employeeId", employeeId);
 
             const nextString = next.toString();
             lastInternalUrlRef.current = nextString;
 
             setSearchParams(next, { replace: true });
         },
-        [setSearchParams, searchParams]
+        [setSearchParams, searchParams],
     );
 
     useEffect(() => {
@@ -59,7 +63,8 @@ export function useCalendarUrlSync(
         if (!calendarApi) return;
 
         const currentDate = dayjs(calendarApi.getDate()).format("YYYY-MM-DD");
-        const viewOrDateChanged = calendarApi.view.type !== urlView || currentDate !== urlDate;
+        const viewOrDateChanged =
+            calendarApi.view.type !== urlView || currentDate !== urlDate;
 
         if (calendarApi.view.type !== urlView) {
             calendarApi.changeView(urlView);
@@ -79,7 +84,7 @@ export function useCalendarUrlSync(
                     view,
                     timeZone: calendarApi.getOption("timeZone") ?? "local",
                 } as DatesSetArg,
-                urlEmployee
+                urlEmployee,
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

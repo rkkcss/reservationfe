@@ -5,19 +5,27 @@ import {
     cancelAppointmentById,
     patchAppointmentQuery,
     deleteAppointmentQuery,
-    createAppointmentByBusinessAndEmployeeId
-} from '../helpers/queries/appointment-queries';
-import { createAsyncThunk, createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
-import { Appointment, APPOINTMENT_STATUSES } from '../helpers/types/Appointment';
-import { notification } from 'antd';
-import dayjs from 'dayjs';
-import { UserStore } from '../store/store';
-import { logoutUser, setActiveBusinessEmployeeDefault } from './userSlice';
+    createAppointmentByBusinessAndEmployeeId,
+} from "../helpers/queries/appointment-queries";
+import {
+    createAsyncThunk,
+    createSlice,
+    isAnyOf,
+    PayloadAction,
+} from "@reduxjs/toolkit";
+import {
+    Appointment,
+    APPOINTMENT_STATUSES,
+} from "../helpers/types/Appointment";
+import { notification } from "antd";
+import dayjs from "dayjs";
+import { UserStore } from "../store/store";
+import { logoutUser, setActiveBusinessEmployeeDefault } from "./userSlice";
 
 export type AppointmentsState = {
-    pendingAppointments: Appointment[],
-    appointments: Appointment[],
-    loading: boolean,
+    pendingAppointments: Appointment[];
+    appointments: Appointment[];
+    loading: boolean;
 };
 
 const initialState: AppointmentsState = {
@@ -27,91 +35,105 @@ const initialState: AppointmentsState = {
 };
 
 export const fetchAppointmentsBetween = createAsyncThunk<
-    Appointment[], { businessId: number, employeeName: string, startDate?: Date, endDate?: Date }
->('appointments/fetchAppointmentsBetween', async (params) => {
+    Appointment[],
+    { employeeId: string; startDate?: Date; endDate?: Date }
+>("appointments/fetchAppointmentsBetween", async (params) => {
     const response = await getAppointmentsBetween(params);
     return response.data;
 });
-
 
 // Async thunk to fetch pending appointments
 export const fetchPendingAppointments = createAsyncThunk<
     Appointment[],
     void,
     { state: UserStore }
+>("appointments/getPendingAppointments", async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    //TODO:remove businessID
+    const businessId = state.userStore.selectedBusinessEmployee?.business.id;
+    //need better handling
+    if (!businessId) return [];
+
+    const response = await getPendingAppointments(Number(businessId));
+
+    return response.data;
+});
+
+export const approvePendingAppointmentByIdThunk = createAsyncThunk<
+    Appointment,
+    { appointmentId: number | null; employeeId: number }
 >(
-    'appointments/getPendingAppointments',
-    async (_, thunkAPI) => {
-
-        const state = thunkAPI.getState();
-        //TODO:remove businessID
-        const businessId = state.userStore.selectedBusinessEmployee?.business.id
-        //need better handling
-        if (!businessId) return [];
-
-        const response = await getPendingAppointments(Number(businessId));
-
-        return response.data;
-    }
-);
-
-export const approvePendingAppointmentByIdThunk = createAsyncThunk<Appointment, { appointmentId: number | null, employeeId: number }>(
-    'appointments/approvePendingAppointmentById',
+    "appointments/approvePendingAppointmentById",
     async ({ appointmentId, employeeId }, { rejectWithValue }) => {
-        if (!appointmentId || !employeeId) return rejectWithValue("Invalid appointment ID");
+        if (!appointmentId || !employeeId)
+            return rejectWithValue("Invalid appointment ID");
 
         const result = await approveAppointmentById(appointmentId, employeeId);
         return result.data;
-    });
+    },
+);
 
-export const cancelPendingAppointmentByIdThunk = createAsyncThunk<Appointment, { appointmentId: number | null, employeeId: number }>(
-    'appointments/cancelPendingAppointmentById',
+export const cancelPendingAppointmentByIdThunk = createAsyncThunk<
+    Appointment,
+    { appointmentId: number | null; employeeId: number }
+>(
+    "appointments/cancelPendingAppointmentById",
     async ({ appointmentId, employeeId }, { rejectWithValue }) => {
         // Implementation for canceling a pending appointment
-        if (!appointmentId || !employeeId) return rejectWithValue("Invalid appointment ID");
+        if (!appointmentId || !employeeId)
+            return rejectWithValue("Invalid appointment ID");
 
         const result = await cancelAppointmentById(appointmentId, employeeId);
         return result.data;
-    }
+    },
 );
 
-export const updateAppointmentThunk = createAsyncThunk<Appointment, { appointment: Appointment, businessId: number }>(
-    'appointments/updateAppointment',
+export const updateAppointmentThunk = createAsyncThunk<
+    Appointment,
+    { appointment: Appointment; businessId: number }
+>(
+    "appointments/updateAppointment",
     async ({ appointment, businessId }, { rejectWithValue }) => {
         // Implementation for updating an appointment
         if (!appointment.id) return rejectWithValue("Invalid appointment ID");
         const result = await patchAppointmentQuery(businessId, appointment);
         return result.data;
-    }
+    },
 );
 
 type CreateAppointmentArgs = {
     businessId: number;
     employeeId: number;
     appointment: Appointment;
-}
+};
 
-export const createAppointmentThunk = createAsyncThunk<Appointment, CreateAppointmentArgs>(
-    'appointments/createAppointmentThunk',
+export const createAppointmentThunk = createAsyncThunk<
+    Appointment,
+    CreateAppointmentArgs
+>(
+    "appointments/createAppointmentThunk",
     async ({ businessId, employeeId, appointment }, { rejectWithValue }) => {
         if (appointment.id) return rejectWithValue("Can't have ID");
-        const result = await createAppointmentByBusinessAndEmployeeId(businessId, employeeId, appointment);
+        const result = await createAppointmentByBusinessAndEmployeeId(
+            businessId,
+            employeeId,
+            appointment,
+        );
         return result.data;
-    }
+    },
 );
 
 export const deleteAppointmentThunk = createAsyncThunk<number, number>(
-    'appointment/deleteAppointmentThunk',
+    "appointment/deleteAppointmentThunk",
     async (appointmentId, { rejectWithValue }) => {
         if (!appointmentId) return rejectWithValue("ID can't be null!");
         await deleteAppointmentQuery(appointmentId);
         return appointmentId;
-    }
-)
-
+    },
+);
 
 const appointmentsSlice = createSlice({
-    name: 'appointments',
+    name: "appointments",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -121,7 +143,10 @@ const appointmentsSlice = createSlice({
                 state.loading = false;
             })
             .addCase(fetchPendingAppointments.rejected, (state) => {
-                notification.error({ title: "Hiba a függőben lévő időpontok lekérésekor!", placement: "bottom" });
+                notification.error({
+                    title: "Hiba a függőben lévő időpontok lekérésekor!",
+                    placement: "bottom",
+                });
                 state.loading = false;
             })
             .addCase(fetchPendingAppointments.pending, (state) => {
@@ -130,44 +155,72 @@ const appointmentsSlice = createSlice({
             .addCase(fetchAppointmentsBetween.fulfilled, (state, action) => {
                 state.appointments = action.payload;
             })
-            .addCase(createAppointmentThunk.fulfilled, (state, action: PayloadAction<Appointment>) => {
-                state.appointments.push(action.payload);
-                if (action.payload.status === APPOINTMENT_STATUSES.PENDING) {
-                    state.pendingAppointments.push(action.payload);
-                }
-            })
-            // Update appointment
-            .addCase(updateAppointmentThunk.fulfilled, (state, action: PayloadAction<Appointment>) => {
-                const index = state.appointments.findIndex(
-                    (appointment) => appointment.id === action.payload.id
-                );
-
-                if (index !== -1) {
-                    state.appointments[index] = action.payload;
-
-                    const isPending = action.payload.status === APPOINTMENT_STATUSES.PENDING;
-                    const isFutureAppointment = dayjs(action.payload.startDate).isAfter(dayjs());
-                    const alreadyPending = state.pendingAppointments.some(
-                        (appointment) => appointment.id === action.payload.id
-                    );
-
-                    if (isPending && isFutureAppointment && !alreadyPending) {
+            .addCase(
+                createAppointmentThunk.fulfilled,
+                (state, action: PayloadAction<Appointment>) => {
+                    state.appointments.push(action.payload);
+                    if (
+                        action.payload.status === APPOINTMENT_STATUSES.PENDING
+                    ) {
                         state.pendingAppointments.push(action.payload);
                     }
+                },
+            )
+            // Update appointment
+            .addCase(
+                updateAppointmentThunk.fulfilled,
+                (state, action: PayloadAction<Appointment>) => {
+                    const index = state.appointments.findIndex(
+                        (appointment) => appointment.id === action.payload.id,
+                    );
 
-                    else if ((!isPending || !isFutureAppointment) && alreadyPending) {
-                        state.pendingAppointments = state.pendingAppointments.filter(
-                            (appointment) => appointment.id !== action.payload.id
+                    if (index !== -1) {
+                        state.appointments[index] = action.payload;
+
+                        const isPending =
+                            action.payload.status ===
+                            APPOINTMENT_STATUSES.PENDING;
+                        const isFutureAppointment = dayjs(
+                            action.payload.startDate,
+                        ).isAfter(dayjs());
+                        const alreadyPending = state.pendingAppointments.some(
+                            (appointment) =>
+                                appointment.id === action.payload.id,
                         );
+
+                        if (
+                            isPending &&
+                            isFutureAppointment &&
+                            !alreadyPending
+                        ) {
+                            state.pendingAppointments.push(action.payload);
+                        } else if (
+                            (!isPending || !isFutureAppointment) &&
+                            alreadyPending
+                        ) {
+                            state.pendingAppointments =
+                                state.pendingAppointments.filter(
+                                    (appointment) =>
+                                        appointment.id !== action.payload.id,
+                                );
+                        }
                     }
-                }
-            })
-            //after delete 
-            .addCase(deleteAppointmentThunk.fulfilled, (state, action: PayloadAction<number>) => {
-                console.log(action)
-                state.appointments = state.appointments.filter(appointment => appointment.id !== action.payload);
-                state.pendingAppointments = state.pendingAppointments.filter(appointment => appointment.id !== action.payload);
-            })
+                },
+            )
+            //after delete
+            .addCase(
+                deleteAppointmentThunk.fulfilled,
+                (state, action: PayloadAction<number>) => {
+                    console.log(action);
+                    state.appointments = state.appointments.filter(
+                        (appointment) => appointment.id !== action.payload,
+                    );
+                    state.pendingAppointments =
+                        state.pendingAppointments.filter(
+                            (appointment) => appointment.id !== action.payload,
+                        );
+                },
+            )
             //after logout
             .addCase(logoutUser.fulfilled, (state) => {
                 state.appointments = [];
@@ -180,23 +233,26 @@ const appointmentsSlice = createSlice({
             .addMatcher(
                 isAnyOf(
                     approvePendingAppointmentByIdThunk.fulfilled,
-                    cancelPendingAppointmentByIdThunk.fulfilled
+                    cancelPendingAppointmentByIdThunk.fulfilled,
                 ),
                 (state, action: PayloadAction<Appointment>) => {
                     // Remove from pendingAppointments
-                    state.pendingAppointments = state.pendingAppointments
-                        .filter(appointment => appointment.id !== action.payload.id);
+                    state.pendingAppointments =
+                        state.pendingAppointments.filter(
+                            (appointment) =>
+                                appointment.id !== action.payload.id,
+                        );
 
                     // Update in appointments
                     const index = state.appointments.findIndex(
-                        (appointment) => appointment.id === action.payload.id
+                        (appointment) => appointment.id === action.payload.id,
                     );
                     if (index !== -1) {
                         state.appointments[index] = action.payload;
                     }
-                }
-            )
-    }
+                },
+            );
+    },
 });
 
 export default appointmentsSlice.reducer;

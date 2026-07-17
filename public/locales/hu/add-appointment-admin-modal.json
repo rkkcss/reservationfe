@@ -17,5 +17,6 @@
     "confirmDeleteAppointment": "Biztosan törölni szeretné az időpontot?",
     "yes": "Igen",
     "no": "Nem",
-    "cancel": "Mégse"
+    "cancel": "Mégse",
+    "required": "Kötelező"
 }

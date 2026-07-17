@@ -1,7 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
-import loginSliceReducer from '../redux/userSlice';
-import generalSliceReducer from '../redux/generalSlice';
-import appointmentsSliceReducer from '../redux/appointmentsSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import loginSliceReducer from "../redux/userSlice";
+import generalSliceReducer from "../redux/generalSlice";
+import appointmentsSliceReducer from "../redux/appointmentsSlice";
+import timeOffSliceReducer from "../redux/timeOffsSlice";
 import {
     persistStore,
     persistReducer,
@@ -11,41 +12,68 @@ import {
     PERSIST,
     PURGE,
     REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const loginPersistConfig = {
-    key: 'login',
+    key: "login",
     storage,
-    blacklist: ['error'],
+    blacklist: ["error"],
 };
 
 const generalPersistConfig = {
-    key: 'general',
+    key: "general",
     storage,
-    blacklist: ['error'],
+    blacklist: ["error"],
 };
 
 const appointmentPersistConfig = {
-    key: 'appointments',
+    key: "appointments",
     storage,
-    blacklist: ['error'],
+    blacklist: ["error"],
 };
 
-const persistedLoginReducer = persistReducer(loginPersistConfig, loginSliceReducer);
-const persistedGeneralReducer = persistReducer(generalPersistConfig, generalSliceReducer);
-const persistedAppointmentsReducer = persistReducer(appointmentPersistConfig, appointmentsSliceReducer);
+const timeOffPersistConfig = {
+    key: "timeOffs",
+    storage,
+    blacklist: ["error"],
+};
+
+const persistedLoginReducer = persistReducer(
+    loginPersistConfig,
+    loginSliceReducer,
+);
+const persistedGeneralReducer = persistReducer(
+    generalPersistConfig,
+    generalSliceReducer,
+);
+const persistedAppointmentsReducer = persistReducer(
+    appointmentPersistConfig,
+    appointmentsSliceReducer,
+);
+const persistedTimeOffReducer = persistReducer(
+    timeOffPersistConfig,
+    timeOffSliceReducer,
+);
 
 const store = configureStore({
     reducer: {
         userStore: persistedLoginReducer,
         generalStore: persistedGeneralReducer,
-        appointmentStore: persistedAppointmentsReducer
+        appointmentStore: persistedAppointmentsReducer,
+        timeOffStore: persistedTimeOffReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                ignoredActions: [
+                    FLUSH,
+                    REHYDRATE,
+                    PAUSE,
+                    PERSIST,
+                    PURGE,
+                    REGISTER,
+                ],
             },
         }),
 });

@@ -17,5 +17,6 @@
     "confirmDeleteAppointment": "Are you sure you want to delete this appointment?",
     "yes": "Yes",
     "no": "No",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "required": "Required"
 }

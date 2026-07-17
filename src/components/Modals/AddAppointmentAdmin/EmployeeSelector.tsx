@@ -6,7 +6,10 @@ type EmployeeFormSelectorProps = {
     loadOptions: () => void;
 };
 
-export const EmployeeFormSelector = ({ options, loadOptions }: EmployeeFormSelectorProps) => {
+export const EmployeeFormSelector = ({
+    options,
+    loadOptions,
+}: EmployeeFormSelectorProps) => {
     return (
         <Form.Item label="Munkatárs" name="employeeId">
             <Select
@@ -15,12 +18,11 @@ export const EmployeeFormSelector = ({ options, loadOptions }: EmployeeFormSelec
                 placeholder="Válassz munkatársat..."
                 allowClear
                 optionLabelProp="label"
-                options={options.map(e => ({
+                options={options.map((e) => ({
                     label: `${e.user.fullName}`,
-                    value: e.user.id
+                    value: e.user.id,
                 }))}
-            >
-            </Select>
+            ></Select>
         </Form.Item>
     );
 };

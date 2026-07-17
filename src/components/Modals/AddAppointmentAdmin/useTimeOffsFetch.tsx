@@ -1,18 +1,18 @@
 import { useCallback, useRef } from "react";
 import dayjs from "dayjs";
 import type { DatesSetArg } from "@fullcalendar/core";
-import { useAppDispatch } from "../../store/hooks";
-import { fetchAppointmentsBetween } from "../../redux/appointmentsSlice";
+import { useAppDispatch } from "../../../store/hooks";
+import { fetchTimeOffsBetween } from "../../../redux/timeOffsSlice";
 
-export function useAppointmentsFetch() {
+export function useTimeOffsFetch() {
     const dispatch = useAppDispatch();
     const lastFetchedRangeRef = useRef<{
         start: string;
         end: string;
-        employeeId: string;
+        name: string;
     } | null>(null);
 
-    const fetchAppointmentsForRange = useCallback(
+    const fetchTimeOffsForRange = useCallback(
         (arg: DatesSetArg, employeeId: string) => {
             const start = dayjs(arg.start).format("YYYY-MM-DD");
             const end = dayjs(arg.end).format("YYYY-MM-DD");
@@ -20,18 +20,14 @@ export function useAppointmentsFetch() {
             const isSameRange =
                 lastFetchedRangeRef.current?.start === start &&
                 lastFetchedRangeRef.current?.end === end &&
-                lastFetchedRangeRef.current?.employeeId === employeeId;
+                lastFetchedRangeRef.current?.name === employeeId;
 
             if (isSameRange) return;
 
-            lastFetchedRangeRef.current = {
-                start,
-                end,
-                employeeId: employeeId,
-            };
+            lastFetchedRangeRef.current = { start, end, name: employeeId };
 
             dispatch(
-                fetchAppointmentsBetween({
+                fetchTimeOffsBetween({
                     employeeId,
                     startDate: arg.start,
                     endDate: arg.end,
@@ -41,5 +37,5 @@ export function useAppointmentsFetch() {
         [dispatch],
     );
 
-    return { fetchAppointmentsForRange };
+    return { fetchTimeOffsForRange };
 }

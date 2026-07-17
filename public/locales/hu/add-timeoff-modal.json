@@ -1,0 +1,22 @@
+{
+    "addTimeOff": "Szabadság hozzáadása",
+    "editTimeOff": "Szabadság szerkesztése",
+    "deleteTimeOff": "Szabadság törlése",
+    "confirmDeleteTimeOff": "Biztosan törlöd ezt a szabadságot?",
+    "type": "Típus",
+    "typeRequired": "A típus megadása kötelező",
+    "vacation": "Szabadság",
+    "sickLeave": "Betegszabadság",
+    "other": "Egyéb",
+    "dateRange": "Időszak",
+    "dateRangeRequired": "Az időszak megadása kötelező",
+    "fullDay": "Egész napos",
+    "timeRange": "Napi időintervallum",
+    "timeRangeRequired": "Az időintervallum megadása kötelező",
+    "note": "Megjegyzés",
+    "cancel": "Mégse",
+    "whatToCreate": "Mit szeretnél létrehozni?",
+    "appointment": "Időpont",
+    "timeOff": "Szabadság",
+    "employee": "Alkalmazott"
+}

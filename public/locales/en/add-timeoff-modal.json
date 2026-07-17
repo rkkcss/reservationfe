@@ -1,0 +1,22 @@
+{
+    "addTimeOff": "Add time off",
+    "editTimeOff": "Edit time off",
+    "deleteTimeOff": "Delete time off",
+    "confirmDeleteTimeOff": "Are you sure you want to delete this time off?",
+    "type": "Type",
+    "typeRequired": "Type is required",
+    "vacation": "Vacation",
+    "sickLeave": "Sick leave",
+    "other": "Other",
+    "dateRange": "Date range",
+    "dateRangeRequired": "Date range is required",
+    "fullDay": "Full day",
+    "timeRange": "Daily time range",
+    "timeRangeRequired": "Time range is required",
+    "note": "Note",
+    "cancel": "Cancel",
+    "whatToCreate": "What would you like to create?",
+    "appointment": "Appointment",
+    "timeOff": "Time off",
+    "employee": "Employee"
+}

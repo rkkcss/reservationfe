@@ -1,12 +1,17 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import huLocal from "@fullcalendar/core/locales/hu";
-import type { DatesSetArg, EventInput } from "@fullcalendar/core";
+import type {
+    DateSelectArg,
+    DatesSetArg,
+    EventClickArg,
+    EventInput,
+} from "@fullcalendar/core";
 import { useSelector } from "react-redux";
-import { appointmentToEvent } from "../../services/calendar-service";
+
 import { useCalendar } from "../../context/CalendarContext";
 import AddAppointmentAdmin from "../../components/Modals/AddAppointmentAdmin/AddAppointmentAdmin";
 import PendingAppointments from "../../components/PendingAppointments/PendingAppointments";
@@ -18,47 +23,94 @@ import { useCalendarUrlSync } from "./useCalendarUrlSync";
 import { useAppointmentsFetch } from "./useAppointmentsFetch";
 import { useDateRangeLabel } from "./useDateRangeLabel";
 import { useAppointmentModal } from "./useAppointmentModal";
+import {
+    appointmentToEvent,
+    timeOffToEvent,
+} from "../../services/calendar-service";
+import AddTimeOffModal from "../../components/Modals/AddAppointmentAdmin/AddTimeOffModal";
+import EventTypePickerModal from "../../components/Modals/AddAppointmentAdmin/EventTypePickerModal";
+import { useTimeOffsFetch } from "../../components/Modals/AddAppointmentAdmin/useTimeOffsFetch";
+import { useTimeOffModal } from "./useTimeOffModal";
 
 const CalendarPage = () => {
     const { appointments } = useAppSelector((state) => state.appointmentStore);
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const { timeOffs } = useAppSelector((state) => state.timeOffStore);
+
+    const { selectedBusinessEmployee } = useSelector(
+        (state: UserStore) => state.userStore,
+    );
     const businessId = selectedBusinessEmployee?.business.id;
 
     const { calendarRef } = useCalendar();
     const employees = useEmployees();
 
-    const { urlView, urlDate, urlEmployee, syncUrlFromCalendar } = useCalendarUrlSync(
-    calendarRef,
-    (arg, employeeName) => fetchAppointmentsForRange(arg, employeeName)
-);
-    const { fetchAppointmentsForRange } = useAppointmentsFetch(businessId);
+    const { fetchAppointmentsForRange } = useAppointmentsFetch();
+    const { fetchTimeOffsForRange } = useTimeOffsFetch();
+
+    const { urlView, urlDate, urlEmployee, syncUrlFromCalendar } =
+        useCalendarUrlSync(calendarRef, (arg, employeeId) => {
+            fetchAppointmentsForRange(arg, employeeId);
+            fetchTimeOffsForRange(arg, employeeId);
+        });
+
     const { dateRange, updateDateRangeLabel } = useDateRangeLabel();
+
     const {
         isOpen: appointmentModalOpen,
         selectedAppointment,
-        openForEdit,
-        openForCreate,
+        openForEdit: openAppointmentForEdit,
+        openForCreate: openAppointmentForCreate,
         close: closeAppointmentModal,
         save: saveAppointment,
         remove: removeAppointment,
     } = useAppointmentModal(businessId, selectedBusinessEmployee?.user.id);
 
+    const {
+        isOpen: timeOffModalOpen,
+        selectedTimeOff,
+        openForEdit: openTimeOffForEdit,
+        openForCreate: openTimeOffForCreate,
+        close: closeTimeOffModal,
+        save: saveTimeOff,
+        remove: removeTimeOff,
+    } = useTimeOffModal(businessId);
+
+    // A picker csak akkor jelenik meg, ha van "pending" kiválasztás (select esemény)
+    const [pendingSelection, setPendingSelection] =
+        useState<DateSelectArg | null>(null);
+
     const formattedAppointments = useMemo<EventInput[]>(
         () => appointments.map(appointmentToEvent),
-        [appointments]
+        [appointments],
+    );
+
+    const formattedTimeOffs = useMemo<EventInput[]>(
+        () => timeOffs.map(timeOffToEvent),
+        [timeOffs],
+    );
+
+    const allEvents = useMemo<EventInput[]>(
+        () => [...formattedAppointments, ...formattedTimeOffs],
+        [formattedAppointments, formattedTimeOffs],
     );
 
     const handleDatesSet = useCallback(
-        (arg: DatesSetArg, employeeName: string) => {
+        (arg: DatesSetArg, employeeId: string) => {
             updateDateRangeLabel(arg);
-            syncUrlFromCalendar(arg, employeeName);
-            fetchAppointmentsForRange(arg, employeeName);
+            syncUrlFromCalendar(arg, employeeId);
+            fetchAppointmentsForRange(arg, employeeId);
+            fetchTimeOffsForRange(arg, employeeId);
         },
-        [updateDateRangeLabel, syncUrlFromCalendar, fetchAppointmentsForRange]
+        [
+            updateDateRangeLabel,
+            syncUrlFromCalendar,
+            fetchAppointmentsForRange,
+            fetchTimeOffsForRange,
+        ],
     );
 
     const handleEmployeeChange = useCallback(
-        (name: string) => {
+        (employeeId: string) => {
             const calendarApi = calendarRef.current?.getApi();
             if (!calendarApi) return;
 
@@ -72,11 +124,41 @@ const CalendarPage = () => {
                     view,
                     timeZone: calendarApi.getOption("timeZone") ?? "local",
                 } as DatesSetArg,
-                name
+                employeeId,
             );
         },
-        [calendarRef, handleDatesSet]
+        [calendarRef, handleDatesSet],
     );
+
+    // Meglévő eseményre kattintás -> extendedProps.eventType dönt
+    const handleEventClick = useCallback(
+        (clickInfo: EventClickArg) => {
+            const eventType = clickInfo.event.extendedProps.eventType;
+            if (eventType === "timeoff") {
+                openTimeOffForEdit(clickInfo);
+            } else {
+                openAppointmentForEdit(clickInfo);
+            }
+        },
+        [openAppointmentForEdit, openTimeOffForEdit],
+    );
+
+    // Üres időre kattintás -> picker nyílik, nem közvetlenül a modal
+    const handleSelect = useCallback((selectInfo: DateSelectArg) => {
+        setPendingSelection(selectInfo);
+    }, []);
+
+    const closePicker = useCallback(() => setPendingSelection(null), []);
+
+    const handlePickAppointment = useCallback(() => {
+        if (pendingSelection) openAppointmentForCreate(pendingSelection);
+        setPendingSelection(null);
+    }, [pendingSelection, openAppointmentForCreate]);
+
+    const handlePickTimeOff = useCallback(() => {
+        if (pendingSelection) openTimeOffForCreate(pendingSelection);
+        setPendingSelection(null);
+    }, [pendingSelection, openTimeOffForCreate]);
 
     return (
         <>
@@ -86,7 +168,26 @@ const CalendarPage = () => {
                 appointment={selectedAppointment}
                 onOk={saveAppointment}
                 deleteAppointment={removeAppointment}
-                key={selectedAppointment?.startDate?.toString() || "new-appointment"}
+                key={
+                    selectedAppointment?.startDate?.toString() ||
+                    "new-appointment"
+                }
+            />
+
+            <AddTimeOffModal
+                open={timeOffModalOpen}
+                onClose={closeTimeOffModal}
+                timeOff={selectedTimeOff}
+                onOk={saveTimeOff}
+                deleteTimeOff={removeTimeOff}
+                key={selectedTimeOff?.startDate?.toString() || "new-timeoff"}
+            />
+
+            <EventTypePickerModal
+                open={!!pendingSelection}
+                onClose={closePicker}
+                onPickAppointment={handlePickAppointment}
+                onPickTimeOff={handlePickTimeOff}
             />
 
             <div className="mt-4">
@@ -109,11 +210,11 @@ const CalendarPage = () => {
                 initialDate={urlDate}
                 locale={huLocal}
                 headerToolbar={false}
-                events={formattedAppointments}
+                events={allEvents}
                 datesSet={(arg) => handleDatesSet(arg, urlEmployee)}
-                eventClick={openForEdit}
+                eventClick={handleEventClick}
                 selectable
-                select={openForCreate}
+                select={handleSelect}
                 eventClassNames="cursor-pointer hover:outline hover:opacity-80 hover:outline-2 hover:outline-blue-500 hover:outline-offset-1 duration-50 border-none transition-ease-in-out"
                 slotLabelClassNames="cursor-pointer hover:bg-blue-100 duration-50 transition-ease-in-out"
                 nowIndicator
