@@ -46,14 +46,30 @@ export const createTimeOffThunk = createAsyncThunk<TimeOff, CreateTimeOffArgs>(
     },
 );
 
+import axios from "axios";
+
 export const updateTimeOffThunk = createAsyncThunk<
     TimeOff,
-    { timeOff: CreateTimeOffType }
+    { timeOff: CreateTimeOffType },
+    { rejectValue: string }
 >("timeOffs/updateTimeOff", async ({ timeOff }, { rejectWithValue }) => {
-    console.log(timeOff);
     if (!timeOff.id) return rejectWithValue("Invalid time off ID");
-    const result = await patchTimeOffQuery(timeOff);
-    return result.data;
+
+    try {
+        const result = await patchTimeOffQuery(timeOff);
+        return result.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const serverMessage = error.response?.data?.message;
+
+            if (typeof serverMessage === "string") {
+                return rejectWithValue(serverMessage);
+            }
+        }
+        return rejectWithValue(
+            error instanceof Error ? error.message : "Ismeretlen hiba",
+        );
+    }
 });
 
 export const deleteTimeOffThunk = createAsyncThunk<
@@ -111,7 +127,7 @@ const timeOffsSlice = createSlice({
                     }
                 },
             )
-            .addCase(updateTimeOffThunk.rejected, (action) => {
+            .addCase(updateTimeOffThunk.rejected, (_state, action) => {
                 if (action.payload === "timeoff.overlap") {
                     notification.error({
                         message:
