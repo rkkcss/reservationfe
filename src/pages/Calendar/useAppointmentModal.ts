@@ -3,17 +3,25 @@ import dayjs from "dayjs";
 import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 
 import { useAppDispatch } from "../../store/hooks";
-import { Appointment, CreateAdminAppointmentRequest } from "../../helpers/types/Appointment";
+import {
+    Appointment,
+    CreateAdminAppointmentRequest,
+} from "../../helpers/types/Appointment";
 import { eventToAppointment } from "../../services/calendar-service";
-import { createAppointmentThunk, deleteAppointmentThunk, updateAppointmentThunk } from "../../redux/appointmentsSlice";
+import {
+    createAppointmentThunk,
+    deleteAppointmentThunk,
+    updateAppointmentThunk,
+} from "../../redux/appointmentsSlice";
 
 export function useAppointmentModal(
-    businessId: number | string | undefined | null,
-    fallbackEmployeeId: number | string | undefined
+    fallbackEmployeeId: number | string | undefined,
 ) {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<Appointment>({} as Appointment);
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment>(
+        {} as Appointment,
+    );
 
     const openForEdit = useCallback((clickInfo: EventClickArg) => {
         setSelectedAppointment(eventToAppointment(clickInfo.event));
@@ -37,16 +45,23 @@ export function useAppointmentModal(
         (appointment: CreateAdminAppointmentRequest) => {
             if (!appointment.id) {
                 //TODO:remove businessID
-                dispatch(createAppointmentThunk({
-                    businessId: Number(businessId),
-                    employeeId: appointment.employeeId ?? Number(fallbackEmployeeId),
-                    appointment,
-                }));
+                dispatch(
+                    createAppointmentThunk({
+                        employeeId:
+                            appointment.employeeId ??
+                            Number(fallbackEmployeeId),
+                        appointment,
+                    }),
+                );
             } else {
-                dispatch(updateAppointmentThunk({ businessId: Number(businessId), appointment }));
+                dispatch(
+                    updateAppointmentThunk({
+                        appointment,
+                    }),
+                );
             }
         },
-        [dispatch, businessId, fallbackEmployeeId]
+        [dispatch, fallbackEmployeeId],
     );
 
     const remove = useCallback(
@@ -55,8 +70,16 @@ export function useAppointmentModal(
                 dispatch(deleteAppointmentThunk(appointmentId));
             }
         },
-        [dispatch]
+        [dispatch],
     );
 
-    return { isOpen, selectedAppointment, openForEdit, openForCreate, close, save, remove };
+    return {
+        isOpen,
+        selectedAppointment,
+        openForEdit,
+        openForCreate,
+        close,
+        save,
+        remove,
+    };
 }

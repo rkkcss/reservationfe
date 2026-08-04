@@ -39,7 +39,6 @@ const CalendarPage = () => {
     const { selectedBusinessEmployee } = useSelector(
         (state: UserStore) => state.userStore,
     );
-    const businessId = selectedBusinessEmployee?.business.id;
 
     const { calendarRef } = useCalendar();
     const employees = useEmployees();
@@ -63,7 +62,7 @@ const CalendarPage = () => {
         close: closeAppointmentModal,
         save: saveAppointment,
         remove: removeAppointment,
-    } = useAppointmentModal(businessId, selectedBusinessEmployee?.user.id);
+    } = useAppointmentModal(selectedBusinessEmployee?.user?.id);
 
     const {
         isOpen: timeOffModalOpen,
@@ -73,7 +72,7 @@ const CalendarPage = () => {
         close: closeTimeOffModal,
         save: saveTimeOff,
         remove: removeTimeOff,
-    } = useTimeOffModal(businessId);
+    } = useTimeOffModal(selectedBusinessEmployee?.id);
 
     // A picker csak akkor jelenik meg, ha van "pending" kiválasztás (select esemény)
     const [pendingSelection, setPendingSelection] =

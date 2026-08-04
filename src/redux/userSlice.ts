@@ -148,6 +148,16 @@ const loginSlice = createSlice({
                 };
             }
         },
+        finishBusinessOnboarding(state) {
+            if (state.selectedBusinessEmployee) {
+                state.selectedBusinessEmployee.business.onboardingCompleted = true;
+            }
+        },
+        changeBusinessThemeDispatch(state, action) {
+            if (state.selectedBusinessEmployee) {
+                state.selectedBusinessEmployee.business.theme = action.payload;
+            }
+        },
     },
     extraReducers(builder) {
         builder
@@ -205,6 +215,8 @@ export const {
     setActiveBusinessEmployee,
     setActiveBusinessEmployeeDefault,
     increaseOnBoardingV,
+    finishBusinessOnboarding,
+    changeBusinessThemeDispatch,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

@@ -1,9 +1,8 @@
 import { Button, Tabs } from "antd";
 import SettingsBusinessData from "./SettingsBusinessData";
-import { useCallback, useEffect, useState } from "react";
-import { getBusinessByLoggedInUser } from "../helpers/queries/business-queries";
+import { useCallback, useState } from "react";
 import { Business } from "../helpers/types/Business";
-import SettingsThemeSelector from "./SettingsThemeSelector";
+import SettingsThemeSelector from "./SettingsThemeSelector/SettingsThemeSelector";
 import { useAppSelector } from "../store/hooks";
 import BusinessOpeningHours from "./BusinessOpeningHours/BusinessOpeningHours";
 
@@ -11,15 +10,9 @@ const SettingsBusiness = () => {
     const { selectedBusinessEmployee } = useAppSelector(
         (state) => state.userStore,
     );
-    const [business, setBusiness] = useState<Business>({} as Business);
-
-    useEffect(() => {
-        if (selectedBusinessEmployee) {
-            getBusinessByLoggedInUser().then((res) => {
-                setBusiness(res.data);
-            });
-        }
-    }, []);
+    const [business, setBusiness] = useState<Business>(
+        selectedBusinessEmployee?.business || ({} as Business),
+    );
 
     const setBusinessTheme = useCallback((theme: string) => {
         setBusiness((prev) => {
