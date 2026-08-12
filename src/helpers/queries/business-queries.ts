@@ -1,37 +1,47 @@
-import { API } from "../../utils/API"
-import { Business } from "../types/Business";
+import { API } from "../../utils/API";
+import { Business, OnboardingFinishType } from "../types/Business";
+import { SlugCheckResponse } from "../types/SlugCheckResponse";
 
-const DEFAULT_PATH = "/api/businesses"
+const DEFAULT_PATH = "/api/businesses";
 
 export const getBusiness = (id: number | string) => {
     return API.get(`${DEFAULT_PATH}/${id}`);
-}
+};
 
 export const getBusinessBySlugQuery = (slug: string) => {
     return API.get(`${DEFAULT_PATH}/by-slug/${slug}`);
-}
+};
 
 export const getBusinessByLoggedInUser = () => {
     return API.get(`${DEFAULT_PATH}/private`);
-}
+};
 
 export const patchBusiness = (business: Business) => {
     return API.patch(`${DEFAULT_PATH}/${business.id}`, business);
-}
-
+};
 
 type ChangeBusinessLogoType = {
-    logo: string
-}
+    logo: string;
+};
 
 export const changeBusinessLogo = (data: ChangeBusinessLogoType) => {
     return API.post(`${DEFAULT_PATH}/logo`, data);
-}
+};
 
 type ChangeBusinessThemeType = {
-    theme: string
-}
+    theme: string;
+};
 
 export const changeBusinessTheme = (data: ChangeBusinessThemeType) => {
     return API.post(`${DEFAULT_PATH}/theme`, data);
-}
+};
+
+export const getSlugAvailableQuery = (slug: string) => {
+    return API.get<SlugCheckResponse>("/api/businesses/check-slug", {
+        params: { slug: slug },
+    });
+};
+
+export const postOnboardingFinishQuery = (data: OnboardingFinishType) => {
+    return API.post("/api/businesses/onboarding-complete", data);
+};

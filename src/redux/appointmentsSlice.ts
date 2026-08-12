@@ -90,19 +90,18 @@ export const cancelPendingAppointmentByIdThunk = createAsyncThunk<
 
 export const updateAppointmentThunk = createAsyncThunk<
     Appointment,
-    { appointment: Appointment; businessId: number }
+    { appointment: Appointment }
 >(
     "appointments/updateAppointment",
-    async ({ appointment, businessId }, { rejectWithValue }) => {
+    async ({ appointment }, { rejectWithValue }) => {
         // Implementation for updating an appointment
         if (!appointment.id) return rejectWithValue("Invalid appointment ID");
-        const result = await patchAppointmentQuery(businessId, appointment);
+        const result = await patchAppointmentQuery(appointment);
         return result.data;
     },
 );
 
 type CreateAppointmentArgs = {
-    businessId: number;
     employeeId: number;
     appointment: Appointment;
 };
@@ -112,10 +111,9 @@ export const createAppointmentThunk = createAsyncThunk<
     CreateAppointmentArgs
 >(
     "appointments/createAppointmentThunk",
-    async ({ businessId, employeeId, appointment }, { rejectWithValue }) => {
+    async ({ employeeId, appointment }, { rejectWithValue }) => {
         if (appointment.id) return rejectWithValue("Can't have ID");
         const result = await createAppointmentByBusinessAndEmployeeId(
-            businessId,
             employeeId,
             appointment,
         );
