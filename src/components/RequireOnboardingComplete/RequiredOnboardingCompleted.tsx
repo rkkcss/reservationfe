@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 
 export const RequireOnboardingComplete = () => {
     const { selectedBusinessEmployee, user } = useAppSelector(
@@ -22,7 +22,7 @@ export const RequireOnboardingComplete = () => {
     const onboardingIncomplete = !business?.onboardingCompleted; // falsy check, nem szigorú === false
 
     if (isOwner && onboardingIncomplete) {
-        return <Navigate to="/complete-onboarding" replace />;
+        return <Navigate to="/dashboard" replace />;
     }
 
     return <Outlet />;

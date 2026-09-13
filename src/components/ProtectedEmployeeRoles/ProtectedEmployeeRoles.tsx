@@ -1,20 +1,21 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { UserStore } from '../store/store';
-import { BusinessEmployeeRole } from '../helpers/types/BusinessEmployeeRole';
-import { BusinessPermission } from '../helpers/types/BusinessPermission';
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { UserStore } from "../../store/store";
+import { BusinessEmployeeRole } from "../../helpers/types/BusinessEmployeeRole";
+import { BusinessPermission } from "../../helpers/types/BusinessPermission";
 
 type ProtectedEmployeeRolesProps = {
-    roles?: BusinessEmployeeRole[],
-    permissions?: BusinessPermission[]
-}
+    roles?: BusinessEmployeeRole[];
+    permissions?: BusinessPermission[];
+};
 
 const ProtectedEmployeeRoles = ({
     roles = [],
-    permissions = []
+    permissions = [],
 }: ProtectedEmployeeRolesProps) => {
-
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const { selectedBusinessEmployee } = useSelector(
+        (state: UserStore) => state.userStore,
+    );
 
     if (!selectedBusinessEmployee) return <Navigate to="/choose-business" />;
 
@@ -32,8 +33,8 @@ const ProtectedEmployeeRoles = ({
 
     // ---- PERMISSION CHECK ----
     if (permissions.length > 0) {
-        const hasRequiredPermission = permissions.some(p =>
-            employeePermissions.includes(p)
+        const hasRequiredPermission = permissions.some((p) =>
+            employeePermissions.includes(p),
         );
 
         if (!hasRequiredPermission) {
@@ -43,6 +44,6 @@ const ProtectedEmployeeRoles = ({
 
     // Ha minden OK → mehet tovább
     return <Outlet />;
-}
+};
 
 export default ProtectedEmployeeRoles;

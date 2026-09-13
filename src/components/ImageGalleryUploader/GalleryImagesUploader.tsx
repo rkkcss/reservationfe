@@ -123,7 +123,6 @@ function GalleryImagesUploader() {
 
             setImages((prev) => [...prev, ...newImagesList]);
             setPendingFiles([]);
-            message.success("Képek sikeresen feltöltve!");
         } catch (err) {
             message.error(
                 err instanceof Error ? err.message : "Sikertelen feltöltés",
@@ -144,7 +143,6 @@ function GalleryImagesUploader() {
                 throw new Error("Sikertelen törlés a szerverről");
             }
             setImages((prev) => prev.filter((img) => img.id !== imageId));
-            message.success("Kép sikeresen törölve");
         } catch (err) {
             message.error(
                 err instanceof Error ? err.message : "Sikertelen törlés",

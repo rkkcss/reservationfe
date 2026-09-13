@@ -14,6 +14,7 @@ import {
 } from "../../helpers/queries/business-employee-invite-queries";
 import { BusinessEmployeeInvite } from "../../helpers/types/BusinessEmployeeInvite";
 import ChooseBusinessItem from "./ChooseBusinessItem";
+import { BiPlus } from "react-icons/bi";
 
 const ChooseBusiness = () => {
     const [businessEmployees, setBusinessEmployees] = useState<
@@ -105,7 +106,7 @@ const ChooseBusiness = () => {
                                     />
                                 )}
                                 {businessEmployees.length > 0 && (
-                                    <ul className="flex flex-col gap-4">
+                                    <ul className="flex flex-col gap-4 overflow-y-auto max-h-72 p-1">
                                         {businessEmployees.map(
                                             (businessEmployee, index) => (
                                                 <ChooseBusinessItem
@@ -149,7 +150,7 @@ const ChooseBusiness = () => {
                                             className="mb-2"
                                             showIcon
                                             type="warning"
-                                            message={
+                                            title={
                                                 "Az alábbi vállalkozásokba kaptál meghivást."
                                             }
                                         />
@@ -195,6 +196,18 @@ const ChooseBusiness = () => {
                                         </ul>
                                     </>
                                 )}
+                                <div>
+                                    <Button
+                                        className="w-full py-5 mt-6"
+                                        type="dashed"
+                                        icon={<BiPlus />}
+                                        onClick={() =>
+                                            navigate("/new-business")
+                                        }
+                                    >
+                                        Új hozzáadása
+                                    </Button>
+                                </div>
                                 <Button
                                     type="text"
                                     className="w-full mt-4"

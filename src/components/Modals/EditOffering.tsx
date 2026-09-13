@@ -1,20 +1,28 @@
-import { Button, ColorPicker, Form, Input, InputNumber, Modal, Switch } from "antd"
-import { Offering } from "../../helpers/types/Offering"
-import { useEffect } from "react"
-import TextArea from "antd/es/input/TextArea"
-import { useTranslation } from "react-i18next"
-import { BASIC_ENTITY_STATUSES } from "../../helpers/types/BasicEntityStatus"
+import {
+    Button,
+    ColorPicker,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Switch,
+} from "antd";
+import { Offering } from "../../helpers/types/Offering";
+import { useEffect } from "react";
+import TextArea from "antd/es/input/TextArea";
+import { useTranslation } from "react-i18next";
+import { BASIC_ENTITY_STATUSES } from "../../helpers/types/BasicEntityStatus";
 
 type EditOfferingProps = {
-    visible: boolean,
-    onClose: () => void,
-    onOk: (offer: Offering) => void,
-    offer?: Offering
-}
+    visible: boolean;
+    onClose: () => void;
+    onOk: (offer: Offering) => void;
+    offer?: Offering;
+};
 
 const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
     const [form] = Form.useForm();
-    const { t } = useTranslation('edit-offering');
+    const { t } = useTranslation("edit-offering");
 
     const handleCloseModal = () => {
         form.resetFields();
@@ -25,39 +33,40 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
         if (onOk) {
             const payload: Offering = {
                 ...values,
-                status: values.status ? BASIC_ENTITY_STATUSES.ACTIVE : BASIC_ENTITY_STATUSES.INACTIVE,
-            }
+                status: values.status
+                    ? BASIC_ENTITY_STATUSES.ACTIVE
+                    : BASIC_ENTITY_STATUSES.INACTIVE,
+            };
 
             onOk(payload);
             form.resetFields();
             onClose();
         }
-    }
+    };
 
     useEffect(() => {
         if (offer) {
-            form.setFieldsValue({ 
-                ...offer, 
-                status: offer.status === BASIC_ENTITY_STATUSES.ACTIVE ? true : false });
+            form.setFieldsValue({
+                ...offer,
+                status:
+                    offer.status === BASIC_ENTITY_STATUSES.ACTIVE
+                        ? true
+                        : false,
+            });
         }
-    }, [offer]);
+    }, [offer, form]);
 
     return (
         <Modal
             onCancel={handleCloseModal}
             open={visible}
-            title={offer?.id
-                ? t("edit")
-                : t("newService")
-            }
+            title={offer?.id ? t("edit") : t("newService")}
             footer={false}
         >
-            <Form
-                layout="vertical"
-                onFinish={handleOnOk}
-                form={form}
-            >
-                <Form.Item hidden name="id"><Input hidden /></Form.Item>
+            <Form layout="vertical" onFinish={handleOnOk} form={form}>
+                <Form.Item hidden name="id">
+                    <Input hidden />
+                </Form.Item>
                 <Form.Item
                     label={t("serviceName")}
                     name="title"
@@ -71,7 +80,11 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                     name="description"
                     rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <TextArea placeholder={t("serviceDescription") + "..."} maxLength={100} showCount />
+                    <TextArea
+                        placeholder={t("serviceDescription") + "..."}
+                        maxLength={100}
+                        showCount
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -79,7 +92,8 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                     name="price"
                     rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <InputNumber placeholder={t("servicePrice") + "..."}
+                    <InputNumber
+                        placeholder={t("servicePrice") + "..."}
                         min={1}
                         className="w-full"
                         suffix="Ft"
@@ -91,7 +105,8 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                     name="durationMinutes"
                     rules={[{ required: true, message: t("requiredField") }]}
                 >
-                    <InputNumber placeholder={t("serviceDuration") + "..."}
+                    <InputNumber
+                        placeholder={t("serviceDuration") + "..."}
                         min={1}
                         className="w-full"
                         suffix={t("minutes")}
@@ -104,14 +119,12 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
                 >
                     <Switch />
                 </Form.Item>
-                <Form.Item 
+                <Form.Item
                     name="color"
                     label={t("color")}
                     getValueFromEvent={(color) => color.toHexString()}
                 >
-                    <ColorPicker 
-                        showText
-                    />
+                    <ColorPicker showText format="hex" disabledFormat />
                 </Form.Item>
                 <div className="flex justify-between mb-0">
                     <Button type="primary" htmlType="submit" className="mt-3">
@@ -124,6 +137,6 @@ const EditOffering = ({ offer, visible, onClose, onOk }: EditOfferingProps) => {
             </Form>
         </Modal>
     );
-}
+};
 
 export default EditOffering;

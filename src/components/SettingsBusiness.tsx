@@ -5,6 +5,7 @@ import { Business } from "../helpers/types/Business";
 import SettingsThemeSelector from "./SettingsThemeSelector/SettingsThemeSelector";
 import { useAppSelector } from "../store/hooks";
 import BusinessOpeningHours from "./BusinessOpeningHours/BusinessOpeningHours";
+import BusinessCoverImageUpload from "./BusinessCoverImageUpload";
 
 const SettingsBusiness = () => {
     const { selectedBusinessEmployee } = useAppSelector(
@@ -43,6 +44,11 @@ const SettingsBusiness = () => {
             key: "3",
             label: "Üzlet nyitvatartás",
             children: <BusinessOpeningHours />,
+        },
+        {
+            key: "4",
+            label: "Üzlet borítókép",
+            children: <BusinessCoverImageUpload />,
         },
     ];
 

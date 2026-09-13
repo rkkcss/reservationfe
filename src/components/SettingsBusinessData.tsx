@@ -70,9 +70,12 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
                 </Form.Item>
                 <Form.Item
                     label={
-                        <div className="flex gap-1 items-center">
+                        <div className="flex gap-1 items-center relative">
                             <span>Időpontok automatikus elfogadása</span>
-                            <Tooltip title="Be tudod állitani hogy a mindig neked kelljen megerősítened a foglalásokat, vagy a rendszer automatikusan elfogadja el öket!">
+                            <Tooltip
+                                placement="top"
+                                title="Be tudod állitani hogy a mindig neked kelljen megerősítened a foglalásokat, vagy a rendszer automatikusan elfogadja el öket!"
+                            >
                                 <MdInfoOutline size={20} />
                             </Tooltip>
                         </div>

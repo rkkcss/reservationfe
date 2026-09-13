@@ -7,13 +7,23 @@ import pinkTheme from "../../assets/pink-theme.png";
 import { changeBusinessTheme } from "../../helpers/queries/business-queries";
 import { useAppDispatch } from "../../store/hooks";
 import { changeBusinessThemeDispatch } from "../../redux/userSlice";
+import { ReactNode } from "react";
 
 type Props = {
     form: FormInstance;
-    onFinish: ({ theme }: { theme: string }) => void;
+    onFinish?: ({ theme }: { theme: string }) => void;
+    finishBtnText?: string;
+    footer?: boolean;
+    customFooter?: ReactNode;
 };
 
-const ThemeSelectorForm = ({ form, onFinish }: Props) => {
+const ThemeSelectorForm = ({
+    form,
+    onFinish,
+    finishBtnText,
+    footer = true,
+    customFooter,
+}: Props) => {
     const dispatch = useAppDispatch();
     const defaultOnFinish = ({ theme }: { theme: string }) => {
         if (onFinish) {
@@ -94,13 +104,17 @@ const ThemeSelectorForm = ({ form, onFinish }: Props) => {
                     ]}
                 ></Radio.Group>
             </Form.Item>
-            <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full sm:w-fit mt-4"
-            >
-                Mentés
-            </Button>
+            {footer ? (
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="w-full sm:w-fit mt-4"
+                >
+                    {finishBtnText ? finishBtnText : "Mentés"}
+                </Button>
+            ) : (
+                customFooter
+            )}
         </Form>
     );
 };

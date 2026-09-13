@@ -22,7 +22,7 @@ import SettingsSecurity from "./components/SettingsSecurity";
 import RequireBusiness from "./components/RequireBusiness";
 import ChooseBusiness from "./pages/ChooseBusiness/ChooseBusiness";
 import EmployeeLayout from "./pages/SettingsEmployee/EmployeeLayout";
-import ProtectedEmployeeRoles from "./components/ProtectedEmployeeRoles";
+import ProtectedEmployeeRoles from "./components/ProtectedEmployeeRoles/ProtectedEmployeeRoles";
 import { BUSINESS_PERMISSIONS } from "./helpers/types/BusinessPermission";
 import { setupNotifications } from "./utils/notificationConfig";
 import EmployeeActivation from "./pages/Activations/EmployeeActivation";
@@ -36,7 +36,7 @@ import AuthenticatedLayout from "./layout/AuthenticatedLayout";
 import AllNotification from "./pages/AllNotification/AllNotification";
 import { useTenantSlug } from "./hooks/useTenantSlug";
 import CalendarPage from "./pages/Calendar/CalendarPage";
-import { RequireOnboardingComplete } from "./components/RequiredOnboardingCompleted";
+import { RequireOnboardingComplete } from "./components/RequireOnboardingComplete/RequiredOnboardingCompleted";
 import CompleteOnboardingPage from "./pages/CompleteOnboarding/CompleteOnboardingPage";
 import { RequireIncompleteOnboarding } from "./components/RequireIncompleteOnboarding";
 
@@ -94,7 +94,10 @@ function App() {
                             path="/choose-business"
                             element={<ChooseBusiness />}
                         />
-
+                        <Route
+                            path="/new-business"
+                            element={<CompleteOnboardingPage />}
+                        />
                         <Route element={<RequireBusiness />}>
                             <Route element={<RequireIncompleteOnboarding />}>
                                 <Route

@@ -1,5 +1,5 @@
 import { API } from "../../utils/API";
-import { Business, OnboardingFinishType } from "../types/Business";
+import { Business } from "../types/Business";
 import { SlugCheckResponse } from "../types/SlugCheckResponse";
 
 const DEFAULT_PATH = "/api/businesses";
@@ -42,6 +42,6 @@ export const getSlugAvailableQuery = (slug: string) => {
     });
 };
 
-export const postOnboardingFinishQuery = (data: OnboardingFinishType) => {
-    return API.post("/api/businesses/onboarding-complete", data);
+export const uploadCoverImageQuery = (data: FormData) => {
+    return API.patch<Business>("/api/businesses/cover-image", data);
 };

@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 import { BusinessEmployee } from "../helpers/types/BusinessEmployee";
 import { notificationManager } from "../utils/notificationConfig";
 import { User } from "../helpers/types/User";
+import { Business } from "../helpers/types/Business";
 
 export type LoginForm = {
     username: string;
@@ -158,6 +159,14 @@ const loginSlice = createSlice({
                 state.selectedBusinessEmployee.business.theme = action.payload;
             }
         },
+        updateBusinessInSelectedEmployee(
+            state,
+            action: PayloadAction<Business>,
+        ) {
+            if (state.selectedBusinessEmployee) {
+                state.selectedBusinessEmployee.business = action.payload;
+            }
+        },
     },
     extraReducers(builder) {
         builder
@@ -217,6 +226,7 @@ export const {
     increaseOnBoardingV,
     finishBusinessOnboarding,
     changeBusinessThemeDispatch,
+    updateBusinessInSelectedEmployee,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

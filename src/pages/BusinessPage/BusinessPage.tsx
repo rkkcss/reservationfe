@@ -60,9 +60,11 @@ export default function BusinessPage() {
                     <div className="!absolute !inset-0 w-full h-full">
                         <Image
                             alt="Interior"
-                            width={"100vw"}
+                            className="object-cover"
+                            width={"100%"}
                             height={"100%"}
-                            src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&h=400&q=80"
+                            src={business?.bannerUrl}
+                            fallback="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&h=400&q=80"
                         />
                     </div>
 

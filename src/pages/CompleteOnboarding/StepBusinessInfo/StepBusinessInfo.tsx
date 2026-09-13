@@ -1,23 +1,22 @@
-import {
-    Button,
-    Card,
-    Form,
-    FormInstance,
-    Input,
-    InputRef,
-    Space,
-    Tag,
-} from "antd";
+import { Button, Card, Form, Input, InputRef, Space, Tag } from "antd";
 import { MouseEvent, useRef, useState } from "react";
 import { useSlugAvailability } from "./useSlugAvailability";
 import { getMainDomain } from "../../../hooks/useTenantSlug";
+import { isValidPhoneNumber } from "libphonenumber-js";
+import { useForm } from "antd/es/form/Form";
+import { Business } from "../../../helpers/types/Business";
+import { onboardingDetailsStepPostQuery } from "../../../helpers/queries/onboarding-queries";
+import { useAppDispatch } from "../../../store/hooks";
+import { setActiveBusinessEmployee } from "../../../redux/userSlice";
 
 type Props = {
     onNext: (event?: MouseEvent<HTMLButtonElement>) => void;
-    form: FormInstance;
+    onLoadingChange: (loading: boolean) => void;
 };
 
-const StepBusinessInfo = ({ form }: Props) => {
+const StepBusinessInfo = ({ onNext, onLoadingChange }: Props) => {
+    const [form] = useForm();
+    const dispatch = useAppDispatch();
     const [isSlugCustomized, setIsSlugCustomized] = useState(false);
     const slugInputRef = useRef<InputRef>(null);
     const {
@@ -104,139 +103,181 @@ const StepBusinessInfo = ({ form }: Props) => {
         form.validateFields(["slug"]);
     };
 
-    // const handleNext = async (event: MouseEvent<HTMLButtonElement>) => {
-    //     try {
-    //         await form.validateFields();
-    //         onNext(event);
-    //     } catch (error) {
-    //         console.log("Validációs hiba:", error);
-    //     }
-    // };
+    const handleNext = async (data: Business) => {
+        onLoadingChange(true);
+        await onboardingDetailsStepPostQuery(data)
+            .then((res) => {
+                if (res.status === 201) {
+                    dispatch(
+                        setActiveBusinessEmployee(res.data.businessEmployee),
+                    );
+                    onNext();
+                }
+            })
+            .then(() => onLoadingChange(false));
+    };
 
     return (
         <div>
-            <Card>
-                <Form.Item
-                    label="Üzlet neve"
-                    name="name"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
-                >
-                    <Input
-                        placeholder="pl. Komoly Barber Budapest..."
-                        onChange={handleNameChange}
-                    />
-                </Form.Item>
-
-                <Form.Item
-                    label="Leírása"
-                    name="description"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
-                >
-                    <Input.TextArea placeholder="Üzlet rövid leírása..." />
-                </Form.Item>
-
-                <Form.Item label="Üzlet egyedi webcíme (Subdomain)" required>
-                    <Space.Compact style={{ width: "100%" }}>
+            <Form form={form} onFinish={handleNext} layout="vertical">
+                <Card classNames={{ body: "!py-2" }}>
+                    <Form.Item
+                        label="Üzlet neve"
+                        name="name"
+                        rules={[{ required: true, message: "Kötelező mező!" }]}
+                    >
                         <Input
-                            style={{ width: "20%", textAlign: "center" }}
-                            disabled
-                            defaultValue="https://"
+                            placeholder="pl. Komoly Barber Budapest..."
+                            onChange={handleNameChange}
                         />
+                    </Form.Item>
 
-                        <Form.Item
-                            name="slug"
-                            noStyle
-                            validateTrigger={["onBlur"]}
-                            rules={[
-                                { required: true, message: "Kötelező mező!" },
-                                {
-                                    pattern: /^[a-z0-9-]+$/,
-                                    message:
-                                        "Csak kisbetűket, számokat és kötőjelet tartalmazhat!",
-                                },
-                                {
-                                    validator: async (_, value) => {
-                                        if (!value || value.trim().length < 2) {
-                                            setSuggestions([]);
-                                            return Promise.resolve();
-                                        }
+                    <Form.Item
+                        label="Leírása"
+                        name="description"
+                        rules={[{ required: true, message: "Kötelező mező!" }]}
+                    >
+                        <Input.TextArea placeholder="Üzlet rövid leírása..." />
+                    </Form.Item>
 
-                                        if (isConfirmedAvailable(value)) {
-                                            setSuggestions([]);
-                                            return Promise.resolve();
-                                        }
-                                        resetConfirmation();
-
-                                        const res =
-                                            await checkAvailability(value);
-
-                                        if (
-                                            form.getFieldValue("slug") !== value
-                                        ) {
-                                            return Promise.resolve();
-                                        }
-
-                                        if (!res.available) {
-                                            setSuggestions(
-                                                res.suggestions || [],
-                                            );
-                                            return Promise.reject(
-                                                new Error(
-                                                    "Ez a webcím nem elérhető vagy már foglalt!",
-                                                ),
-                                            );
-                                        }
-
-                                        setSuggestions([]);
-                                        return Promise.resolve();
-                                    },
-                                },
-                            ]}
-                        >
+                    <Form.Item
+                        label="Üzlet egyedi webcíme (Subdomain)"
+                        required
+                    >
+                        <Space.Compact style={{ width: "100%" }}>
                             <Input
-                                ref={slugInputRef}
-                                style={{ width: "50%" }}
-                                placeholder="komoly-barber"
-                                onChange={handleSlugChange}
-                                onBlur={handleSlugBlur}
+                                style={{ width: "20%", textAlign: "center" }}
+                                disabled
+                                defaultValue="https://"
                             />
-                        </Form.Item>
 
-                        <Input
-                            style={{ width: "30%" }}
-                            disabled
-                            value={`.${mainDomain}`}
-                        />
-                    </Space.Compact>
+                            <Form.Item
+                                name="slug"
+                                noStyle
+                                validateTrigger={["onBlur"]}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Kötelező mező!",
+                                    },
+                                    {
+                                        pattern: /^[a-z0-9-]+$/,
+                                        message:
+                                            "Csak kisbetűket, számokat és kötőjelet tartalmazhat!",
+                                    },
+                                    {
+                                        validator: async (_, value) => {
+                                            if (
+                                                !value ||
+                                                value.trim().length < 2
+                                            ) {
+                                                setSuggestions([]);
+                                                return Promise.resolve();
+                                            }
 
-                    {suggestions.length > 0 && (
-                        <div className="flex gap-2 my-2">
-                            {suggestions.map((sug) => (
-                                <Tag
-                                    className="cursor-pointer hover:border-blue-400"
-                                    key={sug}
-                                    color="blue"
-                                    onClick={() => handleSelectSuggestion(sug)}
-                                >
-                                    {sug}
-                                </Tag>
-                            ))}
-                        </div>
-                    )}
-                </Form.Item>
+                                            if (isConfirmedAvailable(value)) {
+                                                setSuggestions([]);
+                                                return Promise.resolve();
+                                            }
+                                            resetConfirmation();
 
-                <Form.Item
-                    label="Üzlet cím"
-                    name="address"
-                    rules={[{ required: true, message: "Kötelező mező!" }]}
-                >
-                    <Input placeholder="pl 1012 Budapest xy utca 12 ..." />
-                </Form.Item>
+                                            const res =
+                                                await checkAvailability(value);
 
-                <Button type="primary" htmlType="submit">
-                    Mentés
-                </Button>
-            </Card>
+                                            if (
+                                                form.getFieldValue("slug") !==
+                                                value
+                                            ) {
+                                                return Promise.resolve();
+                                            }
+
+                                            if (!res.available) {
+                                                setSuggestions(
+                                                    res.suggestions || [],
+                                                );
+                                                return Promise.reject(
+                                                    new Error(
+                                                        "Ez a webcím nem elérhető vagy már foglalt!",
+                                                    ),
+                                                );
+                                            }
+
+                                            setSuggestions([]);
+                                            return Promise.resolve();
+                                        },
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    ref={slugInputRef}
+                                    style={{ width: "50%" }}
+                                    placeholder="komoly-barber"
+                                    onChange={handleSlugChange}
+                                    onBlur={handleSlugBlur}
+                                />
+                            </Form.Item>
+
+                            <Input
+                                style={{ width: "30%" }}
+                                disabled
+                                value={`.${mainDomain}`}
+                            />
+                        </Space.Compact>
+
+                        {suggestions.length > 0 && (
+                            <div className="flex gap-2 my-2">
+                                {suggestions.map((sug) => (
+                                    <Tag
+                                        className="cursor-pointer hover:border-blue-400"
+                                        key={sug}
+                                        color="blue"
+                                        onClick={() =>
+                                            handleSelectSuggestion(sug)
+                                        }
+                                    >
+                                        {sug}
+                                    </Tag>
+                                ))}
+                            </div>
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        name="phoneNumber"
+                        label="Telefonszám"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Telefonszám...",
+                            },
+                            {
+                                validator(_, value) {
+                                    if (!value || isValidPhoneNumber(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        "Érvénytelen telefonszám formátum!",
+                                    );
+                                },
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Telefonszámod..." />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Üzlet cím"
+                        name="address"
+                        rules={[{ required: true, message: "Kötelező mező!" }]}
+                    >
+                        <Input placeholder="pl 1012 Budapest xy utca 12 ..." />
+                    </Form.Item>
+                </Card>
+                <div className="flex justify-end mt-4">
+                    <Button type="primary" htmlType="submit">
+                        Következő
+                    </Button>
+                </div>
+            </Form>
         </div>
     );
 };

@@ -3,10 +3,10 @@ import { notification } from "antd";
 import { ArgsProps } from "antd/es/notification";
 import type { ReactNode } from "react";
 
-// Globális konfiguráció - egyszer hívd meg, pl. App.tsx-ben: setupNotifications()
+// Globális konfiguráció - egyszer hívjuk meg, App.tsx-ben: setupNotifications()
 export const setupNotifications = () => {
     notification.config({
-        placement: "top", // 'bottom' esetén a 'bottom' offset propot kellene használni, nem 'top'-ot
+        placement: "bottom",
         bottom: 80,
         duration: 4,
         maxCount: 1,
@@ -52,10 +52,6 @@ class NotificationManager {
                 onClose?.();
             },
         });
-
-        // Nincs szükség saját setTimeout-ra: az antd a 'duration' alapján
-        // magától eltünteti a notificationt, és ekkor lefut az onClose,
-        // ami már gondoskodik a currentKey nullázásáról.
     }
 
     error(key: string, config: NotificationConfig) {
@@ -74,7 +70,6 @@ class NotificationManager {
         this.show("info", key, config);
     }
 
-    // opcionális: kézi bezárás lehetősége kívülről
     destroyCurrent() {
         if (this.currentKey) {
             notification.destroy(this.currentKey);
