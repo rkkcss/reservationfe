@@ -64,7 +64,6 @@ const LoginModal = () => {
     };
 
     const handleGoogleLogin = () => {
-        console.log(import.meta.env.VITE_API_URL)
         window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`;
     };
 
@@ -78,37 +77,60 @@ const LoginModal = () => {
             open={isOpen}
             onCancel={() => loginModal.close()}
             footer={null}
-            title={
-                <p className="text-2xl font-bold">
-                    {t("loginHeader")}
-                </p>
-            }
+            title={<p className="text-2xl font-bold">{t("loginHeader")}</p>}
             width={450}
         >
-            {errorMsg &&
-                <Alert showIcon className="my-4" type="error" message={errorMsg} />
-            }
-            <Form form={form} layout="vertical" onFinish={submitLogin} >
-                <Form.Item name="username" label={t("username")}
+            {errorMsg && (
+                <Alert
+                    showIcon
+                    className="my-4"
+                    type="error"
+                    message={errorMsg}
+                />
+            )}
+            <Form form={form} layout="vertical" onFinish={submitLogin}>
+                <Form.Item
+                    name="username"
+                    label={t("username")}
                     rules={[{ required: true, message: t("required") }]}
                 >
                     <Input type="text" placeholder={t("username") + "..."} />
                 </Form.Item>
-                <Form.Item name="password" label={t("password")}
+                <Form.Item
+                    name="password"
+                    label={t("password")}
                     rules={[{ required: true, message: t("required") }]}
                 >
-                    <Input type="password" placeholder={t("password") + "..."} />
+                    <Input
+                        type="password"
+                        placeholder={t("password") + "..."}
+                    />
                 </Form.Item>
-                <Form.Item name="remember-me" valuePropName="checked" label={null}>
+                <Form.Item
+                    name="remember-me"
+                    valuePropName="checked"
+                    label={null}
+                >
                     <Checkbox>{t("rememberMe")}</Checkbox>
                 </Form.Item>
                 <div className="flex justify-between">
-                    <Button type="primary" htmlType="submit" loading={loading} className="w-full">
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={loading}
+                        className="w-full"
+                    >
                         {t("submit")}
                     </Button>
                 </div>
             </Form>
-            <Button type="default" className="w-full mt-4 mb-6" onClick={() => navigateAndCloseModal("/account/reset/init")}>{t("forgotPassword")}</Button>
+            <Button
+                type="default"
+                className="w-full mt-4 mb-6"
+                onClick={() => navigateAndCloseModal("/account/reset/init")}
+            >
+                {t("forgotPassword")}
+            </Button>
 
             <div className="mt-4 text-center text-sm">
                 <Typography.Link onClick={handleNavigateRegister}>
@@ -118,7 +140,12 @@ const LoginModal = () => {
             <Divider>
                 <span className="text-sm">vagy</span>
             </Divider>
-            <Button className="w-full" onClick={handleGoogleLogin} icon={<FcGoogle />} type="text">
+            <Button
+                className="w-full"
+                onClick={handleGoogleLogin}
+                icon={<FcGoogle />}
+                type="text"
+            >
                 Folytatás Google-lal
             </Button>
         </Modal>

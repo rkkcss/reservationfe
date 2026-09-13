@@ -40,7 +40,6 @@ const AddTimeOffModal = ({
     };
 
     useEffect(() => {
-        console.log(timeOff);
         // Ha be van zárva a modal, vagy nincs meg az alkalmazott adata, nem csinálunk semmit
         if (!open || !timeOff?.businessEmployee) return;
 

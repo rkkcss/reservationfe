@@ -37,9 +37,7 @@ const EmployeeWorkingHours = () => {
         updateWorkingHours(
             Number(businessEmployee?.id),
             formattedOpeningHours,
-        ).then((res) => {
-            console.log(res);
-        });
+        ).then(() => {});
     };
 
     return (

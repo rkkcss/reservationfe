@@ -157,40 +157,34 @@ const ChooseBusiness = () => {
                                         <ul className="flex flex-col gap-4">
                                             {pendingInvitations.map(
                                                 (invitation, index) => (
-                                                    <>
-                                                        <ChooseBusinessItem
-                                                            key={invitation.id}
-                                                            logo={
-                                                                invitation
-                                                                    .business
-                                                                    .logo
-                                                            }
-                                                            businessName={
-                                                                invitation
-                                                                    .business
-                                                                    .name
-                                                            }
-                                                            role={
-                                                                invitation.role
-                                                            }
-                                                            onApprove={() =>
-                                                                handleOnApprove(
-                                                                    invitation,
-                                                                )
-                                                            }
-                                                            onDecline={() =>
-                                                                console.log(
-                                                                    "decline",
-                                                                )
-                                                            }
-                                                            isInvitation={true}
-                                                            ref={
-                                                                index === 0
-                                                                    ? refs.listRef
-                                                                    : null
-                                                            }
-                                                        />
-                                                    </>
+                                                    <ChooseBusinessItem
+                                                        key={invitation.id}
+                                                        logo={
+                                                            invitation.business
+                                                                .logo
+                                                        }
+                                                        businessName={
+                                                            invitation.business
+                                                                .name
+                                                        }
+                                                        role={invitation.role}
+                                                        onApprove={() =>
+                                                            handleOnApprove(
+                                                                invitation,
+                                                            )
+                                                        }
+                                                        onDecline={() =>
+                                                            console.log(
+                                                                "decline",
+                                                            )
+                                                        }
+                                                        isInvitation={true}
+                                                        ref={
+                                                            index === 0
+                                                                ? refs.listRef
+                                                                : null
+                                                        }
+                                                    />
                                                 ),
                                             )}
                                         </ul>

@@ -10,17 +10,15 @@ export const SearchTriggerButton = ({ onClick }: Props) => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const isCtrlOrCmd = event.ctrlKey || event.metaKey;
 
-            if (isCtrlOrCmd && event.key.toLowerCase() === 'k') {
+            if (isCtrlOrCmd && event.key.toLowerCase() === "k") {
                 event.preventDefault();
-
-                console.log('Ctrl + K megnyomva!');
                 onClick();
             }
         };
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
@@ -31,6 +29,9 @@ export const SearchTriggerButton = ({ onClick }: Props) => {
         >
             <FiSearch className="text-gray-500 text-lg" />
             <span>Keresés...</span>
-            <span className="ml-auto text-xs bg-gray-300 text-gray-600 px-2 py-0.5 rounded">Ctrl + K</span>
-        </button>)
+            <span className="ml-auto text-xs bg-gray-300 text-gray-600 px-2 py-0.5 rounded">
+                Ctrl + K
+            </span>
+        </button>
+    );
 };

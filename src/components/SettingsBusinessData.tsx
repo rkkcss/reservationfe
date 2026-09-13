@@ -27,12 +27,7 @@ const SettingsBusinessData = ({ business }: SettingsBusinessDataProps) => {
 
     return (
         <div className="">
-            <Form
-                layout="vertical"
-                form={form}
-                onFinish={handleSubmit}
-                onFinishFailed={(v) => console.log(v)}
-            >
+            <Form layout="vertical" form={form} onFinish={handleSubmit}>
                 <Form.Item hidden name="id">
                     <Input hidden />
                 </Form.Item>

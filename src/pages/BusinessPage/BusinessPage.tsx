@@ -37,10 +37,6 @@ export default function BusinessPage() {
     const handleValuesChange = (changedValues: Record<string, unknown>) => {
         if ("employeeId" in changedValues) {
             form.setFieldsValue({ time: null, date: null, offering: null });
-            console.log(
-                "form values after employeeId reset:",
-                form.getFieldsValue(),
-            );
         }
 
         if ("date" in changedValues) {

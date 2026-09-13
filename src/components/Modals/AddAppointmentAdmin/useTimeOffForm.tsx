@@ -42,7 +42,7 @@ export function useTimeOffForm(
         const isFullDay = values.isFullDay;
         const [startDate, endDate] = values.dateRange;
         const [startTime, endTime] = values.timeRange ?? [undefined, undefined];
-        console.log("VALUES", values);
+
         const payload: CreateTimeOffType = {
             id: timeOff?.id ?? null,
             businessEmployeeId:

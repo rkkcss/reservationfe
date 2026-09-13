@@ -71,7 +71,6 @@ const eventClassNames: Record<string, string> = {
 };
 
 export const appointmentToEvent = (app: Appointment): EventInput => {
-    console.log("formatting", app);
     const status = Array.isArray(app.status)
         ? Object.values(app.status[0])[0]
         : app.status;

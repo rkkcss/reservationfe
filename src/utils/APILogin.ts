@@ -5,7 +5,6 @@ export const APILogin = axios.create();
 APILogin.interceptors.request.use(
     async (config) => {
         const serverMode = import.meta.env.VITE_API_URL;
-        console.log(serverMode);
         config.baseURL = serverMode;
         config.withCredentials = true;
         config.headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -19,7 +18,7 @@ APILogin.interceptors.request.use(
     },
     (error) => {
         return Promise.reject(error);
-    }
+    },
 );
 function getCookie(name: string) {
     const value = `; ${document.cookie}`;
@@ -38,5 +37,5 @@ APILogin.interceptors.response.use(
     },
     (error) => {
         return Promise.reject(error);
-    }
+    },
 );

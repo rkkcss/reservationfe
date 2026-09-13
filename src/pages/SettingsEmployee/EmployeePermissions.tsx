@@ -1,59 +1,75 @@
-import { Button, Divider, Form, Switch } from 'antd';
-import { useEffect, useState } from 'react'
-import { BUSINESS_PERMISSIONS, BusinessPermission, permissionGroups } from '../../helpers/types/BusinessPermission';
-import { useBusinessEmployee } from '../../context/BusinessEmployeeContext';
-import { UserStore } from '../../store/store';
-import { useSelector } from 'react-redux';
-import { API } from '../../utils/API';
-import { BUSINESS_EMPLOYEE_ROLE } from '../../helpers/types/BusinessEmployeeRole';
+import { Button, Divider, Form, Switch } from "antd";
+import { useEffect, useState } from "react";
+import {
+    BUSINESS_PERMISSIONS,
+    BusinessPermission,
+    permissionGroups,
+} from "../../helpers/types/BusinessPermission";
+import { useBusinessEmployee } from "../../context/BusinessEmployeeContext";
+import { UserStore } from "../../store/store";
+import { useSelector } from "react-redux";
+import { API } from "../../utils/API";
+import { BUSINESS_EMPLOYEE_ROLE } from "../../helpers/types/BusinessEmployeeRole";
 
 const EmployeePermissions = () => {
     const [isViewMode, setIsViewMode] = useState(true);
     const [form] = Form.useForm();
     const { businessEmployee } = useBusinessEmployee();
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const { selectedBusinessEmployee } = useSelector(
+        (state: UserStore) => state.userStore,
+    );
 
     useEffect(() => {
         if (businessEmployee?.permissions) {
-            const initialValues = businessEmployee.permissions.reduce((acc, permission) => {
-                acc[permission] = true;
-                return acc;
-            }, {} as Record<string, boolean>);
+            const initialValues = businessEmployee.permissions.reduce(
+                (acc, permission) => {
+                    acc[permission] = true;
+                    return acc;
+                },
+                {} as Record<string, boolean>,
+            );
 
             form.setFieldsValue(initialValues);
         }
         setIsViewMode(() => {
             //if it's the same user (user can't change their own permissions)
-            return (selectedBusinessEmployee?.user.id === businessEmployee?.user.id)
-                ||
-                (businessEmployee?.role === BUSINESS_EMPLOYEE_ROLE.OWNER);
-        })
+            return (
+                selectedBusinessEmployee?.user.id ===
+                    businessEmployee?.user.id ||
+                businessEmployee?.role === BUSINESS_EMPLOYEE_ROLE.OWNER
+            );
+        });
     }, [form, businessEmployee]);
 
     const onFinish = (values: Record<string, boolean>) => {
-        console.log(values)
         const permissions = Object.entries(values)
             .filter(([, value]) => value === true)
             .map(([key]) => key as BusinessPermission);
-        API.patch(`api/business-employee/${businessEmployee?.id}/permissions`, permissions)
-            .then(res => {
-                console.log(res)
-            })
+        API.patch(
+            `api/business-employee/${businessEmployee?.id}/permissions`,
+            permissions,
+        ).then(() => {});
     };
 
     const handleSelectAll = () => {
-        const allPermissions = Object.values(BUSINESS_PERMISSIONS).reduce((acc, permission) => {
-            acc[permission] = true;
-            return acc;
-        }, {} as Record<string, boolean>);
+        const allPermissions = Object.values(BUSINESS_PERMISSIONS).reduce(
+            (acc, permission) => {
+                acc[permission] = true;
+                return acc;
+            },
+            {} as Record<string, boolean>,
+        );
         form.setFieldsValue(allPermissions);
     };
 
     const handleDeselectAll = () => {
-        const noPermissions = Object.values(BUSINESS_PERMISSIONS).reduce((acc, permission) => {
-            acc[permission] = false;
-            return acc;
-        }, {} as Record<string, boolean>);
+        const noPermissions = Object.values(BUSINESS_PERMISSIONS).reduce(
+            (acc, permission) => {
+                acc[permission] = false;
+                return acc;
+            },
+            {} as Record<string, boolean>,
+        );
         form.setFieldsValue(noPermissions);
     };
 
@@ -68,8 +84,7 @@ const EmployeePermissions = () => {
                 </p>
             </div>
 
-            {
-                !isViewMode &&
+            {!isViewMode && (
                 <div className="mb-4 flex gap-2">
                     <Button onClick={handleSelectAll} size="small">
                         Összes kijelölése
@@ -78,7 +93,7 @@ const EmployeePermissions = () => {
                         Összes törlése
                     </Button>
                 </div>
-            }
+            )}
 
             <Form
                 form={form}
@@ -93,8 +108,13 @@ const EmployeePermissions = () => {
                         </h3>
 
                         {group.permissions.map((permission) => (
-                            <div key={permission.key} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors mb-3">
-                                <span className="text-gray-700">{permission.label}</span>
+                            <div
+                                key={permission.key}
+                                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors mb-3"
+                            >
+                                <span className="text-gray-700">
+                                    {permission.label}
+                                </span>
                                 <Form.Item
                                     name={permission.key}
                                     valuePropName="checked"
@@ -115,12 +135,9 @@ const EmployeePermissions = () => {
                         Mentés
                     </Button>
                 </div>
-
-
-
             </Form>
         </div>
     );
-}
+};
 
-export default EmployeePermissions
+export default EmployeePermissions;

@@ -1,4 +1,12 @@
-import { createContext, useContext, ReactNode, useEffect, useCallback, useState } from "react";
+import {
+    createContext,
+    useContext,
+    ReactNode,
+    useEffect,
+    useCallback,
+    useState,
+    useMemo,
+} from "react";
 import { Business } from "../helpers/types/Business";
 import { getBusinessBySlugQuery } from "../helpers/queries/business-queries";
 import { ConfigProvider, theme } from "antd";
@@ -13,21 +21,20 @@ type CustomTheme = {
 
 const themes: Record<string, CustomTheme> = {
     blue: {
-        token: { colorPrimary: "#1677ff", colorInfo: "#1677ff" }
+        token: { colorPrimary: "#1677ff", colorInfo: "#1677ff" },
     },
     pink: {
-        token: { colorPrimary: "#ff4d4f", colorInfo: "#ff4d4f" }
+        token: { colorPrimary: "#ff4d4f", colorInfo: "#ff4d4f" },
     },
     orange: {
-        token: { colorPrimary: "#ffa940", colorInfo: "#ffa940" }
+        token: { colorPrimary: "#ffa940", colorInfo: "#ffa940" },
     },
     black: {
         // Ez lesz a teljes sötét mód
         algorithm: theme.darkAlgorithm,
         token: {
-            "colorPrimary": "#4f4f4f",
-            "colorInfo": "#4f4f4f",
-
+            colorPrimary: "#4f4f4f",
+            colorInfo: "#4f4f4f",
         },
     },
 };
@@ -37,27 +44,36 @@ type ConfigProviderBusinessContextType = {
     selectedTheme: CustomTheme;
 };
 
-const ConfigProviderBusinessContext = createContext<ConfigProviderBusinessContextType | undefined>(undefined);
+const ConfigProviderBusinessContext = createContext<
+    ConfigProviderBusinessContextType | undefined
+>(undefined);
 
-export const ConfigProviderBusinessProvider = ({ children }: { children: ReactNode }) => {
+export const ConfigProviderBusinessProvider = ({
+    children,
+}: {
+    children: ReactNode;
+}) => {
     const tenantSlug = useTenantSlug();
     const [business, setBusiness] = useState<Business>({} as Business);
 
     if (!tenantSlug) throw new Error("tenantSlug is required in URL params");
 
     const getBusinessBySlug = useCallback(() => {
-        getBusinessBySlugQuery(tenantSlug).then(res => setBusiness(res.data));
+        getBusinessBySlugQuery(tenantSlug).then((res) => setBusiness(res.data));
     }, [tenantSlug]);
 
     useEffect(() => {
         getBusinessBySlug();
     }, [getBusinessBySlug]);
 
-    const normalizedTheme = (business.theme || 'pink').toLowerCase();
-    const selectedTheme = themes[normalizedTheme] || themes['pink'];
-    console.log("selectedTheme.token", selectedTheme.token)
+    const normalizedTheme = (business.theme || "pink").toLowerCase();
+    const selectedTheme = themes[normalizedTheme] || themes["pink"];
+    const contextValue = useMemo(
+        () => ({ business, selectedTheme }),
+        [business, selectedTheme],
+    );
     return (
-        <ConfigProviderBusinessContext.Provider value={{ business, selectedTheme }}>
+        <ConfigProviderBusinessContext.Provider value={contextValue}>
             <ConfigProvider
                 theme={{
                     token: selectedTheme.token,
@@ -71,6 +87,9 @@ export const ConfigProviderBusinessProvider = ({ children }: { children: ReactNo
 
 export const useBusinessConfigProvider = () => {
     const context = useContext(ConfigProviderBusinessContext);
-    if (!context) throw new Error("useBusinessConfigProvider must be used within a ConfigProviderBusinessProvider");
+    if (!context)
+        throw new Error(
+            "useBusinessConfigProvider must be used within a ConfigProviderBusinessProvider",
+        );
     return context;
 };

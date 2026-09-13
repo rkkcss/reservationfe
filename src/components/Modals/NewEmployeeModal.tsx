@@ -1,5 +1,5 @@
-import { Button, Card, Checkbox, Form, Input, Modal, Select } from "antd"
-import { permissionGroups } from "../../helpers/types/BusinessPermission"
+import { Button, Card, Checkbox, Form, Input, Modal, Select } from "antd";
+import { permissionGroups } from "../../helpers/types/BusinessPermission";
 import { businessEmployeeRoleLabels } from "../../helpers/types/BusinessEmployeeRole";
 import { BusinessEmployeeInvite } from "../../helpers/types/BusinessEmployeeInvite";
 import API from "../../utils/API";
@@ -10,55 +10,76 @@ import { AxiosError } from "axios";
 
 type NewEmployeeModalProps = {
     onCancel: () => void;
-}
+};
 
 const NewEmployeeModal = ({ onCancel }: NewEmployeeModalProps) => {
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
+    const { selectedBusinessEmployee } = useSelector(
+        (state: UserStore) => state.userStore,
+    );
     const onFinish = (values: BusinessEmployeeInvite) => {
-        console.log('Form values:', values);
-        API.post(`/api/employee-invite/${selectedBusinessEmployee?.business.id}`, values)
-            .then(response => {
-                console.log('Invite created successfully:', response.data);
+        API.post(
+            `/api/employee-invite/${selectedBusinessEmployee?.business.id}`,
+            values,
+        )
+            .then(() => {
+                notificationManager.success("employee-invite-create-success", {
+                    title: "Alkalmazott sikeresen meghívva!",
+                });
             })
             .catch((error: AxiosError) => {
-                console.log(error)
-                notificationManager.error("employee-invite-create-failed", { title: error.message });
+                notificationManager.error("employee-invite-create-failed", {
+                    title: error.message,
+                });
             });
-    }
+    };
 
     return (
-        <Modal title="Új alkalmazott hozzáadása" open={true} onCancel={onCancel} footer={null}>
+        <Modal
+            title="Új alkalmazott hozzáadása"
+            open={true}
+            onCancel={onCancel}
+            footer={null}
+        >
             <Form layout="vertical" onFinish={onFinish}>
-                <Form.Item label="Email" name="email"
+                <Form.Item
+                    label="Email"
+                    name="email"
                     rules={[
                         {
                             required: true,
-                            message: 'Kérlek adja meg az e-mail cimet!',
-                        }
-                    ]}>
+                            message: "Kérlek adja meg az e-mail cimet!",
+                        },
+                    ]}
+                >
                     <Input type="email" />
                 </Form.Item>
-                <Form.Item label="Szerepkör" name="role"
+                <Form.Item
+                    label="Szerepkör"
+                    name="role"
                     rules={[
                         {
                             required: true,
-                            message: 'Kérlek válassz szerepkört!',
-                        }
-                    ]}>
-                    <Select placeholder="Ki lesz ő a cégnél?" style={{ width: '100%' }} >
-                        {
-                            Object.entries(businessEmployeeRoleLabels).map(([key, label]) => (
+                            message: "Kérlek válassz szerepkört!",
+                        },
+                    ]}
+                >
+                    <Select
+                        placeholder="Ki lesz ő a cégnél?"
+                        style={{ width: "100%" }}
+                    >
+                        {Object.entries(businessEmployeeRoleLabels).map(
+                            ([key, label]) => (
                                 <Select.Option key={key} value={key}>
                                     {label}
                                 </Select.Option>
-                            ))
-                        }
+                            ),
+                        )}
                     </Select>
                 </Form.Item>
                 <Form.Item name="permissions" label="Jogosultságok">
                     <Checkbox.Group className="w-full">
                         <div className="space-y-6 w-full">
-                            {permissionGroups.map(group => (
+                            {permissionGroups.map((group) => (
                                 <Card
                                     key={group.title}
                                     className="border border-gray-200 transition-colors w-full"
@@ -67,7 +88,7 @@ const NewEmployeeModal = ({ onCancel }: NewEmployeeModalProps) => {
                                         {group.title}
                                     </h4>
                                     <div className="grid grid-cols-1 gap-2">
-                                        {group.permissions.map(p => (
+                                        {group.permissions.map((p) => (
                                             <Checkbox
                                                 key={p.key}
                                                 value={p.key}
@@ -86,10 +107,12 @@ const NewEmployeeModal = ({ onCancel }: NewEmployeeModalProps) => {
                         </div>
                     </Checkbox.Group>
                 </Form.Item>
-                <Button type="primary" htmlType="submit">Létrehozás</Button>
+                <Button type="primary" htmlType="submit">
+                    Létrehozás
+                </Button>
             </Form>
         </Modal>
-    )
-}
+    );
+};
 
-export default NewEmployeeModal
+export default NewEmployeeModal;

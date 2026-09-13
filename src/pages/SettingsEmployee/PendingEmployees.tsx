@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { UserStore } from "../../store/store";
 import { useSelector } from "react-redux";
 import { Button, Dropdown, Table, Tag, Tooltip } from "antd";
@@ -9,18 +9,22 @@ import dayjs from "dayjs";
 import { getAllBusinessEmployeeInvitesQuery } from "../../helpers/queries/business-employee-invite-queries";
 
 const PendingEmployees = () => {
-    const { selectedBusinessEmployee } = useSelector((state: UserStore) => state.userStore);
-    const [pendingEmployees, setPendingEmployees] = useState<BusinessEmployeeInvite[]>([]);
+    const { selectedBusinessEmployee } = useSelector(
+        (state: UserStore) => state.userStore,
+    );
+    const [pendingEmployees, setPendingEmployees] = useState<
+        BusinessEmployeeInvite[]
+    >([]);
 
     useEffect(() => {
         if (selectedBusinessEmployee) {
-            getAllBusinessEmployeeInvitesQuery(Number(selectedBusinessEmployee.business.id))
-                .then(response => {
-                    console.log(response.data)
-                    setPendingEmployees(response.data);
-                })
+            getAllBusinessEmployeeInvitesQuery(
+                Number(selectedBusinessEmployee.business.id),
+            ).then((response) => {
+                setPendingEmployees(response.data);
+            });
         }
-    }, [selectedBusinessEmployee])
+    }, [selectedBusinessEmployee]);
 
     const columns = [
         {
@@ -32,16 +36,22 @@ const PendingEmployees = () => {
             title: "Pozíció",
             dataIndex: "role",
             key: "role",
-            render: (role: string) => <Tag color="blue">{businessEmployeeRoleLabels[role]}</Tag>,
+            render: (role: string) => (
+                <Tag color="blue">{businessEmployeeRoleLabels[role]}</Tag>
+            ),
         },
         {
             title: "Jogosultságok",
             dataIndex: "permissions",
             key: "permissions",
             render: (permissions: string[]) => {
-                const items = permissions.map(p => ({
+                const items = permissions.map((p) => ({
                     key: p,
-                    label: <Tag color="purple">{BusinessEmployeePermissonLabels[p]}</Tag>,
+                    label: (
+                        <Tag color="purple">
+                            {BusinessEmployeePermissonLabels[p]}
+                        </Tag>
+                    ),
                 }));
 
                 return (
@@ -76,19 +86,21 @@ const PendingEmployees = () => {
 
                 return (
                     <Tooltip title={dayjs(date).format("YYYY.MM.DD HH:mm")}>
-                        <Tag
-                            color={status}
-                        >{text}</Tag>
+                        <Tag color={status}>{text}</Tag>
                     </Tooltip>
                 );
-            }
+            },
         },
         {
             title: "Felhasználva?",
             dataIndex: "used",
             key: "used",
             render: (used: boolean) =>
-                used ? <Tag color="red">Igen</Tag> : <Tag color="green">Nem</Tag>,
+                used ? (
+                    <Tag color="red">Igen</Tag>
+                ) : (
+                    <Tag color="green">Nem</Tag>
+                ),
         },
     ];
 
@@ -101,7 +113,7 @@ const PendingEmployees = () => {
                 pagination={{ pageSize: 10 }}
             />
         </div>
-    )
-}
+    );
+};
 
-export default PendingEmployees
+export default PendingEmployees;

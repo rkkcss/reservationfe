@@ -204,14 +204,11 @@ const loginSlice = createSlice({
                     title: i18next.t("login-modal:logoutSuccessfully"),
                 });
             })
-            .addCase(logoutUser.rejected, (state: State, action) => {
+            .addCase(logoutUser.rejected, (state: State) => {
                 state.loading = false;
                 state.user = null;
-                console.log(action);
             })
-            .addCase(updateUserApi.rejected, (state: State) => {
-                console.log("updateerror", state);
-            });
+            .addCase(updateUserApi.rejected, () => {});
     },
 });
 

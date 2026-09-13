@@ -12,7 +12,6 @@ const OpeningHours = () => {
     const handleWorkingHoursSubmit = (values: {
         openingHours: WorkingHours[];
     }) => {
-        console.log(values);
         const formattedOpeningHours = values.openingHours.map((item) => {
             const formattedStartTime = dayjs(item.startTime).format("HH:mm");
             const formattedEndTime = dayjs(item.endTime).format("HH:mm");
@@ -23,13 +22,10 @@ const OpeningHours = () => {
                 endTime: formattedEndTime,
             };
         });
-        console.log(formattedOpeningHours);
         updateWorkingHours(
             Number(selectedBusinessEmployee?.id),
             formattedOpeningHours,
-        ).then((res) => {
-            console.log(res);
-        });
+        ).then(() => {});
     };
     return (
         <div className="flex flex-col w-full pl-5 mt-5">
