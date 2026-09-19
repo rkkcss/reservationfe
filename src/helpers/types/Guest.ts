@@ -1,11 +1,19 @@
-import { BusinessEmployee } from "./BusinessEmployee"
+import { BusinessEmployee } from "./BusinessEmployee";
 
 export type Guest = {
-    id: number | null,
-    name: string,
-    email: string,
-    phoneNumber: string,
-    canBook: boolean,
-    businessEmployee: BusinessEmployee,
-    createdDate: Date,
-}
+    id: number | null;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    canBook: boolean;
+    businessEmployee: BusinessEmployee;
+    createdDate: Date;
+};
+
+export type GuestStatistics = {
+    allAppointmentCount: number;
+    cancelledAppointmentCount: number;
+    didNotComeCount: number;
+    appearedAppointmentCount: number;
+    allSpentMoney: number;
+};

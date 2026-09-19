@@ -39,6 +39,7 @@ import CalendarPage from "./pages/Calendar/CalendarPage";
 import { RequireOnboardingComplete } from "./components/RequireOnboardingComplete/RequiredOnboardingCompleted";
 import CompleteOnboardingPage from "./pages/CompleteOnboarding/CompleteOnboardingPage";
 import { RequireIncompleteOnboarding } from "./components/RequireIncompleteOnboarding";
+import GuestPage from "./pages/Guest/GuestPage";
 
 export const AboutPage = lazy(() => import("./pages/AboutPage"));
 export const PricePage = lazy(() => import("./pages/PricePage"));
@@ -214,6 +215,10 @@ function App() {
                                     <Route
                                         path="guests"
                                         element={<SettingsGuests />}
+                                    />
+                                    <Route
+                                        path="guests/:guestId"
+                                        element={<GuestPage />}
                                     />
                                     <Route
                                         path="notifications"
