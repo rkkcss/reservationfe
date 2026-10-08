@@ -60,6 +60,7 @@ const GuestAppointments = () => {
     return (
         <div>
             <Table
+                scroll={{ x: "max-content" }}
                 columns={columns}
                 dataSource={appointments || []}
                 pagination={false}

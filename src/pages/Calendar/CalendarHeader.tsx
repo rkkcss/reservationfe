@@ -53,15 +53,15 @@ const CalendarHeader = ({
 
     return (
         <div className="flex flex-col md:flex-row items-end gap-3 justify-between">
-            <div className="flex items-end gap-4">
+            <div className="flex items-end justify-start flex-col md:flex-row gap-4 w-full lg:w-fit">
                 {hasPermission(BUSINESS_PERMISSIONS.VIEW_ALL_SCHEDULE) && (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-full sm:w-fit">
                         <label>Munkatárs:</label>
                         <Select
                             defaultValue={"all"}
                             defaultActiveFirstOption
                             onChange={(e) => handleEmployeeChange(e)}
-                            className="w-48"
+                            className="md:w-48"
                         >
                             <Select.Option value="all" key="all">
                                 Összes megtekintése

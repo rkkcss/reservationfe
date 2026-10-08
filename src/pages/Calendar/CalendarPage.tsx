@@ -201,6 +201,7 @@ const CalendarPage = () => {
             </div>
 
             <FullCalendar
+                handleWindowResize={true}
                 ref={calendarRef}
                 viewClassNames="mt-4 bg-white"
                 height="70vh"

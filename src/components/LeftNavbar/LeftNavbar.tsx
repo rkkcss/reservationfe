@@ -42,7 +42,7 @@ const LeftNavbar = () => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative z-20">
             <div
                 className={`${!isLeftMenuCollapsed ? "w-72 md:w-72 md:max-w-72" : "w-16"}
                  bg-white h-screen flex flex-col fixed top-0 border-r`}
@@ -58,20 +58,23 @@ const LeftNavbar = () => {
                 </Button>
                 {/* logo */}
                 <div className="flex items-center justify-start p-4 relative">
-                    <Image
-                        preview={false}
-                        src={logoMini}
-                        className={`${isLeftMenuCollapsed ? "block md:block" : "block md:hidden"}  cursor-pointer`}
-                        alt="logo"
-                        onClick={() => navigate("/")}
-                    />
-                    <Image
-                        preview={false}
-                        src={logoFull}
-                        className={`${isLeftMenuCollapsed ? "hidden" : "hidden md:block"} !h-14 cursor-pointer`}
-                        alt="logo"
-                        onClick={() => navigate("/")}
-                    />
+                    {isLeftMenuCollapsed ? (
+                        <Image
+                            preview={false}
+                            src={logoMini}
+                            className={`cursor-pointer`}
+                            alt="logo"
+                            onClick={() => navigate("/")}
+                        />
+                    ) : (
+                        <Image
+                            preview={false}
+                            src={logoFull}
+                            className={`!h-14 cursor-pointer`}
+                            alt="logo"
+                            onClick={() => navigate("/")}
+                        />
+                    )}
 
                     {/* Desktop verzió: Alapértelmezetten rejtve van, 'md' mérettől kezdve látszik */}
                 </div>
